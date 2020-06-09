@@ -86,59 +86,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-用一个数值保存多选的值" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/">用一个数值保存多选的值</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在开发过程中，对于网页中的多选，我们有很多种存储方式，常见的如逗号分隔。下文介绍一种通用设计方式：用一个整数来存储复选框的值。</p>
-<h3 id="准备知识-——-位与运算"><a href="#准备知识-——-位与运算" class="headerlink" title="准备知识 —— 位与运算"></a>准备知识 —— 位与运算</h3><p>位与运算：二进制运算，相同位的两个数字都为1，则为1；若有一个不为1，则为0，如：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> 下方是运算</span><br><span class="line">  00101 </span><br><span class="line">&amp; 11100 </span><br><span class="line">------------ </span><br><span class="line">  00100</span><br></pre></td></tr></table></figure>
-
-<h3 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h3><p>将多项的选项值分别设置为 2 的 n 次方，n 从 0 开始，每多一项，n + 1。即 1，2，4，8…<br>多选的存储值为各项值之和，如选中了第 1、3 项，则值为：1 + 4 = 5</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<h3 id="回显"><a href="#回显" class="headerlink" title="回显"></a>回显</h3><p>假设存储的值为 5 ，要使相应的项被勾选，则是循环多项的值，每项与存储值 5 进行 位与运算，如果值与选项本身的值相等，则选中该项；相反地，如果运算值为 0 ，则设置为不选中：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">下方回显</span><br><span class="line"> 1 &amp; 5 = 1</span><br><span class="line"> 2 &amp; 5 = 0</span><br><span class="line"> 4 &amp; 5 = 4</span><br><span class="line"> 8 &amp; 5 = 0</span><br></pre></td></tr></table></figure>
-
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt; </span><br><span class="line">&lt;html lang=<span class="string">"en"</span>&gt; </span><br><span class="line">&lt;head&gt; </span><br><span class="line">  &lt;meta charset=<span class="string">"UTF-8"</span>&gt; </span><br><span class="line">  &lt;title&gt;Checkbox Test&lt;/title&gt; </span><br><span class="line">&lt;/head&gt; </span><br><span class="line">&lt;body&gt; </span><br><span class="line">&lt;form&gt; </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"1"</span>&gt; 1 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"2"</span>&gt; 2 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"4"</span>&gt; 4 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"8"</span>&gt; 8 </span><br><span class="line">&lt;/form&gt; </span><br><span class="line">&lt;input <span class="built_in">type</span>=<span class="string">"text"</span> id=<span class="string">"result"</span> placeholder=<span class="string">"设置要回显的值"</span>&gt; </span><br><span class="line">&lt;button id=<span class="string">"show"</span>&gt;回显&lt;/button&gt; </span><br><span class="line">&lt;script src=<span class="string">"http://libs.baidu.com/jquery/1.11.1/jquery.min.js"</span>&gt;&lt;/script&gt; </span><br><span class="line">&lt;script&gt; </span><br><span class="line">$(<span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">  $(<span class="string">"[name='test']"</span>).on(<span class="string">"change"</span>, <span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">    var result = 0; </span><br><span class="line">    $(<span class="string">"[name='test']:checkbox:checked"</span>).each(<span class="function"><span class="title">function</span></span>()&#123; </span><br><span class="line">      result += parseInt($(this).val()); </span><br><span class="line">    &#125;); </span><br><span class="line">    $(<span class="string">"#result"</span>).val(result); &#125;); </span><br><span class="line">    $(<span class="string">"#show"</span>).on(<span class="string">"click"</span>, <span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">      var result = parseInt($(<span class="string">"#result"</span>).val()); </span><br><span class="line">      $(<span class="string">"[name='test']:checkbox"</span>).each(<span class="function"><span class="title">function</span></span>()&#123; </span><br><span class="line">        var value = parseInt($(this).val()); </span><br><span class="line">        <span class="keyword">if</span> ((result &amp; value) == value) &#123; </span><br><span class="line">        $(this).prop(<span class="string">"checked"</span>, <span class="literal">true</span>); </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">        $(this).prop(<span class="string">"checked"</span>, <span class="literal">false</span>); </span><br><span class="line">        &#125; </span><br><span class="line">      &#125;); </span><br><span class="line">   &#125;); </span><br><span class="line">&#125;); </span><br><span class="line">&lt;/script&gt; </span><br><span class="line">&lt;/body&gt; </span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://tianfs.com/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" data-id="ckb7lt7ya00000as6f42r7ula" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-css定位绝对居中办法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" class="article-date">
@@ -171,55 +118,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="ckb7mbd640000gns6a4k9h356" class="article-share-link">Share</a>
+      <a data-url="http://tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="ckb7ri46f0000w4s65qmwgm0n" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-求两个数的比例" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/">求两个数的比例</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="比例计算"><a href="#比例计算" class="headerlink" title="比例计算"></a>比例计算</h2><p>1、计算长宽比例（长200 * 宽180）</p>
-<p>2、设A为长，B为宽，C为A和B的最大公约数 （20）</p>
-<p>3、得到 A/C : B/C   =&gt;（10 : 9）</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://tianfs.com/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" data-id="ckb7mbd6f0009gns6187z2pw9" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
 
     </footer>
   </div>
@@ -263,7 +165,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="ckb7mwexc000014s6a2y20q6b" class="article-share-link">Share</a>
+      <a data-url="http://tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="ckb7ri46s0004w4s68jz7379x" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
@@ -309,10 +211,63 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://tianfs.com/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" data-id="ckb7mwexh000114s658flgrnk" class="article-share-link">Share</a>
+      <a data-url="http://tianfs.com/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" data-id="ckb7ri46t0005w4s63q5p9lrm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-用一个数值保存多选的值" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/">用一个数值保存多选的值</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在开发过程中，对于网页中的多选，我们有很多种存储方式，常见的如逗号分隔。下文介绍一种通用设计方式：用一个整数来存储复选框的值。</p>
+<h3 id="准备知识-——-位与运算"><a href="#准备知识-——-位与运算" class="headerlink" title="准备知识 —— 位与运算"></a>准备知识 —— 位与运算</h3><p>位与运算：二进制运算，相同位的两个数字都为1，则为1；若有一个不为1，则为0，如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> 下方是运算</span><br><span class="line">  00101 </span><br><span class="line">&amp; 11100 </span><br><span class="line">------------ </span><br><span class="line">  00100</span><br></pre></td></tr></table></figure>
+
+<h3 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h3><p>将多项的选项值分别设置为 2 的 n 次方，n 从 0 开始，每多一项，n + 1。即 1，2，4，8…<br>多选的存储值为各项值之和，如选中了第 1、3 项，则值为：1 + 4 = 5</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<h3 id="回显"><a href="#回显" class="headerlink" title="回显"></a>回显</h3><p>假设存储的值为 5 ，要使相应的项被勾选，则是循环多项的值，每项与存储值 5 进行 位与运算，如果值与选项本身的值相等，则选中该项；相反地，如果运算值为 0 ，则设置为不选中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">下方回显</span><br><span class="line"> 1 &amp; 5 = 1</span><br><span class="line"> 2 &amp; 5 = 0</span><br><span class="line"> 4 &amp; 5 = 4</span><br><span class="line"> 8 &amp; 5 = 0</span><br></pre></td></tr></table></figure>
+
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt; </span><br><span class="line">&lt;html lang=<span class="string">"en"</span>&gt; </span><br><span class="line">&lt;head&gt; </span><br><span class="line">  &lt;meta charset=<span class="string">"UTF-8"</span>&gt; </span><br><span class="line">  &lt;title&gt;Checkbox Test&lt;/title&gt; </span><br><span class="line">&lt;/head&gt; </span><br><span class="line">&lt;body&gt; </span><br><span class="line">&lt;form&gt; </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"1"</span>&gt; 1 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"2"</span>&gt; 2 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"4"</span>&gt; 4 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"8"</span>&gt; 8 </span><br><span class="line">&lt;/form&gt; </span><br><span class="line">&lt;input <span class="built_in">type</span>=<span class="string">"text"</span> id=<span class="string">"result"</span> placeholder=<span class="string">"设置要回显的值"</span>&gt; </span><br><span class="line">&lt;button id=<span class="string">"show"</span>&gt;回显&lt;/button&gt; </span><br><span class="line">&lt;script src=<span class="string">"http://libs.baidu.com/jquery/1.11.1/jquery.min.js"</span>&gt;&lt;/script&gt; </span><br><span class="line">&lt;script&gt; </span><br><span class="line">$(<span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">  $(<span class="string">"[name='test']"</span>).on(<span class="string">"change"</span>, <span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">    var result = 0; </span><br><span class="line">    $(<span class="string">"[name='test']:checkbox:checked"</span>).each(<span class="function"><span class="title">function</span></span>()&#123; </span><br><span class="line">      result += parseInt($(this).val()); </span><br><span class="line">    &#125;); </span><br><span class="line">    $(<span class="string">"#result"</span>).val(result); &#125;); </span><br><span class="line">    $(<span class="string">"#show"</span>).on(<span class="string">"click"</span>, <span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">      var result = parseInt($(<span class="string">"#result"</span>).val()); </span><br><span class="line">      $(<span class="string">"[name='test']:checkbox"</span>).each(<span class="function"><span class="title">function</span></span>()&#123; </span><br><span class="line">        var value = parseInt($(this).val()); </span><br><span class="line">        <span class="keyword">if</span> ((result &amp; value) == value) &#123; </span><br><span class="line">        $(this).prop(<span class="string">"checked"</span>, <span class="literal">true</span>); </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">        $(this).prop(<span class="string">"checked"</span>, <span class="literal">false</span>); </span><br><span class="line">        &#125; </span><br><span class="line">      &#125;); </span><br><span class="line">   &#125;); </span><br><span class="line">&#125;); </span><br><span class="line">&lt;/script&gt; </span><br><span class="line">&lt;/body&gt; </span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://tianfs.com/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" data-id="ckb7ri46x0009w4s6ag9td525" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
 
     </footer>
   </div>
@@ -358,10 +313,55 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://tianfs.com/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" data-id="ckb7mwexn000a14s6eth12j8f" class="article-share-link">Share</a>
+      <a data-url="http://tianfs.com/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" data-id="ckb7ri46y000aw4s6ggnlgx0l" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-求两个数的比例" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/">求两个数的比例</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="比例计算"><a href="#比例计算" class="headerlink" title="比例计算"></a>比例计算</h2><p>1、计算长宽比例（长200 * 宽180）</p>
+<p>2、设A为长，B为宽，C为A和B的最大公约数 （20）</p>
+<p>3、得到 A/C : B/C   =&gt;（10 : 9）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://tianfs.com/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" data-id="ckb7ri47d0014w4s69y7khohx" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
 
     </footer>
   </div>
@@ -443,7 +443,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://tianfs.com/2020/06/09/php%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" data-id="ckb7refef0000s5s65tqcbdb7" class="article-share-link">Share</a>
+      <a data-url="http://tianfs.com/2020/06/09/php%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" data-id="ckb7ri47f0017w4s63ani1hf2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/" rel="tag">php</a></li></ul>
@@ -497,7 +497,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://tianfs.com/2020/06/09/%E9%80%9A%E8%BF%87PHP%E7%94%9F%E6%88%90PHP/" data-id="ckb7o94ga000183s6f9i6ax83" class="article-share-link">Share</a>
+      <a data-url="http://tianfs.com/2020/06/09/%E9%80%9A%E8%BF%87PHP%E7%94%9F%E6%88%90PHP/" data-id="ckb7ri47e0015w4s6ej5fgaiv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/" rel="tag">php</a></li></ul>
@@ -548,7 +548,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://tianfs.com/2020/06/09/hello-world/" data-id="ckb7e7a6j0000gss61l1dfxv2" class="article-share-link">Share</a>
+      <a data-url="http://tianfs.com/2020/06/09/hello-world/" data-id="ckb7ri46o0001w4s67q1ydv1q" class="article-share-link">Share</a>
       
       
     </footer>
@@ -599,7 +599,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://tianfs.com/2020/06/08/order-by-rand%E5%BC%95%E5%8F%91%E7%9A%84%E5%A4%A7%E6%8A%A5%E9%94%99/" data-id="ckb7o94g4000083s6d17m0xqm" class="article-share-link">Share</a>
+      <a data-url="http://tianfs.com/2020/06/08/order-by-rand%E5%BC%95%E5%8F%91%E7%9A%84%E5%A4%A7%E6%8A%A5%E9%94%99/" data-id="ckb7ri46u0006w4s679j60ezx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
@@ -663,15 +663,7 @@
       <ul>
         
           <li>
-            <a href="/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/">用一个数值保存多选的值</a>
-          </li>
-        
-          <li>
             <a href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/">css定位绝对居中办法</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/">求两个数的比例</a>
           </li>
         
           <li>
@@ -680,6 +672,14 @@
         
           <li>
             <a href="/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/">jquery图片上传插件，支持进度条，非flash,v1.2版</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/">用一个数值保存多选的值</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/">用css3 media实现响应式布局</a>
           </li>
         
       </ul>
