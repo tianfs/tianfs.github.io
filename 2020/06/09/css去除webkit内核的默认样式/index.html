@@ -7,15 +7,15 @@
   
   <title>css去除webkit内核的默认样式 | 田丰硕个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="##前言做移动端的朋友应该知道，iphone的默认按钮是个很恶心的圆角，select下拉框也有默认样式无法修改。 ###解决办法这时候可以用到在按钮和select样式里加入下面css–webkit–appearance:none &#x2F;&#x2F;去除默认样 ###示例代码 123456789101112131415input&amp;#123; background:#FF9933; border–radius:5p">
+  <meta name="description" content="##前言做移动端的朋友应该知道，iphone的默认按钮是个很恶心的圆角，select下拉框也有默认样式无法修改。 ###解决办法这时候可以用到的在按钮和select样式里加入下面css–webkit–appearance:none &#x2F;&#x2F;去除默认样 ###示例代码 123456789101112131415input&amp;#123; background:#FF9933; border–radius:5">
 <meta property="og:type" content="article">
 <meta property="og:title" content="css去除webkit内核的默认样式">
 <meta property="og:url" content="http://blog.tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/index.html">
 <meta property="og:site_name" content="田丰硕个人博客">
-<meta property="og:description" content="##前言做移动端的朋友应该知道，iphone的默认按钮是个很恶心的圆角，select下拉框也有默认样式无法修改。 ###解决办法这时候可以用到在按钮和select样式里加入下面css–webkit–appearance:none &#x2F;&#x2F;去除默认样 ###示例代码 123456789101112131415input&amp;#123; background:#FF9933; border–radius:5p">
+<meta property="og:description" content="##前言做移动端的朋友应该知道，iphone的默认按钮是个很恶心的圆角，select下拉框也有默认样式无法修改。 ###解决办法这时候可以用到的在按钮和select样式里加入下面css–webkit–appearance:none &#x2F;&#x2F;去除默认样 ###示例代码 123456789101112131415input&amp;#123; background:#FF9933; border–radius:5">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-06-09T03:46:47.000Z">
-<meta property="article:modified_time" content="2020-06-09T07:52:35.488Z">
+<meta property="article:modified_time" content="2020-08-05T06:57:47.621Z">
 <meta property="article:author" content="tianfs">
 <meta property="article:tag" content="css">
 <meta property="article:tag" content="html">
@@ -100,7 +100,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>##前言<br>做移动端的朋友应该知道，iphone的默认按钮是个很恶心的圆角，select下拉框也有默认样式无法修改。</p>
-<p>###解决办法<br>这时候可以用到<br>在按钮和select样式里加入下面css<br>–webkit–appearance:none //去除默认样</p>
+<p>###解决办法<br>这时候可以用到的<br>在按钮和select样式里加入下面css<br>–webkit–appearance:none //去除默认样</p>
 <p>###示例代码</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">input&#123;</span><br><span class="line"> background:<span class="comment">#FF9933;</span></span><br><span class="line"> border–radius:5px;</span><br><span class="line"> color:<span class="comment">#fff;</span></span><br><span class="line"> padding:3px 20px;</span><br><span class="line">–webkit–appearance:none;</span><br><span class="line">&#125;</span><br><span class="line">select&#123;</span><br><span class="line"> background:url(images/img1.jpg) no–repeat;</span><br><span class="line"> background–size:20px;</span><br><span class="line"> background–position:95% center;</span><br><span class="line"> padding:3px 10px;</span><br><span class="line"> width:30%;</span><br><span class="line">–webkit–appearance:none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
