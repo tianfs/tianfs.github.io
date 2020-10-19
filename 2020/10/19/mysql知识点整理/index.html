@@ -15,7 +15,7 @@
 <meta property="og:description" content="mysql一、锁相关1、悲观锁： 悲观的认为每次操作数据的时候都会有人来修改数据，所以使用数据时对其加锁，确保在自己使用的过程中数据不会被别人修改，使用完成后进行数据解锁。由于数据进行加锁，期间对该数据进行读写的其他线程都会进行等待。写入频繁使用悲观锁2、乐观锁： 所以每次获取数据的时候都不会进行加锁，但是在更新数据的时候需要判断该数据是否被别人修改过。一般是在sql的where上带版本号或时间戳">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-10-19T03:46:47.000Z">
-<meta property="article:modified_time" content="2020-10-19T11:29:49.910Z">
+<meta property="article:modified_time" content="2020-10-19T11:31:35.765Z">
 <meta property="article:author" content="tianfs">
 <meta property="article:tag" content="mysql">
 <meta property="article:tag" content="算法">
@@ -150,13 +150,7 @@
 <li>Hash索引遇到大量Hash值相等的情况后性能并不一定会比BTree高</li>
 </ul>
 <h3 id="五、分库、分表"><a href="#五、分库、分表" class="headerlink" title="五、分库、分表"></a>五、分库、分表</h3><h4 id="1、为什么要分表："><a href="#1、为什么要分表：" class="headerlink" title="1、为什么要分表："></a>1、为什么要分表：</h4><ul>
-<li><ul>
-<li><ul>
 <li>减小数据库的单表负担，缩短查询时间，减少锁等待的情况。<h4 id="表垂直分区"><a href="#表垂直分区" class="headerlink" title="表垂直分区"></a>表垂直分区</h4></li>
-</ul>
-</li>
-</ul>
-</li>
 <li>减少一个表中的字段，根据id关联起来<h4 id="表水平分区"><a href="#表水平分区" class="headerlink" title="表水平分区"></a>表水平分区</h4></li>
 <li>使用规则（例如按id哈希、id区间、时间）分组，可以单库多表或多库多表<h4 id="分库分表后查询问题"><a href="#分库分表后查询问题" class="headerlink" title="分库分表后查询问题"></a>分库分表后查询问题</h4></li>
 <li>单库多表<br>如果分表为myisam引擎的表，可以创建一个merge引擎的集合表来查询（merge引擎要求被合并表中不能又重复字段）<br>如果是innodb引擎，只能根据规则单独查询在合并或使用搜索引擎解决</li>
@@ -203,7 +197,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgggk55m001wh7fy5sw4csxw" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgggkrtc001wj5fy9p49du1f" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li></ul>
