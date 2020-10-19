@@ -113,31 +113,56 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>##mysql</p>
-<h3 id="锁相关"><a href="#锁相关" class="headerlink" title="锁相关"></a>锁相关</h3><h4 id="1、悲观锁："><a href="#1、悲观锁：" class="headerlink" title="1、悲观锁："></a>1、悲观锁：</h4><p>悲观的认为每次操作数据的时候都会有人来修改数据，所以使用数据时对其加锁，确保在自己使用的过程中数据不会被别人修改，使用完成后进行数据解锁。由于数据进行加锁，期间对该数据进行读写的其他线程都会进行等待。写入频繁使用悲观锁</p>
+<h3 id="一、锁相关"><a href="#一、锁相关" class="headerlink" title="一、锁相关"></a>一、锁相关</h3><h4 id="1、悲观锁："><a href="#1、悲观锁：" class="headerlink" title="1、悲观锁："></a>1、悲观锁：</h4><p>悲观的认为每次操作数据的时候都会有人来修改数据，所以使用数据时对其加锁，确保在自己使用的过程中数据不会被别人修改，使用完成后进行数据解锁。由于数据进行加锁，期间对该数据进行读写的其他线程都会进行等待。写入频繁使用悲观锁</p>
 <h4 id="2、乐观锁："><a href="#2、乐观锁：" class="headerlink" title="2、乐观锁："></a>2、乐观锁：</h4><p>所以每次获取数据的时候都不会进行加锁，但是在更新数据的时候需要判断该数据是否被别人修改过。一般是在sql的where上带版本号或时间戳，写代码时候自己实现，读取频繁使用乐观锁</p>
 <h4 id="3、共享锁："><a href="#3、共享锁：" class="headerlink" title="3、共享锁："></a>3、共享锁：</h4><p>如果事务T对数据A加上共享锁后，则其他事务只能对A再加共享锁，不能加排他锁。获准共享锁的事务只能读数据，不能修改数据。</p>
 <h4 id="4、排他锁："><a href="#4、排他锁：" class="headerlink" title="4、排他锁："></a>4、排他锁：</h4><p>如果事务T对数据A加上排他锁后，则其他事务不能再对A加任任何类型的封锁。获准排他锁的事务既能读数据，又能修改数据。</p>
 <h4 id="5、简要说明为什么会发生死锁-解决死锁的主要方法是什么"><a href="#5、简要说明为什么会发生死锁-解决死锁的主要方法是什么" class="headerlink" title="5、简要说明为什么会发生死锁?解决死锁的主要方法是什么?"></a>5、简要说明为什么会发生死锁?解决死锁的主要方法是什么?</h4><p>若干事务相互等待释放封锁，就陷入无限期等待状态，系统就进入死锁</p>
 <h4 id="6、解决死锁的方法应从预防和解除的两个方面着手："><a href="#6、解决死锁的方法应从预防和解除的两个方面着手：" class="headerlink" title="6、解决死锁的方法应从预防和解除的两个方面着手："></a>6、解决死锁的方法应从预防和解除的两个方面着手：</h4><p>(1)死锁的预防方法：①要求每一个事务必须一次封锁所要使用的全部数据（要么全成功，要么全不成功）②规定封锁数据的顺序，所有事务必须按这个顺序实行封锁。<br>(2)允许死锁发生，然后解除它，如果发现死锁，则将其中一个代价较小的事物撤消<br>，回滚这个事务，并释放此事务持有的封锁，使其他事务继续运行。</p>
-<h3 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h3><h4 id="1、Read-uncommitted（读未提交）（脏读）"><a href="#1、Read-uncommitted（读未提交）（脏读）" class="headerlink" title="1、Read uncommitted（读未提交）（脏读）:"></a>1、Read uncommitted（读未提交）（脏读）:</h4><p>在该隔离级别，所有事务都可以看到其它未提交事务的执行结果。可能会出现脏读。</p>
+<h3 id="二、事务隔离级别"><a href="#二、事务隔离级别" class="headerlink" title="二、事务隔离级别"></a>二、事务隔离级别</h3><h4 id="1、Read-uncommitted（读未提交）（脏读）"><a href="#1、Read-uncommitted（读未提交）（脏读）" class="headerlink" title="1、Read uncommitted（读未提交）（脏读）:"></a>1、Read uncommitted（读未提交）（脏读）:</h4><p>在该隔离级别，所有事务都可以看到其它未提交事务的执行结果。可能会出现脏读。</p>
 <h4 id="2、Read-Committed（读已提交，简称：-RC）（幻读）："><a href="#2、Read-Committed（读已提交，简称：-RC）（幻读）：" class="headerlink" title="2、Read Committed（读已提交，简称： RC）（幻读）："></a>2、Read Committed（读已提交，简称： RC）（幻读）：</h4><p>一个事务只能看见已经提交事务所做的改变。因为同一事务的其它实例在该实例处理期间可能会有新的 commit，所以可能出现幻读。</p>
 <h4 id="3、Repeatable-Read（可重复读，简称：RR）（默认，结果相同）："><a href="#3、Repeatable-Read（可重复读，简称：RR）（默认，结果相同）：" class="headerlink" title="3、Repeatable Read（可重复读，简称：RR）（默认，结果相同）："></a>3、Repeatable Read（可重复读，简称：RR）（默认，结果相同）：</h4><p>这是 MySQL 的默认事务隔离级别，它确保同一事务的多个实例在并发读取数据时，会看到同样的数据行。消除了脏读、不可重复读，默认也不会出现幻读。</p>
 <h4 id="4、Serializable（串行）："><a href="#4、Serializable（串行）：" class="headerlink" title="4、Serializable（串行）："></a>4、Serializable（串行）：</h4><p>这是最高的隔离级别，它通过强制事务排序，使之不可能相互冲突，从而解决幻读问题。</p>
-<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><h4 id="1、B-tree索引"><a href="#1、B-tree索引" class="headerlink" title="1、B+tree索引"></a>1、B+tree索引</h4><p>常用默认是B+tree</p>
-<h4 id="2、hash-索引"><a href="#2、hash-索引" class="headerlink" title="2、hash 索引"></a>2、hash 索引</h4><p>Hash索引仅仅能满足“=”,“IN”,“&lt;=&gt;”查询，不能使用范围查询<br>联合索引中，Hash索引不能利用部分索引键查询<br>Hash索引无法避免数据的排序操作<br>Hash索引任何时候都不能避免表扫描<br>Hash索引遇到大量Hash值相等的情况后性能并不一定会比BTree高</p>
-<h4 id="3、区别"><a href="#3、区别" class="headerlink" title="3、区别"></a>3、区别</h4><p>hash索引查找数据基本上能一次定位数据，当然有大量碰撞的话性能也会下降。而btree索引就得在节点上挨着查找了，很明显在数据精确查找方面hash索引的效率是要高于btree的；<br>那么不精确查找呢，也很明显，因为hash算法是基于等值计算的，所以对于“like”等范围查找hash索引无效，不支持；<br>对于btree支持的联合索引的最优前缀，hash也是无法支持的，联合索引中的字段要么全用要么全不用。<br>hash不支持索引排序，索引值和计算出来的hash值大小并不一定一致。</p>
-<h3 id="b-tree和b-tree"><a href="#b-tree和b-tree" class="headerlink" title="b-tree和b-tree"></a>b-tree和b-tree</h3><h4 id="1、b-tree"><a href="#1、b-tree" class="headerlink" title="1、b+tree"></a>1、b+tree</h4><p>B+ 树是 B 树的变体，定义基本与 B 树一致，与 B 树的不同点<br>所有叶子节点中包含了全部关键字的信息<br>非叶子节点上只存储 key 的信息，这样相对 B 树，可以增加每一页中存储 key 的数量<br>B 树是纵向扩展，最终变成一个 “瘦高个”，而 B+ 树是横向扩展的，最终会变成一个 “矮胖子”<br>各叶子节点用指针进行连接<br>mysql使用b+树索引<br>innodb索引和数据存在一个文件中<br>myisam下索引叶子节点保存数据的地址而不是数据本身</p>
-<h4 id="2、b-tree"><a href="#2、b-tree" class="headerlink" title="2、b-tree"></a>2、b-tree</h4><p>多路搜索树，每个结点存储M/2到M个关键字，非叶子结点存储指向关键字范围的子结点；<br>所有关键字在整颗树中出现，且只出现一次，非叶子结点可以命中；<br>如果 data 比较大时，每一页存储的 key 会比较少；当数据比较多时，同样会有：“要经历多层节点才能查询在叶子节点的数据” 的问题。</p>
-<h4 id="3、mysql中的b-tree"><a href="#3、mysql中的b-tree" class="headerlink" title="3、mysql中的b+tree"></a>3、mysql中的b+tree</h4><p>在B-树基础上，为叶子结点增加链表指针，所有关键字都在叶子结点中出现，非叶子结点作为叶子结点的索引；B+树总是到叶子结点才命中；<br>主聚集索引（clustered index）和辅助索引（secondary index）<br>具体行数据在在聚集索引上，辅助索引叶子节点存储聚集索引的key值，也就是主见<br>辅助索引的叶子节点并不包含行记录的全部数据</p>
+<h3 id="三、索引"><a href="#三、索引" class="headerlink" title="三、索引"></a>三、索引</h3><p>摘自（<a href="https://www.cnblogs.com/gdjk/p/10668868.html）" target="_blank" rel="noopener">https://www.cnblogs.com/gdjk/p/10668868.html）</a></p>
+<h4 id="1、重要概念"><a href="#1、重要概念" class="headerlink" title="1、重要概念"></a>1、重要概念</h4><p>基数：单个列唯一键（distict_keys）的数量叫做基数。<br>回表：当对一个列创建索引之后，索引会包含该列的键值及键值对应行所在的rowid。通过索引中记录的rowid访问表中的数据就叫回表。回表次数太多会严重影响SQL性能，如果回表次数太多，就不应该走索引扫描，应该直接走全表扫描。<br>EXPLAIN命令结果中的Using Index意味着不会回表，通过索引就可以获得主要的数据。Using Where则意味着需要回表取数据。</p>
+<h4 id="2、优化原则"><a href="#2、优化原则" class="headerlink" title="2、优化原则"></a>2、优化原则</h4><p>1）适合索引的列是出现在where子句中的列，或者连接子句中指定的列；<br>2）基数较小的类，索引效果较差，没有必要在此列建立索引；<br>3）使用短索引，如果对长字符串列进行索引，应该指定一个前缀长度，这样能够节省大量索引空间；<br>4）不要过度索引。索引需要额外的磁盘空间，并降低写操作的性能。在修改表内容的时候，索引会进行更新甚至重构，索引列越多，这个时间就会越长。所以只保持需要的索引有利于查询即可。</p>
+<h3 id="四、b-tree索、b-tree索引、hash索引"><a href="#四、b-tree索、b-tree索引、hash索引" class="headerlink" title="四、b-tree索、b-tree索引、hash索引"></a>四、b-tree索、b-tree索引、hash索引</h3><h4 id="1、b-tree"><a href="#1、b-tree" class="headerlink" title="1、b+tree"></a>1、b+tree</h4><p>B+ 树是 B 树的变体，定义基本与 B 树一致，与 B 树的不同点<br>所有叶子节点中包含了全部关键字的信息<br>非叶子节点上只存储 key 的信息，这样相对 B 树，可以增加每一页中存储 key 的数量<br>B 树是纵向扩展，最终变成一个 “瘦高个”，而 B+ 树是横向扩展的，最终会变成一个 “矮胖子”<br>各叶子节点用指针进行连接<br>mysql使用b+树索引<br>innodb索引和数据存在一个文件中<br>myisam下索引叶子节点保存数据的地址而不是数据本身</p>
+<h4 id="2、b-tree"><a href="#2、b-tree" class="headerlink" title="2、b-tree"></a>2、b-tree</h4><p>多路搜索树，每个结点存储M/2到M个关键字，非叶子结点存储指向关键字范围的子结点；<br>所有关键字在整颗树中出现，且只出现一次，非叶子结点可以命中；<br>树的每个节点都包含key值和data值，叶子节点可以看作外部节点，不包含任何信息；<br>如果 data 比较大时，每一页存储的 key 会比较少；当数据比较多时，同样会有：“要经历多层节点才能查询在叶子节点的数据” 的问题。</p>
+<h4 id="3、mysql中的b-tree"><a href="#3、mysql中的b-tree" class="headerlink" title="3、mysql中的b+tree"></a>3、mysql中的b+tree</h4><p>在B-树基础上，为叶子结点增加链表指针，所有关键字都在叶子结点中出现，非叶子结点作为叶子结点的索引；B+树总是到叶子结点才命中；<br>主聚集索引（clustered index）和辅助索引（secondary index）<br>具体行数据在在聚集索引上，辅助索引叶子节点存储聚集索引的key值，也就是主见<br>辅助索引的叶子节点并不包含行记录的全部数据<br>树的磁盘读写代价更低<br>树的查询效率更加稳定 </p>
 <h4 id="4、B-树："><a href="#4、B-树：" class="headerlink" title="4、B*树："></a>4、B*树：</h4><p>在B+树基础上，为非叶子结点也增加链表指针，将结点的最低利用率从1/2提高到2/3；</p>
-<h4 id="5、区别"><a href="#5、区别" class="headerlink" title="5、区别"></a>5、区别</h4><p>B-树的每个节点都包含key值和data值，叶子节点可以看作外部节点，不包含任何信息；<br>B+树的非叶子节点中只有关键字和指向下一个节点的索引，记录只放在叶子节点中，叶子结点有指针链接。<br>B+树的磁盘读写代价更低<br>B+树的查询效率更加稳定 </p>
-<h3 id="分库、分表"><a href="#分库、分表" class="headerlink" title="分库、分表"></a>分库、分表</h3><h4 id="简单版"><a href="#简单版" class="headerlink" title="简单版"></a>简单版</h4><h4 id="es"><a href="#es" class="headerlink" title="es"></a>es</h4><h4 id="hbase"><a href="#hbase" class="headerlink" title="hbase"></a>hbase</h4><h3 id="explain"><a href="#explain" class="headerlink" title="explain"></a>explain</h3><h3 id="引擎"><a href="#引擎" class="headerlink" title="引擎"></a>引擎</h3><h4 id="1、innodb："><a href="#1、innodb：" class="headerlink" title="1、innodb："></a>1、innodb：</h4><p>MySQL 5.5 之后的默认存储引擎<br>默认引擎<br>支持行锁<br>索引叶子节点存储数据<br>支持事务<br>默认select不加锁，UPDATE、INSERT、DELETE默认都是排它锁，可以通过（lock in share mode）和（for update）加共享锁和排他锁：<br>Record Lock：单个记录上的索引加锁，Gap Lock：间隙锁，对索引项之间的间隙加锁，但不包括记录本身，Next-Key Lock：Gap Lock + Record Lock，锁定一个范围，并且锁定记录本身。<br>如果不通过索引条件检索数据，那么 InnoDB 将对表中所有记录加锁，实际效果跟表锁一样（where不命中索引就锁表）。</p>
+<h4 id="5、mysql中的hash-索引"><a href="#5、mysql中的hash-索引" class="headerlink" title="5、mysql中的hash 索引"></a>5、mysql中的hash 索引</h4><p>Hash索引仅仅能满足“=”,“IN”,“&lt;=&gt;”查询，不能使用范围查询<br>联合索引中，Hash索引不能利用部分索引键查询<br>Hash索引无法避免数据的排序操作<br>Hash索引任何时候都不能避免表扫描<br>Hash索引遇到大量Hash值相等的情况后性能并不一定会比BTree高</p>
+<h3 id="五、分库、分表"><a href="#五、分库、分表" class="headerlink" title="五、分库、分表"></a>五、分库、分表</h3><h4 id="1、为什么要分表："><a href="#1、为什么要分表：" class="headerlink" title="1、为什么要分表："></a>1、为什么要分表：</h4><p>减小数据库的单表负担，缩短查询时间，减少锁等待的情况。</p>
+<h4 id="表垂直分区"><a href="#表垂直分区" class="headerlink" title="表垂直分区"></a>表垂直分区</h4><p>减少一个表中的字段，根据id关联起来</p>
+<h4 id="表水平分区"><a href="#表水平分区" class="headerlink" title="表水平分区"></a>表水平分区</h4><p>使用规则（例如按id哈希、id区间、时间）分组，可以单库多表或多库多表</p>
+<h4 id="分库分表后查询问题"><a href="#分库分表后查询问题" class="headerlink" title="分库分表后查询问题"></a>分库分表后查询问题</h4><p>1、单库多表<br>如果分表为myisam引擎的表，可以创建一个merge引擎的集合表来查询（merge引擎要求被合并表中不能又重复字段）<br>如果是innodb引擎，只能根据规则单独查询在合并或使用搜索引擎解决<br>2、多库多表<br>将数据通过同步插件(例如logstash)或者mq同步到Elasticsearch，然后通过lasticsearch查询，<br>如果数据量过大可以引入hbase 将数据存到hbase中，然后通过lasticsearch存储hbase的rowkey，然后查到rowkey去hbase中取数据</p>
+<h3 id="六、引擎"><a href="#六、引擎" class="headerlink" title="六、引擎"></a>六、引擎</h3><h4 id="1、innodb："><a href="#1、innodb：" class="headerlink" title="1、innodb："></a>1、innodb：</h4><p>MySQL 5.5 之后的默认存储引擎<br>默认引擎<br>支持行锁<br>索引叶子节点存储数据<br>支持事务<br>默认select不加锁，UPDATE、INSERT、DELETE默认都是排它锁，可以通过（lock in share mode）和（for update）加共享锁和排他锁：<br>Record Lock：单个记录上的索引加锁，Gap Lock：间隙锁，对索引项之间的间隙加锁，但不包括记录本身，Next-Key Lock：Gap Lock + Record Lock，锁定一个范围，并且锁定记录本身。<br>如果不通过索引条件检索数据，那么 InnoDB 将对表中所有记录加锁，实际效果跟表锁一样（where不命中索引就锁表）。</p>
 <h4 id="2、myisam："><a href="#2、myisam：" class="headerlink" title="2、myisam："></a>2、myisam：</h4><p>MySQL 8.0弃用<br>MySQL 5.5 之前的默认存储引擎<br>支持表锁<br>不支持行锁<br>不支持事务<br>索引叶子节点只保存数据的地址而不是数据本身</p>
+<h3 id="七、explain"><a href="#七、explain" class="headerlink" title="七、explain"></a>七、explain</h3><p>摘自（<a href="https://segmentfault.com/a/1190000021458117?utm_source=tag-newest）" target="_blank" rel="noopener">https://segmentfault.com/a/1190000021458117?utm_source=tag-newest）</a></p>
+<h4 id="1、用途"><a href="#1、用途" class="headerlink" title="1、用途"></a>1、用途</h4><ol>
+<li>表的读取顺序如何</li>
+<li>数据读取操作有哪些操作类型</li>
+<li>哪些索引可以使用</li>
+<li>哪些索引被实际使用</li>
+<li>表之间是如何引用</li>
+<li>每张表有多少行被优化器查询<br>……<h4 id="2、explain包含的字段"><a href="#2、explain包含的字段" class="headerlink" title="2、explain包含的字段"></a>2、explain包含的字段</h4></li>
+<li>id //select查询的序列号，包含一组数字，表示查询中执行select子句或操作表的顺序</li>
+<li>select_type //查询类型</li>
+<li>table //正在访问哪个表</li>
+<li>partitions //匹配的分区</li>
+<li>type //访问的类型</li>
+<li>possible_keys //显示可能应用在这张表中的索引，一个或多个，但不一定实际使用到</li>
+<li>key //实际使用到的索引，如果为NULL，则没有使用索引</li>
+<li>key_len //表示索引中使用的字节数，可通过该列计算查询中使用的索引的长度</li>
+<li>ref //显示索引的哪一列被使用了，如果可能的话，是一个常数，哪些列或常量被用于查找索引列上的值</li>
+<li>rows //根据表统计信息及索引选用情况，大致估算出找到所需的记录所需读取的行数</li>
+<li>filtered //查询的表行占表的百分比</li>
+<li>Extra //包含不适合在其它列中显示但十分重要的额外信息</li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/19/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckggdmur9000thrfy1c1mgddw" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/19/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckggg84ow001xxvfygwjn4bxp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
@@ -183,7 +208,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/09/27/bitmap/" data-id="ckggdmuqr0001hrfy3i5d2r8u" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/09/27/bitmap/" data-id="ckggg84o20004xvfy7lql06qf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
@@ -231,10 +256,54 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" data-id="ckggdmuqw0005hrfy47e5cphf" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" data-id="ckggg84o40006xvfy06jy8cju" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-HTTP状态码" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/php/">php</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/">HTTP状态码</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>HTTP状态码（HTTP Status Code）是用来表示网页服务器HTTP 响应状态的3位数字代码。它由RFC 2616规范定义的，并得到RFC 2518、RFC 2817、RFC 2295、RFC 2774、RFC 4918等规范扩展。所有状态码的第一个数字代表了响应的五种状态之一</p>
+<p>HTTP/1.1定义的状态码值和对应的原因短语（Reason-Phrase）的例子。<br>1XX表示:消息<br>这一类型的状态码，代表请求已被接受，需要继续处理。这类响应是临时响应，只包含状态行和某些可选的响应头信息，并以空行结束。由于HTTP/1.0 协议中没有定义任何1xx状态码，所以除非在某些试验条件下，服务器禁止向此类客户端发送1xx响应。 这些状态码代表的响应都是信息性的，标示客户应该采取的其他行动。<br>100 : Continue  客户端应当继续发送请求。这个临时响应是用来通知客户端它的部分请求已经被服务器接收，且仍未被拒绝。客户端应当继续发送请求的剩余部分.<br>101 : witching Protocols 服务器已经理解了客户端的请求，并将通过Upgrade消息头通知客户端采用不同的协议来完成这个请求。在发送完这个响应最后的空行后，服务器将会切换到 在Upgrade消息头中定义的那些协议。: 只有在切换新的协议更有好处的时候才应该采取类似措施.<br>102: Processing  由WebDAV（RFC 2518）扩展的状态码，代表处理将被继续执行。<br>2XX表示:成功<br>这一类型的状态码，代表请求已成功被服务器接收、理解、并接受。<br>200 : OK<br>201 : Created 已创建<br>202 : Accepted 接收<br>203 : Non-Authoritative Information 非认证信息<br>204 : No Content 无内容<br>205 : Reset Content 重置内容<br>206 : Partial Content 服务器已经成功处理了部分GET请求。类似于FlashGet或者迅雷这类的HTTP 下载工具都是使用此类响应实现断点续传或者将一个大文档分解为多个下载段同时下载。<br>207: Multi-Status 由WebDAV(RFC 2518)扩展的状态码，代表之后的消息体将是一个XML消息，并且可能依照之前子请求数量的不同，包含一系列独立的响应代码.<br>3XX表示: 重定向<br>这类状态码代表需要客户端采取进一步的操作才能完成请求。通常，这些状态码用来重定向，后续的请求地址（重定向目标）在本次响应的Location域中指明。<br>300 : Multiple Choices 多路选择<br>301 : Moved Permanently  永久转移<br>302 : Found 暂时转移<br>303 : See Other 参见其它<br>304 : Not Modified 未修改<br>305 : Use Proxy 使用代理<br>306: Switch Proxy  在最新版的规范中，306状态码已经不再被使用。<br>307 : Temporary Redirect 请求的资源现在临时从不同的URI响应请求。由于这样的重定向是临时的，客户端应当继续向原有地址发送以后的请求。只有在Cache-Control或 Expires中进行了指定的情况下，这个响应才是可缓存的。<br>4XX表示: 客户端错误<br>这类的状态码代表了客户端看起来可能发生了错误，妨碍了服务器的处理。<br>400 : Bad Request 错误请求<br>401 : Unauthorized 未认证<br>402 : Payment Required 需要付费<br>403 : Forbidden 禁止<br>404 : Not Found  请求失败，请求所希望得到的资源未被在服务器上发现<br>405 : Method Not Allowed 方法不允许<br>406 : Not Acceptable 不接受<br>407 : Proxy Authentication Required 需要代理认证<br>408 : Request Time-out 请求超时<br>409 : Conflict 冲突<br>410 : Gone 失败<br>411 : Length Required 需要长度<br>412 : Precondition Failed 条件失败<br>413 : Request Entity Too Large 请求实体太大<br>414 : Request-URI Too Large 请求URI太长<br>415 : Unsupported Media Type 不支持媒体类型<br>416 : Requested range not satisfiable 如果请求中包含了Range请求头，并且Range中指定的任何数据范围都与当前资源的可用范围不重合，同时请求中又没有定义If-Range请求头，那 么服务器就应当返回416状态码。<br>417 : Expectation Failed 在请求头Expect中指定的预期内容无法被服务器满足<br>421 :There are too many connections from your internet address 从当前客户端所在的IP地址到服务器的连接数超过了服务器许可的最大范围。通常，这里的IP地址指的是从服务器上看到的客户端地址.<br>422: Unprocessable Entity 请求格式正确，但是由于含有语义错误，无法响应。（RFC 4918 WebDAV）<br>423: Locked 当前资源被锁定。（RFC 4918 WebDAV）<br>424: Failed Dependency 由于之前的某个请求发生的错误，导致当前请求失败，例如PROPPATCH。（RFC 4918 WebDAV）<br>425: Unordered Collection 在WebDav Advanced Collections草案中定义，但是未出现在《WebDAV顺序集协议》（RFC 3658）中。<br>426:Upgrade Required 客户端应当切换到TLS/1.0。（RFC 2817）<br>449: Retry With 由微软扩展，代表请求应当在执行完适当的操作后进行重试。<br>5XX表示: 服务器错误<br>这类状态码代表了服务器在处理请求的过程中有错误或者异常状态发生<br>500 : Internal Server Error  服务器遇到了一个未曾预料的状况，导致了它无法完成对请求的处理。一般来说，这个问题都会在服务器的程序码出错时出现<br>501 : Not Implemented 未实现<br>502 : Bad Gateway  作为网关或者代理工作的服务器尝试执行请求时，从上游服务器接收到无效的响应<br>503 : Service Unavailable 由于临时的服务器维护或者过载，服务器当前无法处理请求。这个状况是临时的，并且将在一段时间以后恢复。<br>504 : Gateway Time-out 网关超时<br>505 : HTTP Version not supported  服务器不支持，或者拒绝支持在请求中使用的HTTP版本。这暗示着服务器不能或不愿使用与客户端相同的版本。响应中应当包含一个描述了为何版本不被支持以及服务器支持哪些协议的实体。<br>506 : Variant Also Negotiates 由《透明内容协商协议》（RFC 2295）扩展，代表服务器存在内部配置错误：被请求的协商变元资源被配置为在透明内容协商中使用自己，因此在一个协商处理中不是一个合适的重点。<br>507 : Insufficient Storage 服务器无法存储完成请求所必须的内容。这个状况被认为是临时的。WebDAV（RFC 4918）<br>509 : Bandwidth Limit Exceeded 服务器达到带宽限制。这不是一个官方的状态码，但是仍被广泛使用。<br>510 : Not Extended 获取资源所需要的策略并没有没满足。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" data-id="ckggg84nr0000xvfy44gf68g1" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/" rel="tag">http</a></li></ul>
 
     </footer>
   </div>
@@ -307,98 +376,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="ckggdmuqk0000hrfyhngw7v0z" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="ckggg84ny0001xvfy955td4ja" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-HTTP状态码" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/php/">php</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/">HTTP状态码</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>HTTP状态码（HTTP Status Code）是用来表示网页服务器HTTP 响应状态的3位数字代码。它由RFC 2616规范定义的，并得到RFC 2518、RFC 2817、RFC 2295、RFC 2774、RFC 4918等规范扩展。所有状态码的第一个数字代表了响应的五种状态之一</p>
-<p>HTTP/1.1定义的状态码值和对应的原因短语（Reason-Phrase）的例子。<br>1XX表示:消息<br>这一类型的状态码，代表请求已被接受，需要继续处理。这类响应是临时响应，只包含状态行和某些可选的响应头信息，并以空行结束。由于HTTP/1.0 协议中没有定义任何1xx状态码，所以除非在某些试验条件下，服务器禁止向此类客户端发送1xx响应。 这些状态码代表的响应都是信息性的，标示客户应该采取的其他行动。<br>100 : Continue  客户端应当继续发送请求。这个临时响应是用来通知客户端它的部分请求已经被服务器接收，且仍未被拒绝。客户端应当继续发送请求的剩余部分.<br>101 : witching Protocols 服务器已经理解了客户端的请求，并将通过Upgrade消息头通知客户端采用不同的协议来完成这个请求。在发送完这个响应最后的空行后，服务器将会切换到 在Upgrade消息头中定义的那些协议。: 只有在切换新的协议更有好处的时候才应该采取类似措施.<br>102: Processing  由WebDAV（RFC 2518）扩展的状态码，代表处理将被继续执行。<br>2XX表示:成功<br>这一类型的状态码，代表请求已成功被服务器接收、理解、并接受。<br>200 : OK<br>201 : Created 已创建<br>202 : Accepted 接收<br>203 : Non-Authoritative Information 非认证信息<br>204 : No Content 无内容<br>205 : Reset Content 重置内容<br>206 : Partial Content 服务器已经成功处理了部分GET请求。类似于FlashGet或者迅雷这类的HTTP 下载工具都是使用此类响应实现断点续传或者将一个大文档分解为多个下载段同时下载。<br>207: Multi-Status 由WebDAV(RFC 2518)扩展的状态码，代表之后的消息体将是一个XML消息，并且可能依照之前子请求数量的不同，包含一系列独立的响应代码.<br>3XX表示: 重定向<br>这类状态码代表需要客户端采取进一步的操作才能完成请求。通常，这些状态码用来重定向，后续的请求地址（重定向目标）在本次响应的Location域中指明。<br>300 : Multiple Choices 多路选择<br>301 : Moved Permanently  永久转移<br>302 : Found 暂时转移<br>303 : See Other 参见其它<br>304 : Not Modified 未修改<br>305 : Use Proxy 使用代理<br>306: Switch Proxy  在最新版的规范中，306状态码已经不再被使用。<br>307 : Temporary Redirect 请求的资源现在临时从不同的URI响应请求。由于这样的重定向是临时的，客户端应当继续向原有地址发送以后的请求。只有在Cache-Control或 Expires中进行了指定的情况下，这个响应才是可缓存的。<br>4XX表示: 客户端错误<br>这类的状态码代表了客户端看起来可能发生了错误，妨碍了服务器的处理。<br>400 : Bad Request 错误请求<br>401 : Unauthorized 未认证<br>402 : Payment Required 需要付费<br>403 : Forbidden 禁止<br>404 : Not Found  请求失败，请求所希望得到的资源未被在服务器上发现<br>405 : Method Not Allowed 方法不允许<br>406 : Not Acceptable 不接受<br>407 : Proxy Authentication Required 需要代理认证<br>408 : Request Time-out 请求超时<br>409 : Conflict 冲突<br>410 : Gone 失败<br>411 : Length Required 需要长度<br>412 : Precondition Failed 条件失败<br>413 : Request Entity Too Large 请求实体太大<br>414 : Request-URI Too Large 请求URI太长<br>415 : Unsupported Media Type 不支持媒体类型<br>416 : Requested range not satisfiable 如果请求中包含了Range请求头，并且Range中指定的任何数据范围都与当前资源的可用范围不重合，同时请求中又没有定义If-Range请求头，那 么服务器就应当返回416状态码。<br>417 : Expectation Failed 在请求头Expect中指定的预期内容无法被服务器满足<br>421 :There are too many connections from your internet address 从当前客户端所在的IP地址到服务器的连接数超过了服务器许可的最大范围。通常，这里的IP地址指的是从服务器上看到的客户端地址.<br>422: Unprocessable Entity 请求格式正确，但是由于含有语义错误，无法响应。（RFC 4918 WebDAV）<br>423: Locked 当前资源被锁定。（RFC 4918 WebDAV）<br>424: Failed Dependency 由于之前的某个请求发生的错误，导致当前请求失败，例如PROPPATCH。（RFC 4918 WebDAV）<br>425: Unordered Collection 在WebDav Advanced Collections草案中定义，但是未出现在《WebDAV顺序集协议》（RFC 3658）中。<br>426:Upgrade Required 客户端应当切换到TLS/1.0。（RFC 2817）<br>449: Retry With 由微软扩展，代表请求应当在执行完适当的操作后进行重试。<br>5XX表示: 服务器错误<br>这类状态码代表了服务器在处理请求的过程中有错误或者异常状态发生<br>500 : Internal Server Error  服务器遇到了一个未曾预料的状况，导致了它无法完成对请求的处理。一般来说，这个问题都会在服务器的程序码出错时出现<br>501 : Not Implemented 未实现<br>502 : Bad Gateway  作为网关或者代理工作的服务器尝试执行请求时，从上游服务器接收到无效的响应<br>503 : Service Unavailable 由于临时的服务器维护或者过载，服务器当前无法处理请求。这个状况是临时的，并且将在一段时间以后恢复。<br>504 : Gateway Time-out 网关超时<br>505 : HTTP Version not supported  服务器不支持，或者拒绝支持在请求中使用的HTTP版本。这暗示着服务器不能或不愿使用与客户端相同的版本。响应中应当包含一个描述了为何版本不被支持以及服务器支持哪些协议的实体。<br>506 : Variant Also Negotiates 由《透明内容协商协议》（RFC 2295）扩展，代表服务器存在内部配置错误：被请求的协商变元资源被配置为在透明内容协商中使用自己，因此在一个协商处理中不是一个合适的重点。<br>507 : Insufficient Storage 服务器无法存储完成请求所必须的内容。这个状况被认为是临时的。WebDAV（RFC 4918）<br>509 : Bandwidth Limit Exceeded 服务器达到带宽限制。这不是一个官方的状态码，但是仍被广泛使用。<br>510 : Not Extended 获取资源所需要的策略并没有没满足。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" data-id="ckggdmuqv0004hrfydywxd8hl" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/" rel="tag">http</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-css定位绝对居中办法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/">css定位绝对居中办法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">position: absolute;</span><br><span class="line">left: 50%;</span><br><span class="line">top: 50%;</span><br><span class="line">transform: translate(-50%, -50%);</span><br><span class="line">-webkit-transform:translate(-50%, -50%);</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="ckggdmuqx0006hrfyce0880kv" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
 
     </footer>
   </div>
@@ -442,7 +423,51 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="ckggdmur3000fhrfycf8ac061" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="ckggg84o30005xvfy0uc4elf3" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-css定位绝对居中办法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/">css定位绝对居中办法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">position: absolute;</span><br><span class="line">left: 50%;</span><br><span class="line">top: 50%;</span><br><span class="line">transform: translate(-50%, -50%);</span><br><span class="line">-webkit-transform:translate(-50%, -50%);</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="ckggg84o5000axvfy120d9oxh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
@@ -488,55 +513,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" data-id="ckggdmur4000hhrfycrlk3f32" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" data-id="ckggg84o9000fxvfy6j8cc5h3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-求两个数的比例" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/">求两个数的比例</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="比例计算"><a href="#比例计算" class="headerlink" title="比例计算"></a>比例计算</h2><p>1、计算长宽比例（长200 * 宽180）</p>
-<p>2、设A为长，B为宽，C为A和B的最大公约数 （20）</p>
-<p>3、得到 A/C : B/C   =&gt;（10 : 9）</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" data-id="ckggdmur7000mhrfyg9i1db5e" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
 
     </footer>
   </div>
@@ -582,10 +562,63 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" data-id="ckggdmur8000ohrfyhmi8axbf" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" data-id="ckggg84oa000hxvfy5y1ha7yl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-用一个数值保存多选的值" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/">用一个数值保存多选的值</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在开发过程中，对于网页中的多选，我们有很多种存储方式，常见的如逗号分隔。下文介绍一种通用设计方式：用一个整数来存储复选框的值。</p>
+<h3 id="准备知识-——-位与运算"><a href="#准备知识-——-位与运算" class="headerlink" title="准备知识 —— 位与运算"></a>准备知识 —— 位与运算</h3><p>位与运算：二进制运算，相同位的两个数字都为1，则为1；若有一个不为1，则为0，如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> 下方是运算</span><br><span class="line">  00101 </span><br><span class="line">&amp; 11100 </span><br><span class="line">------------ </span><br><span class="line">  00100</span><br></pre></td></tr></table></figure>
+
+<h3 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h3><p>将多项的选项值分别设置为 2 的 n 次方，n 从 0 开始，每多一项，n + 1。即 1，2，4，8…<br>多选的存储值为各项值之和，如选中了第 1、3 项，则值为：1 + 4 = 5</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<h3 id="回显"><a href="#回显" class="headerlink" title="回显"></a>回显</h3><p>假设存储的值为 5 ，要使相应的项被勾选，则是循环多项的值，每项与存储值 5 进行 位与运算，如果值与选项本身的值相等，则选中该项；相反地，如果运算值为 0 ，则设置为不选中：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">下方回显</span><br><span class="line"> 1 &amp; 5 = 1</span><br><span class="line"> 2 &amp; 5 = 0</span><br><span class="line"> 4 &amp; 5 = 4</span><br><span class="line"> 8 &amp; 5 = 0</span><br></pre></td></tr></table></figure>
+
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt; </span><br><span class="line">&lt;html lang=<span class="string">"en"</span>&gt; </span><br><span class="line">&lt;head&gt; </span><br><span class="line">  &lt;meta charset=<span class="string">"UTF-8"</span>&gt; </span><br><span class="line">  &lt;title&gt;Checkbox Test&lt;/title&gt; </span><br><span class="line">&lt;/head&gt; </span><br><span class="line">&lt;body&gt; </span><br><span class="line">&lt;form&gt; </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"1"</span>&gt; 1 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"2"</span>&gt; 2 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"4"</span>&gt; 4 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"8"</span>&gt; 8 </span><br><span class="line">&lt;/form&gt; </span><br><span class="line">&lt;input <span class="built_in">type</span>=<span class="string">"text"</span> id=<span class="string">"result"</span> placeholder=<span class="string">"设置要回显的值"</span>&gt; </span><br><span class="line">&lt;button id=<span class="string">"show"</span>&gt;回显&lt;/button&gt; </span><br><span class="line">&lt;script src=<span class="string">"http://libs.baidu.com/jquery/1.11.1/jquery.min.js"</span>&gt;&lt;/script&gt; </span><br><span class="line">&lt;script&gt; </span><br><span class="line">$(<span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">  $(<span class="string">"[name='test']"</span>).on(<span class="string">"change"</span>, <span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">    var result = 0; </span><br><span class="line">    $(<span class="string">"[name='test']:checkbox:checked"</span>).each(<span class="function"><span class="title">function</span></span>()&#123; </span><br><span class="line">      result += parseInt($(this).val()); </span><br><span class="line">    &#125;); </span><br><span class="line">    $(<span class="string">"#result"</span>).val(result); &#125;); </span><br><span class="line">    $(<span class="string">"#show"</span>).on(<span class="string">"click"</span>, <span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">      var result = parseInt($(<span class="string">"#result"</span>).val()); </span><br><span class="line">      $(<span class="string">"[name='test']:checkbox"</span>).each(<span class="function"><span class="title">function</span></span>()&#123; </span><br><span class="line">        var value = parseInt($(this).val()); </span><br><span class="line">        <span class="keyword">if</span> ((result &amp; value) == value) &#123; </span><br><span class="line">        $(this).prop(<span class="string">"checked"</span>, <span class="literal">true</span>); </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">        $(this).prop(<span class="string">"checked"</span>, <span class="literal">false</span>); </span><br><span class="line">        &#125; </span><br><span class="line">      &#125;); </span><br><span class="line">   &#125;); </span><br><span class="line">&#125;); </span><br><span class="line">&lt;/script&gt; </span><br><span class="line">&lt;/body&gt; </span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" data-id="ckggg84of000sxvfy75id5kpr" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
 
     </footer>
   </div>
@@ -663,11 +696,11 @@
           </li>
         
           <li>
-            <a href="/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/">MySQL修改root密码的几种方法</a>
+            <a href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/">HTTP状态码</a>
           </li>
         
           <li>
-            <a href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/">HTTP状态码</a>
+            <a href="/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/">MySQL修改root密码的几种方法</a>
           </li>
         
       </ul>
