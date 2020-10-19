@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>知识点整理 | 田丰硕个人博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="##mysql###锁相关1、悲观锁：悲观的认为每次操作数据的时候都会有人来修改数据，所以使用数据时对其加锁，确保在自己使用的过程中数据不会被别人修改，使用完成后进行数据解锁。由于数据进行加锁，期间对该数据进行读写的其他线程都会进行等待。写入频繁使用悲观锁2、乐观锁：所以每次获取数据的时候都不会进行加锁，但是在更新数据的时候需要判断该数据是否被别人修改过。一般是在sql的where上带版本号或时间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识点整理">
+<meta property="og:url" content="http://blog.tianfs.com/2020/10/19/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/index.html">
+<meta property="og:site_name" content="田丰硕个人博客">
+<meta property="og:description" content="##mysql###锁相关1、悲观锁：悲观的认为每次操作数据的时候都会有人来修改数据，所以使用数据时对其加锁，确保在自己使用的过程中数据不会被别人修改，使用完成后进行数据解锁。由于数据进行加锁，期间对该数据进行读写的其他线程都会进行等待。写入频繁使用悲观锁2、乐观锁：所以每次获取数据的时候都不会进行加锁，但是在更新数据的时候需要判断该数据是否被别人修改过。一般是在sql的where上带版本号或时间">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-10-19T03:46:47.000Z">
+<meta property="article:modified_time" content="2020-10-19T08:44:01.488Z">
+<meta property="article:author" content="tianfs">
+<meta property="article:tag" content="mysql">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="php">
+<meta property="article:tag" content="redis">
+<meta property="article:tag" content="分布式">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="田丰硕个人博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">田丰硕个人博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">误入拍(P)黄(H)片(P)之路</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://blog.tianfs.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-知识点整理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/19/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" class="article-date">
+  <time datetime="2020-10-19T03:46:47.000Z" itemprop="datePublished">2020-10-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      知识点整理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##mysql<br>###锁相关<br>1、悲观锁：<br>悲观的认为每次操作数据的时候都会有人来修改数据，所以使用数据时对其加锁，确保在自己使用的过程中数据不会被别人修改，使用完成后进行数据解锁。由于数据进行加锁，期间对该数据进行读写的其他线程都会进行等待。写入频繁使用悲观锁<br>2、乐观锁：<br>所以每次获取数据的时候都不会进行加锁，但是在更新数据的时候需要判断该数据是否被别人修改过。一般是在sql的where上带版本号或时间戳，写代码时候自己实现，读取频繁使用乐观锁<br>3、共享锁：<br>如果事务T对数据A加上共享锁后，则其他事务只能对A再加共享锁，不能加排他锁。获准共享锁的事务只能读数据，不能修改数据。<br>4、排他锁：<br>如果事务T对数据A加上排他锁后，则其他事务不能再对A加任任何类型的封锁。获准排他锁的事务既能读数据，又能修改数据。<br>5、简要说明为什么会发生死锁?解决死锁的主要方法是什么?<br>若干事务相互等待释放封锁，就陷入无限期等待状态，系统就进入死锁<br>6、解决死锁的方法应从预防和解除的两个方面着手：<br>(1)死锁的预防方法：①要求每一个事务必须一次封锁所要使用的全部数据（要么全成功，要么全不成功）②规定封锁数据的顺序，所有事务必须按这个顺序实行封锁。<br>(2)允许死锁发生，然后解除它，如果发现死锁，则将其中一个代价较小的事物撤消<br>，回滚这个事务，并释放此事务持有的封锁，使其他事务继续运行。</p>
+<p>###事务隔离级别<br>1、Read uncommitted（读未提交）（脏读）:<br>在该隔离级别，所有事务都可以看到其它未提交事务的执行结果。可能会出现脏读。<br>2、Read Committed（读已提交，简称： RC）（幻读）：<br>一个事务只能看见已经提交事务所做的改变。因为同一事务的其它实例在该实例处理期间可能会有新的 commit，所以可能出现幻读。<br>3、Repeatable Read（可重复读，简称：RR）（默认，结果相同）：<br>这是 MySQL 的默认事务隔离级别，它确保同一事务的多个实例在并发读取数据时，会看到同样的数据行。消除了脏读、不可重复读，默认也不会出现幻读。<br>4、Serializable（串行）：<br>这是最高的隔离级别，它通过强制事务排序，使之不可能相互冲突，从而解决幻读问题。<br>###索引<br>B+tree索引和Hash索引<br>常用默认是B+tree<br>2、hash<br>Hash索引仅仅能满足“=”,“IN”,“&lt;=&gt;”查询，不能使用范围查询<br>联合索引中，Hash索引不能利用部分索引键查询<br>Hash索引无法避免数据的排序操作<br>Hash索引任何时候都不能避免表扫描<br>Hash索引遇到大量Hash值相等的情况后性能并不一定会比BTree高<br>3、区别<br>hash索引查找数据基本上能一次定位数据，当然有大量碰撞的话性能也会下降。而btree索引就得在节点上挨着查找了，很明显在数据精确查找方面hash索引的效率是要高于btree的；<br>那么不精确查找呢，也很明显，因为hash算法是基于等值计算的，所以对于“like”等范围查找hash索引无效，不支持；<br>对于btree支持的联合索引的最优前缀，hash也是无法支持的，联合索引中的字段要么全用要么全不用。<br>hash不支持索引排序，索引值和计算出来的hash值大小并不一定一致。<br>###b-tree和b-tree<br>1、b+tree<br>B+ 树是 B 树的变体，定义基本与 B 树一致，与 B 树的不同点<br>所有叶子节点中包含了全部关键字的信息<br>非叶子节点上只存储 key 的信息，这样相对 B 树，可以增加每一页中存储 key 的数量<br>B 树是纵向扩展，最终变成一个 “瘦高个”，而 B+ 树是横向扩展的，最终会变成一个 “矮胖子”<br>各叶子节点用指针进行连接<br>mysql使用b+树索引<br>innodb索引和数据存在一个文件中<br>myisam下索引叶子节点保存数据的地址而不是数据本身<br>2、b-tree<br>如果 data 比较大时，每一页存储的 key 会比较少；当数据比较多时，同样会有：“要经历多层节点才能查询在叶子节点的数据” 的问题。<br>3、mysql中的b+tree<br>主聚集索引（clustered index）和辅助索引（secondary index）<br>具体行数据在在聚集索引上，辅助索引叶子节点存储聚集索引的key值，也就是主见<br>辅助索引的叶子节点并不包含行记录的全部数据<br>3、区别<br>B-树的每个节点都包含key值和data值，叶子节点可以看作外部节点，不包含任何信息；<br>B+树的非叶子节点中只有关键字和指向下一个节点的索引，记录只放在叶子节点中，叶子结点有指针链接。<br>B+树的磁盘读写代价更低<br>B+树的查询效率更加稳定<br>###分库、分表<br>es hbase  hash<br>###explain<br>###引擎<br>1、innodb：<br>MySQL 5.5 之后的默认存储引擎<br>默认引擎<br>支持行锁<br>索引叶子节点存储数据<br>支持事务<br>默认select不加锁，UPDATE、INSERT、DELETE默认都是排它锁，可以通过（lock in share mode）和（for update）加共享锁和排他锁：<br>Record Lock：单个记录上的索引加锁，Gap Lock：间隙锁，对索引项之间的间隙加锁，但不包括记录本身，Next-Key Lock：Gap Lock + Record Lock，锁定一个范围，并且锁定记录本身。<br>如果不通过索引条件检索数据，那么 InnoDB 将对表中所有记录加锁，实际效果跟表锁一样（where不命中索引就锁表）。<br>2、myisam：<br>MySQL 8.0弃用<br>MySQL 5.5 之前的默认存储引擎<br>支持表锁<br>不支持行锁<br>不支持事务</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/10/19/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckggbq1t40000t1fy1c67bf2l" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/09/27/bitmap/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">php版bitmap</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/php/">php</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/">后端技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/css/" style="font-size: 15px;">css</a> <a href="/tags/html/" style="font-size: 15px;">html</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mysql/" style="font-size: 15px;">mysql</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 15px;">web前端</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 20px;">算法</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/10/19/%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">知识点整理</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/27/bitmap/">php版bitmap</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/">2进制10进制转换</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/">HTTP状态码</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/">MySQL修改root密码的几种方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 tianfs<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
