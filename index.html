@@ -155,10 +155,79 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckghv65s6000o5vfy5iiedc2e" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgjbcpzw000jfhfy6l6p6qxz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-分布式知识整理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="article-date">
+  <time datetime="2020-10-19T04:46:47.000Z" itemprop="datePublished">2020-10-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一、分布式事务"><a href="#一、分布式事务" class="headerlink" title="一、分布式事务"></a>一、分布式事务</h3><h4 id="1、tcc（最终一致性）"><a href="#1、tcc（最终一致性）" class="headerlink" title="1、tcc（最终一致性）"></a>1、tcc（最终一致性）</h4><ul>
+<li>一般使用tcc分布式事务框架</li>
+<li>实现的功能需要修改的代码比较多，需要个个系统配合完成try、commit和cancel方法</li>
+<li>有try、commit和cancel三个阶段</li>
+<li>TCC是业务层面的分布式事务，最终一致性，不会一直持有资源的锁。</li>
+<li>try阶段保证各自服务本地资源一致</li>
+<li>commit 和cancel只会有一个被执行 </li>
+<li>try阶段有服务失败将触发cancel 如果cancel失败，那么走补偿机制，保证最终一致性</li>
+<li>不会阻塞资源</li>
+<li>执行流程<br>1) 成功流程：事务框架-&gt;try（请求所有服务预留业务资源,不阻塞）-&gt;成功-&gt;commit(所有服务正式提交修改)<br>2) 失败流程：事务框架-&gt;try（请求所有服务预留业务资源,不阻塞）-&gt;失败-&gt;cancel(告知所有服务取消预约)<br>3) commit/cancel 如果失败了，那么走补偿机制，保证最终一致性<h4 id="3、xa两段提交（强一致性）（阻塞）"><a href="#3、xa两段提交（强一致性）（阻塞）" class="headerlink" title="3、xa两段提交（强一致性）（阻塞）"></a>3、xa两段提交（强一致性）（阻塞）</h4></li>
+<li>分为协调者(xa协调工具)、参与者(各服务)</li>
+<li>XA是资源层面的分布式事务，强一致性，在两阶段提交的整个过程中，一直会持有资源的锁。</li>
+<li>只有try 和commit 两个阶段</li>
+<li>执行流程<br>1) 成功流程：协调者-&gt;try（询问所有服务是否可以执行,持有资源的锁）-&gt;成功-&gt;协调者通知commit(所有服务正式提交修改),解除资源锁定<br>2) 失败流程：协调者-&gt;try（询问所有服务是否可以执行,持有资源的锁）-&gt;失败-&gt;协调者通知rollback,解除资源锁定</li>
+</ul>
+<h4 id="2、mq事务消息（最终一致性）"><a href="#2、mq事务消息（最终一致性）" class="headerlink" title="2、mq事务消息（最终一致性）"></a>2、mq事务消息（最终一致性）</h4><ul>
+<li>实现的功能需要修改的代码相对较少，消费端几乎不需要任何修改</li>
+<li>只能保证（生产端的业务和消息投递到mq同时成功）</li>
+<li>消费端消费失败走补偿机制，保证最终一致性</li>
+<li>执行流程<br>1) 服务a向mq发送prepare消息（本地事务，消费端不会收到）-&gt;mq得到返回给服务a执行结果-&gt;只能服务a本地业务<br>2) 服务a本地业务执行成功-&gt;向mq发送事务消息的提交commitlog-&gt;消息出现在真实的mq消息中-&gt;消费端接收处理<br>3) 服务a本地业务执行失败-&gt;向mq发送事务消息的撤销commitlog-&gt;移除事务消息<br>4) 如果mq未收到事务的commit/rollback则会回查事务状态，然后继续执行<h4 id="4、最大努力通知"><a href="#4、最大努力通知" class="headerlink" title="4、最大努力通知"></a>4、最大努力通知</h4></li>
+<li>不可靠消息：业务活动主动方，在完成业务处理之后，向业务活动的被动方发送消息，直到通知N次后不再通知，允许消息丢失(不可靠消息)。</li>
+<li>定期校对：业务活动的被动方，根据定时策略，向业务活动主动方查询(主动方提供查询接口)，恢复丢失的业务消息。<h4 id="5、可靠消息最终一致性"><a href="#5、可靠消息最终一致性" class="headerlink" title="5、可靠消息最终一致性"></a>5、可靠消息最终一致性</h4></li>
+<li>是指产生消息的业务动作与消息发送的一致</li>
+<li>如果业务操作成功，那么由这个业务操作所产生的消息一定要成功投递出去</li>
+<li>异步确保性</li>
+<li>一般可以使用mq事务消息实现</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="ckgjbcpzy000nfhfy4vcqbhnl" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li></ul>
 
     </footer>
   </div>
@@ -290,7 +359,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckghv65sq00225vfy8h897h9e" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgjbcq0n002hfhfy9reb3bjq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li></ul>
@@ -336,7 +405,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/09/27/bitmap/" data-id="ckghv65rj00005vfyctjfbpuw" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/09/27/bitmap/" data-id="ckgjbcpz90000fhfy644h77j9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
@@ -384,54 +453,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" data-id="ckghv65rw00055vfy5e5298lc" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" data-id="ckgjbcpzn0005fhfyg1l2gcd2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-HTTP状态码" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/php/">php</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/">HTTP状态码</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>HTTP状态码（HTTP Status Code）是用来表示网页服务器HTTP 响应状态的3位数字代码。它由RFC 2616规范定义的，并得到RFC 2518、RFC 2817、RFC 2295、RFC 2774、RFC 4918等规范扩展。所有状态码的第一个数字代表了响应的五种状态之一</p>
-<p>HTTP/1.1定义的状态码值和对应的原因短语（Reason-Phrase）的例子。<br>1XX表示:消息<br>这一类型的状态码，代表请求已被接受，需要继续处理。这类响应是临时响应，只包含状态行和某些可选的响应头信息，并以空行结束。由于HTTP/1.0 协议中没有定义任何1xx状态码，所以除非在某些试验条件下，服务器禁止向此类客户端发送1xx响应。 这些状态码代表的响应都是信息性的，标示客户应该采取的其他行动。<br>100 : Continue  客户端应当继续发送请求。这个临时响应是用来通知客户端它的部分请求已经被服务器接收，且仍未被拒绝。客户端应当继续发送请求的剩余部分.<br>101 : witching Protocols 服务器已经理解了客户端的请求，并将通过Upgrade消息头通知客户端采用不同的协议来完成这个请求。在发送完这个响应最后的空行后，服务器将会切换到 在Upgrade消息头中定义的那些协议。: 只有在切换新的协议更有好处的时候才应该采取类似措施.<br>102: Processing  由WebDAV（RFC 2518）扩展的状态码，代表处理将被继续执行。<br>2XX表示:成功<br>这一类型的状态码，代表请求已成功被服务器接收、理解、并接受。<br>200 : OK<br>201 : Created 已创建<br>202 : Accepted 接收<br>203 : Non-Authoritative Information 非认证信息<br>204 : No Content 无内容<br>205 : Reset Content 重置内容<br>206 : Partial Content 服务器已经成功处理了部分GET请求。类似于FlashGet或者迅雷这类的HTTP 下载工具都是使用此类响应实现断点续传或者将一个大文档分解为多个下载段同时下载。<br>207: Multi-Status 由WebDAV(RFC 2518)扩展的状态码，代表之后的消息体将是一个XML消息，并且可能依照之前子请求数量的不同，包含一系列独立的响应代码.<br>3XX表示: 重定向<br>这类状态码代表需要客户端采取进一步的操作才能完成请求。通常，这些状态码用来重定向，后续的请求地址（重定向目标）在本次响应的Location域中指明。<br>300 : Multiple Choices 多路选择<br>301 : Moved Permanently  永久转移<br>302 : Found 暂时转移<br>303 : See Other 参见其它<br>304 : Not Modified 未修改<br>305 : Use Proxy 使用代理<br>306: Switch Proxy  在最新版的规范中，306状态码已经不再被使用。<br>307 : Temporary Redirect 请求的资源现在临时从不同的URI响应请求。由于这样的重定向是临时的，客户端应当继续向原有地址发送以后的请求。只有在Cache-Control或 Expires中进行了指定的情况下，这个响应才是可缓存的。<br>4XX表示: 客户端错误<br>这类的状态码代表了客户端看起来可能发生了错误，妨碍了服务器的处理。<br>400 : Bad Request 错误请求<br>401 : Unauthorized 未认证<br>402 : Payment Required 需要付费<br>403 : Forbidden 禁止<br>404 : Not Found  请求失败，请求所希望得到的资源未被在服务器上发现<br>405 : Method Not Allowed 方法不允许<br>406 : Not Acceptable 不接受<br>407 : Proxy Authentication Required 需要代理认证<br>408 : Request Time-out 请求超时<br>409 : Conflict 冲突<br>410 : Gone 失败<br>411 : Length Required 需要长度<br>412 : Precondition Failed 条件失败<br>413 : Request Entity Too Large 请求实体太大<br>414 : Request-URI Too Large 请求URI太长<br>415 : Unsupported Media Type 不支持媒体类型<br>416 : Requested range not satisfiable 如果请求中包含了Range请求头，并且Range中指定的任何数据范围都与当前资源的可用范围不重合，同时请求中又没有定义If-Range请求头，那 么服务器就应当返回416状态码。<br>417 : Expectation Failed 在请求头Expect中指定的预期内容无法被服务器满足<br>421 :There are too many connections from your internet address 从当前客户端所在的IP地址到服务器的连接数超过了服务器许可的最大范围。通常，这里的IP地址指的是从服务器上看到的客户端地址.<br>422: Unprocessable Entity 请求格式正确，但是由于含有语义错误，无法响应。（RFC 4918 WebDAV）<br>423: Locked 当前资源被锁定。（RFC 4918 WebDAV）<br>424: Failed Dependency 由于之前的某个请求发生的错误，导致当前请求失败，例如PROPPATCH。（RFC 4918 WebDAV）<br>425: Unordered Collection 在WebDav Advanced Collections草案中定义，但是未出现在《WebDAV顺序集协议》（RFC 3658）中。<br>426:Upgrade Required 客户端应当切换到TLS/1.0。（RFC 2817）<br>449: Retry With 由微软扩展，代表请求应当在执行完适当的操作后进行重试。<br>5XX表示: 服务器错误<br>这类状态码代表了服务器在处理请求的过程中有错误或者异常状态发生<br>500 : Internal Server Error  服务器遇到了一个未曾预料的状况，导致了它无法完成对请求的处理。一般来说，这个问题都会在服务器的程序码出错时出现<br>501 : Not Implemented 未实现<br>502 : Bad Gateway  作为网关或者代理工作的服务器尝试执行请求时，从上游服务器接收到无效的响应<br>503 : Service Unavailable 由于临时的服务器维护或者过载，服务器当前无法处理请求。这个状况是临时的，并且将在一段时间以后恢复。<br>504 : Gateway Time-out 网关超时<br>505 : HTTP Version not supported  服务器不支持，或者拒绝支持在请求中使用的HTTP版本。这暗示着服务器不能或不愿使用与客户端相同的版本。响应中应当包含一个描述了为何版本不被支持以及服务器支持哪些协议的实体。<br>506 : Variant Also Negotiates 由《透明内容协商协议》（RFC 2295）扩展，代表服务器存在内部配置错误：被请求的协商变元资源被配置为在透明内容协商中使用自己，因此在一个协商处理中不是一个合适的重点。<br>507 : Insufficient Storage 服务器无法存储完成请求所必须的内容。这个状况被认为是临时的。WebDAV（RFC 4918）<br>509 : Bandwidth Limit Exceeded 服务器达到带宽限制。这不是一个官方的状态码，但是仍被广泛使用。<br>510 : Not Extended 获取资源所需要的策略并没有没满足。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" data-id="ckghv65rr00015vfy2ltm05cc" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/" rel="tag">http</a></li></ul>
 
     </footer>
   </div>
@@ -504,10 +529,100 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="ckghv65ru00045vfyegtd7tpc" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="ckgjbcpzh0001fhfy5nai20y8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-HTTP状态码" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/php/">php</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/">HTTP状态码</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>HTTP状态码（HTTP Status Code）是用来表示网页服务器HTTP 响应状态的3位数字代码。它由RFC 2616规范定义的，并得到RFC 2518、RFC 2817、RFC 2295、RFC 2774、RFC 4918等规范扩展。所有状态码的第一个数字代表了响应的五种状态之一</p>
+<p>HTTP/1.1定义的状态码值和对应的原因短语（Reason-Phrase）的例子。<br>1XX表示:消息<br>这一类型的状态码，代表请求已被接受，需要继续处理。这类响应是临时响应，只包含状态行和某些可选的响应头信息，并以空行结束。由于HTTP/1.0 协议中没有定义任何1xx状态码，所以除非在某些试验条件下，服务器禁止向此类客户端发送1xx响应。 这些状态码代表的响应都是信息性的，标示客户应该采取的其他行动。<br>100 : Continue  客户端应当继续发送请求。这个临时响应是用来通知客户端它的部分请求已经被服务器接收，且仍未被拒绝。客户端应当继续发送请求的剩余部分.<br>101 : witching Protocols 服务器已经理解了客户端的请求，并将通过Upgrade消息头通知客户端采用不同的协议来完成这个请求。在发送完这个响应最后的空行后，服务器将会切换到 在Upgrade消息头中定义的那些协议。: 只有在切换新的协议更有好处的时候才应该采取类似措施.<br>102: Processing  由WebDAV（RFC 2518）扩展的状态码，代表处理将被继续执行。<br>2XX表示:成功<br>这一类型的状态码，代表请求已成功被服务器接收、理解、并接受。<br>200 : OK<br>201 : Created 已创建<br>202 : Accepted 接收<br>203 : Non-Authoritative Information 非认证信息<br>204 : No Content 无内容<br>205 : Reset Content 重置内容<br>206 : Partial Content 服务器已经成功处理了部分GET请求。类似于FlashGet或者迅雷这类的HTTP 下载工具都是使用此类响应实现断点续传或者将一个大文档分解为多个下载段同时下载。<br>207: Multi-Status 由WebDAV(RFC 2518)扩展的状态码，代表之后的消息体将是一个XML消息，并且可能依照之前子请求数量的不同，包含一系列独立的响应代码.<br>3XX表示: 重定向<br>这类状态码代表需要客户端采取进一步的操作才能完成请求。通常，这些状态码用来重定向，后续的请求地址（重定向目标）在本次响应的Location域中指明。<br>300 : Multiple Choices 多路选择<br>301 : Moved Permanently  永久转移<br>302 : Found 暂时转移<br>303 : See Other 参见其它<br>304 : Not Modified 未修改<br>305 : Use Proxy 使用代理<br>306: Switch Proxy  在最新版的规范中，306状态码已经不再被使用。<br>307 : Temporary Redirect 请求的资源现在临时从不同的URI响应请求。由于这样的重定向是临时的，客户端应当继续向原有地址发送以后的请求。只有在Cache-Control或 Expires中进行了指定的情况下，这个响应才是可缓存的。<br>4XX表示: 客户端错误<br>这类的状态码代表了客户端看起来可能发生了错误，妨碍了服务器的处理。<br>400 : Bad Request 错误请求<br>401 : Unauthorized 未认证<br>402 : Payment Required 需要付费<br>403 : Forbidden 禁止<br>404 : Not Found  请求失败，请求所希望得到的资源未被在服务器上发现<br>405 : Method Not Allowed 方法不允许<br>406 : Not Acceptable 不接受<br>407 : Proxy Authentication Required 需要代理认证<br>408 : Request Time-out 请求超时<br>409 : Conflict 冲突<br>410 : Gone 失败<br>411 : Length Required 需要长度<br>412 : Precondition Failed 条件失败<br>413 : Request Entity Too Large 请求实体太大<br>414 : Request-URI Too Large 请求URI太长<br>415 : Unsupported Media Type 不支持媒体类型<br>416 : Requested range not satisfiable 如果请求中包含了Range请求头，并且Range中指定的任何数据范围都与当前资源的可用范围不重合，同时请求中又没有定义If-Range请求头，那 么服务器就应当返回416状态码。<br>417 : Expectation Failed 在请求头Expect中指定的预期内容无法被服务器满足<br>421 :There are too many connections from your internet address 从当前客户端所在的IP地址到服务器的连接数超过了服务器许可的最大范围。通常，这里的IP地址指的是从服务器上看到的客户端地址.<br>422: Unprocessable Entity 请求格式正确，但是由于含有语义错误，无法响应。（RFC 4918 WebDAV）<br>423: Locked 当前资源被锁定。（RFC 4918 WebDAV）<br>424: Failed Dependency 由于之前的某个请求发生的错误，导致当前请求失败，例如PROPPATCH。（RFC 4918 WebDAV）<br>425: Unordered Collection 在WebDav Advanced Collections草案中定义，但是未出现在《WebDAV顺序集协议》（RFC 3658）中。<br>426:Upgrade Required 客户端应当切换到TLS/1.0。（RFC 2817）<br>449: Retry With 由微软扩展，代表请求应当在执行完适当的操作后进行重试。<br>5XX表示: 服务器错误<br>这类状态码代表了服务器在处理请求的过程中有错误或者异常状态发生<br>500 : Internal Server Error  服务器遇到了一个未曾预料的状况，导致了它无法完成对请求的处理。一般来说，这个问题都会在服务器的程序码出错时出现<br>501 : Not Implemented 未实现<br>502 : Bad Gateway  作为网关或者代理工作的服务器尝试执行请求时，从上游服务器接收到无效的响应<br>503 : Service Unavailable 由于临时的服务器维护或者过载，服务器当前无法处理请求。这个状况是临时的，并且将在一段时间以后恢复。<br>504 : Gateway Time-out 网关超时<br>505 : HTTP Version not supported  服务器不支持，或者拒绝支持在请求中使用的HTTP版本。这暗示着服务器不能或不愿使用与客户端相同的版本。响应中应当包含一个描述了为何版本不被支持以及服务器支持哪些协议的实体。<br>506 : Variant Also Negotiates 由《透明内容协商协议》（RFC 2295）扩展，代表服务器存在内部配置错误：被请求的协商变元资源被配置为在透明内容协商中使用自己，因此在一个协商处理中不是一个合适的重点。<br>507 : Insufficient Storage 服务器无法存储完成请求所必须的内容。这个状况被认为是临时的。WebDAV（RFC 4918）<br>509 : Bandwidth Limit Exceeded 服务器达到带宽限制。这不是一个官方的状态码，但是仍被广泛使用。<br>510 : Not Extended 获取资源所需要的策略并没有没满足。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" data-id="ckgjbcpzm0004fhfy3tjvgqv0" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/" rel="tag">http</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-jquery图片上传支持进度条非flash" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/javascript/">javascript</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/">jquery图片上传插件，支持进度条，非flash,v1.2版</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="插件代码"><a href="#插件代码" class="headerlink" title="插件代码"></a>插件代码</h3><p>需要先引入jquery </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * v1.1</span><br><span class="line"> * 田丰硕 tianfs.com</span><br><span class="line"> */</span><br><span class="line">(<span class="keyword">function</span> ($) &#123; </span><br><span class="line"> $.extend($.fn, &#123; </span><br><span class="line"> upload: <span class="keyword">function</span> (settings) &#123; </span><br><span class="line"> </span><br><span class="line"> var options = $.extend(&#123; </span><br><span class="line"> fileType: <span class="string">"gif|jpg|jpeg|png|bmp"</span>, //允许的文件格式 </span><br><span class="line"> uploadUrl: <span class="string">""</span>, //上传URL地址 </span><br><span class="line"> inputName: <span class="string">"upfile"</span>,</span><br><span class="line"> uploadData: &#123;&#125;, //上传时需要附加的参数 可以是 <span class="keyword">function</span></span><br><span class="line"> beforeSubmitFn: <span class="string">""</span>, //上传前执行的方法 原型 beforeSubmit(xhr, <span class="variable">$this</span>); </span><br><span class="line"> successFn: <span class="string">""</span>, //上传成功后执行的方法 uploadSuccess(response, statusText, xhr, <span class="variable">$this</span>) </span><br><span class="line"> errorFn: <span class="string">""</span>, //上传失败后执行的方法 </span><br><span class="line"> onProgress:<span class="string">""</span> //返回上传进度信息</span><br><span class="line"> &#125;, settings); </span><br><span class="line"> </span><br><span class="line"> //上传准备函数 </span><br><span class="line"> var methods = &#123; </span><br><span class="line"> //验证文件格式 </span><br><span class="line"> checkFile: <span class="keyword">function</span> (filename) &#123; </span><br><span class="line"> var pos = filename.lastIndexOf(<span class="string">"."</span>); </span><br><span class="line"> var str = filename.substring(pos, filename.length); </span><br><span class="line"> var str1 = str.toLowerCase(); </span><br><span class="line"> <span class="keyword">if</span> (typeof options.fileType !== <span class="string">'string'</span>) &#123; options.fileType = <span class="string">"gif|jpg|jpeg|png|bmp"</span>; &#125; </span><br><span class="line"> var re = new RegExp(<span class="string">"\.("</span> + options.fileType + <span class="string">")$"</span>); </span><br><span class="line"> <span class="built_in">return</span> re.test(str1); </span><br><span class="line"> &#125;, </span><br><span class="line"> createInputFile: <span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line"> /*var new_fileType = options.fileType.replace(/\|/g,<span class="string">","</span>);</span><br><span class="line"> new_fileType = <span class="string">"."</span>+new_fileType;</span><br><span class="line"> Prompt.topShow(new_fileType)</span><br><span class="line"> var <span class="variable">$input</span> = $(<span class="string">"&lt;input type='file' name='"</span>+options.inputName+<span class="string">"'&gt; accept='"</span>+new_fileType+<span class="string">"'"</span>);*/</span><br><span class="line"> var <span class="variable">$input</span> = $(<span class="string">"&lt;input type='file' class='upload_tmp_input' style='display:none' name='"</span>+options.inputName+<span class="string">"'&gt; "</span>);</span><br><span class="line"> <span class="built_in">return</span> <span class="variable">$input</span>;</span><br><span class="line"> &#125;,</span><br><span class="line"> onload: <span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line"> </span><br><span class="line"> &#125; </span><br><span class="line"> &#125;; </span><br><span class="line"> //上传主函数 </span><br><span class="line"> this.each(<span class="function"><span class="title">function</span></span> () &#123;</span><br><span class="line"> var <span class="variable">$this</span> = $(this); </span><br><span class="line"> <span class="variable">$this</span>.<span class="built_in">bind</span>(<span class="string">"click"</span>, <span class="function"><span class="title">function</span></span> () &#123;</span><br><span class="line"> $(<span class="string">".upload_tmp_input"</span>).remove()</span><br><span class="line"> //创建input file </span><br><span class="line"> var <span class="variable">$input</span> = methods.createInputFile();</span><br><span class="line"> <span class="variable">$this</span>.before(<span class="variable">$input</span>);</span><br><span class="line"> <span class="variable">$input</span>.change(<span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line"> <span class="keyword">if</span> (<span class="variable">$input</span>.val() === <span class="string">""</span>) &#123; </span><br><span class="line"> alert(<span class="string">"请选择要上传的文件！"</span>); </span><br><span class="line"> <span class="built_in">return</span> <span class="literal">false</span>; </span><br><span class="line"> &#125; </span><br><span class="line"> //验证图片 </span><br><span class="line"> <span class="keyword">if</span> (!methods.checkFile(<span class="variable">$input</span>.val())) &#123;</span><br><span class="line"> alert(<span class="string">"文件格式不正确，只能上传格式为："</span> + options.fileType + <span class="string">"的文件。"</span>); </span><br><span class="line"> <span class="built_in">return</span> <span class="literal">false</span>; </span><br><span class="line"> &#125;</span><br><span class="line"> var pic = <span class="variable">$input</span>.get(0).files[0];</span><br><span class="line"> var formData = new FormData();</span><br><span class="line"> formData.append(options.inputName , pic);</span><br><span class="line"> <span class="keyword">if</span> (typeof options.uploadData == <span class="string">'function'</span>) &#123;</span><br><span class="line"> var data = options.uploadData(<span class="variable">$this</span>);</span><br><span class="line"> <span class="keyword">if</span> (data) &#123;</span><br><span class="line"> <span class="keyword">for</span> (var x <span class="keyword">in</span> data) &#123;</span><br><span class="line"> formData.append(x , data[x]);</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"> <span class="keyword">if</span> (options.uploadData) &#123;</span><br><span class="line"> <span class="keyword">for</span> (var x <span class="keyword">in</span> options.uploadData) &#123;</span><br><span class="line"> formData.append(x , options.uploadData[x]);</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> /** </span><br><span class="line"> * 必须<span class="literal">false</span>才会避开jQuery对 formdata 的默认处理 </span><br><span class="line"> * XMLHttpRequest会对 formdata 进行正确的处理 </span><br><span class="line"> */ </span><br><span class="line"> $.ajax(&#123;</span><br><span class="line"> <span class="built_in">type</span>: <span class="string">"POST"</span>,</span><br><span class="line"> url: options.uploadUrl,</span><br><span class="line"> data: formData ,</span><br><span class="line"> processData : <span class="literal">false</span>, </span><br><span class="line"> //必须<span class="literal">false</span>才会自动加上正确的Content-Type </span><br><span class="line"> contentType : <span class="literal">false</span> ,</span><br><span class="line"> dataType : <span class="string">"JSON"</span>,</span><br><span class="line"> xhr: <span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line"> var xhr = $.ajaxSettings.xhr();</span><br><span class="line"> xhr.upload.addEventListener(<span class="string">"progress"</span> , <span class="keyword">function</span> (evt)&#123;</span><br><span class="line"> console.log(evt);</span><br><span class="line"> var loaded = evt.loaded; //已经上传大小情况 </span><br><span class="line"> var tot = evt.total; //附件总大小 </span><br><span class="line"> var per = Math.floor(100*loaded/tot); //已经上传的百分比 </span><br><span class="line"> var onProgress; </span><br><span class="line"> try &#123; onProgress = <span class="built_in">eval</span>(options.onProgress) &#125; catch (err) &#123; &#125;; </span><br><span class="line"> <span class="keyword">if</span> (onProgress) &#123; </span><br><span class="line"> onProgress(per, <span class="variable">$this</span>); </span><br><span class="line"> &#125; </span><br><span class="line"> &#125;, <span class="literal">false</span>);</span><br><span class="line"> <span class="built_in">return</span> xhr;</span><br><span class="line"> &#125;,</span><br><span class="line"> beforeSend:<span class="keyword">function</span> (xhr) &#123;</span><br><span class="line"> <span class="variable">$this</span>.attr(<span class="string">"disabled"</span>, <span class="literal">true</span>);</span><br><span class="line"> var beforeSubmitFn; </span><br><span class="line"> try &#123; beforeSubmitFn = <span class="built_in">eval</span>(options.beforeSubmitFn) &#125; catch (err) &#123; &#125;; </span><br><span class="line"> <span class="keyword">if</span> (beforeSubmitFn) &#123; </span><br><span class="line"> var <span class="variable">$result</span> = beforeSubmitFn(xhr, <span class="variable">$this</span>); </span><br><span class="line"> <span class="keyword">if</span> (typeof (<span class="variable">$result</span>) == <span class="string">"boolean"</span>) </span><br><span class="line"> <span class="built_in">return</span> <span class="variable">$result</span>; </span><br><span class="line"> &#125; </span><br><span class="line"> &#125;,</span><br><span class="line"> error : <span class="keyword">function</span> (response, statusText, xhr) &#123; </span><br><span class="line"> var errorFn; </span><br><span class="line"> try &#123; errorFn = <span class="built_in">eval</span>(options.errorFn) &#125; catch (err) &#123; &#125;; </span><br><span class="line"> <span class="keyword">if</span> (errorFn) &#123; </span><br><span class="line"> errorFn(response, statusText, xhr, <span class="variable">$this</span>); </span><br><span class="line"> &#125;</span><br><span class="line"> <span class="variable">$this</span>.attr(<span class="string">"disabled"</span>, <span class="literal">false</span>); </span><br><span class="line"> <span class="variable">$input</span>.remove(); </span><br><span class="line"> &#125;,</span><br><span class="line"> //上传成功 </span><br><span class="line"> success : <span class="keyword">function</span> (response, statusText, xhr) &#123; </span><br><span class="line"> //response = <span class="built_in">eval</span>(<span class="string">"("</span> + response + <span class="string">")"</span>); </span><br><span class="line"> var successFn; </span><br><span class="line"> try &#123; successFn = <span class="built_in">eval</span>(options.successFn) &#125; catch (err) &#123; &#125;; </span><br><span class="line"> <span class="keyword">if</span> (successFn) &#123; </span><br><span class="line"> $.ajaxSetup(&#123; cache: <span class="literal">false</span> &#125;);//这个不能少，否则ie下会提示下载 </span><br><span class="line"> successFn(response, statusText, xhr, <span class="variable">$this</span>); </span><br><span class="line"> &#125; </span><br><span class="line"> <span class="variable">$this</span>.attr(<span class="string">"disabled"</span>, <span class="literal">false</span>); </span><br><span class="line"> <span class="variable">$input</span>.remove(); </span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> &#125;);</span><br><span class="line"> &#125;)</span><br><span class="line"> <span class="variable">$input</span>.click()</span><br><span class="line"> &#125;); </span><br><span class="line"> </span><br><span class="line"> &#125;); </span><br><span class="line"> &#125; </span><br><span class="line"> &#125;); </span><br><span class="line">&#125;)(jQuery)</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用代码"><a href="#使用代码" class="headerlink" title="使用代码"></a>使用代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$(“.upload-quan”).upload(&#123;</span><br><span class="line">uploadData: &#123;&#125;,</span><br><span class="line">uploadUrl : “”,</span><br><span class="line">inputName: “upfile”,</span><br><span class="line">fileType: “bmp|png|jpeg|jpg|gif”,</span><br><span class="line">successFn: <span class="keyword">function</span> (response, statusText, xhr, <span class="variable">$this</span>) &#123;</span><br><span class="line">console.log(response);</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" data-id="ckgjbcpzr000afhfybk4yfdcm" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
 
     </footer>
   </div>
@@ -551,56 +666,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="ckghv65rz000a5vfy7z3n25sw" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="ckgjbcpzs000cfhfy2vtt3bmv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-jquery图片上传支持进度条非flash" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/javascript/">javascript</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/">jquery图片上传插件，支持进度条，非flash,v1.2版</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="插件代码"><a href="#插件代码" class="headerlink" title="插件代码"></a>插件代码</h3><p>需要先引入jquery </p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * v1.1</span><br><span class="line"> * 田丰硕 tianfs.com</span><br><span class="line"> */</span><br><span class="line">(<span class="keyword">function</span> ($) &#123; </span><br><span class="line"> $.extend($.fn, &#123; </span><br><span class="line"> upload: <span class="keyword">function</span> (settings) &#123; </span><br><span class="line"> </span><br><span class="line"> var options = $.extend(&#123; </span><br><span class="line"> fileType: <span class="string">"gif|jpg|jpeg|png|bmp"</span>, //允许的文件格式 </span><br><span class="line"> uploadUrl: <span class="string">""</span>, //上传URL地址 </span><br><span class="line"> inputName: <span class="string">"upfile"</span>,</span><br><span class="line"> uploadData: &#123;&#125;, //上传时需要附加的参数 可以是 <span class="keyword">function</span></span><br><span class="line"> beforeSubmitFn: <span class="string">""</span>, //上传前执行的方法 原型 beforeSubmit(xhr, <span class="variable">$this</span>); </span><br><span class="line"> successFn: <span class="string">""</span>, //上传成功后执行的方法 uploadSuccess(response, statusText, xhr, <span class="variable">$this</span>) </span><br><span class="line"> errorFn: <span class="string">""</span>, //上传失败后执行的方法 </span><br><span class="line"> onProgress:<span class="string">""</span> //返回上传进度信息</span><br><span class="line"> &#125;, settings); </span><br><span class="line"> </span><br><span class="line"> //上传准备函数 </span><br><span class="line"> var methods = &#123; </span><br><span class="line"> //验证文件格式 </span><br><span class="line"> checkFile: <span class="keyword">function</span> (filename) &#123; </span><br><span class="line"> var pos = filename.lastIndexOf(<span class="string">"."</span>); </span><br><span class="line"> var str = filename.substring(pos, filename.length); </span><br><span class="line"> var str1 = str.toLowerCase(); </span><br><span class="line"> <span class="keyword">if</span> (typeof options.fileType !== <span class="string">'string'</span>) &#123; options.fileType = <span class="string">"gif|jpg|jpeg|png|bmp"</span>; &#125; </span><br><span class="line"> var re = new RegExp(<span class="string">"\.("</span> + options.fileType + <span class="string">")$"</span>); </span><br><span class="line"> <span class="built_in">return</span> re.test(str1); </span><br><span class="line"> &#125;, </span><br><span class="line"> createInputFile: <span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line"> /*var new_fileType = options.fileType.replace(/\|/g,<span class="string">","</span>);</span><br><span class="line"> new_fileType = <span class="string">"."</span>+new_fileType;</span><br><span class="line"> Prompt.topShow(new_fileType)</span><br><span class="line"> var <span class="variable">$input</span> = $(<span class="string">"&lt;input type='file' name='"</span>+options.inputName+<span class="string">"'&gt; accept='"</span>+new_fileType+<span class="string">"'"</span>);*/</span><br><span class="line"> var <span class="variable">$input</span> = $(<span class="string">"&lt;input type='file' class='upload_tmp_input' style='display:none' name='"</span>+options.inputName+<span class="string">"'&gt; "</span>);</span><br><span class="line"> <span class="built_in">return</span> <span class="variable">$input</span>;</span><br><span class="line"> &#125;,</span><br><span class="line"> onload: <span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line"> </span><br><span class="line"> &#125; </span><br><span class="line"> &#125;; </span><br><span class="line"> //上传主函数 </span><br><span class="line"> this.each(<span class="function"><span class="title">function</span></span> () &#123;</span><br><span class="line"> var <span class="variable">$this</span> = $(this); </span><br><span class="line"> <span class="variable">$this</span>.<span class="built_in">bind</span>(<span class="string">"click"</span>, <span class="function"><span class="title">function</span></span> () &#123;</span><br><span class="line"> $(<span class="string">".upload_tmp_input"</span>).remove()</span><br><span class="line"> //创建input file </span><br><span class="line"> var <span class="variable">$input</span> = methods.createInputFile();</span><br><span class="line"> <span class="variable">$this</span>.before(<span class="variable">$input</span>);</span><br><span class="line"> <span class="variable">$input</span>.change(<span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line"> <span class="keyword">if</span> (<span class="variable">$input</span>.val() === <span class="string">""</span>) &#123; </span><br><span class="line"> alert(<span class="string">"请选择要上传的文件！"</span>); </span><br><span class="line"> <span class="built_in">return</span> <span class="literal">false</span>; </span><br><span class="line"> &#125; </span><br><span class="line"> //验证图片 </span><br><span class="line"> <span class="keyword">if</span> (!methods.checkFile(<span class="variable">$input</span>.val())) &#123;</span><br><span class="line"> alert(<span class="string">"文件格式不正确，只能上传格式为："</span> + options.fileType + <span class="string">"的文件。"</span>); </span><br><span class="line"> <span class="built_in">return</span> <span class="literal">false</span>; </span><br><span class="line"> &#125;</span><br><span class="line"> var pic = <span class="variable">$input</span>.get(0).files[0];</span><br><span class="line"> var formData = new FormData();</span><br><span class="line"> formData.append(options.inputName , pic);</span><br><span class="line"> <span class="keyword">if</span> (typeof options.uploadData == <span class="string">'function'</span>) &#123;</span><br><span class="line"> var data = options.uploadData(<span class="variable">$this</span>);</span><br><span class="line"> <span class="keyword">if</span> (data) &#123;</span><br><span class="line"> <span class="keyword">for</span> (var x <span class="keyword">in</span> data) &#123;</span><br><span class="line"> formData.append(x , data[x]);</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125; <span class="keyword">else</span> &#123;</span><br><span class="line"> <span class="keyword">if</span> (options.uploadData) &#123;</span><br><span class="line"> <span class="keyword">for</span> (var x <span class="keyword">in</span> options.uploadData) &#123;</span><br><span class="line"> formData.append(x , options.uploadData[x]);</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> /** </span><br><span class="line"> * 必须<span class="literal">false</span>才会避开jQuery对 formdata 的默认处理 </span><br><span class="line"> * XMLHttpRequest会对 formdata 进行正确的处理 </span><br><span class="line"> */ </span><br><span class="line"> $.ajax(&#123;</span><br><span class="line"> <span class="built_in">type</span>: <span class="string">"POST"</span>,</span><br><span class="line"> url: options.uploadUrl,</span><br><span class="line"> data: formData ,</span><br><span class="line"> processData : <span class="literal">false</span>, </span><br><span class="line"> //必须<span class="literal">false</span>才会自动加上正确的Content-Type </span><br><span class="line"> contentType : <span class="literal">false</span> ,</span><br><span class="line"> dataType : <span class="string">"JSON"</span>,</span><br><span class="line"> xhr: <span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line"> var xhr = $.ajaxSettings.xhr();</span><br><span class="line"> xhr.upload.addEventListener(<span class="string">"progress"</span> , <span class="keyword">function</span> (evt)&#123;</span><br><span class="line"> console.log(evt);</span><br><span class="line"> var loaded = evt.loaded; //已经上传大小情况 </span><br><span class="line"> var tot = evt.total; //附件总大小 </span><br><span class="line"> var per = Math.floor(100*loaded/tot); //已经上传的百分比 </span><br><span class="line"> var onProgress; </span><br><span class="line"> try &#123; onProgress = <span class="built_in">eval</span>(options.onProgress) &#125; catch (err) &#123; &#125;; </span><br><span class="line"> <span class="keyword">if</span> (onProgress) &#123; </span><br><span class="line"> onProgress(per, <span class="variable">$this</span>); </span><br><span class="line"> &#125; </span><br><span class="line"> &#125;, <span class="literal">false</span>);</span><br><span class="line"> <span class="built_in">return</span> xhr;</span><br><span class="line"> &#125;,</span><br><span class="line"> beforeSend:<span class="keyword">function</span> (xhr) &#123;</span><br><span class="line"> <span class="variable">$this</span>.attr(<span class="string">"disabled"</span>, <span class="literal">true</span>);</span><br><span class="line"> var beforeSubmitFn; </span><br><span class="line"> try &#123; beforeSubmitFn = <span class="built_in">eval</span>(options.beforeSubmitFn) &#125; catch (err) &#123; &#125;; </span><br><span class="line"> <span class="keyword">if</span> (beforeSubmitFn) &#123; </span><br><span class="line"> var <span class="variable">$result</span> = beforeSubmitFn(xhr, <span class="variable">$this</span>); </span><br><span class="line"> <span class="keyword">if</span> (typeof (<span class="variable">$result</span>) == <span class="string">"boolean"</span>) </span><br><span class="line"> <span class="built_in">return</span> <span class="variable">$result</span>; </span><br><span class="line"> &#125; </span><br><span class="line"> &#125;,</span><br><span class="line"> error : <span class="keyword">function</span> (response, statusText, xhr) &#123; </span><br><span class="line"> var errorFn; </span><br><span class="line"> try &#123; errorFn = <span class="built_in">eval</span>(options.errorFn) &#125; catch (err) &#123; &#125;; </span><br><span class="line"> <span class="keyword">if</span> (errorFn) &#123; </span><br><span class="line"> errorFn(response, statusText, xhr, <span class="variable">$this</span>); </span><br><span class="line"> &#125;</span><br><span class="line"> <span class="variable">$this</span>.attr(<span class="string">"disabled"</span>, <span class="literal">false</span>); </span><br><span class="line"> <span class="variable">$input</span>.remove(); </span><br><span class="line"> &#125;,</span><br><span class="line"> //上传成功 </span><br><span class="line"> success : <span class="keyword">function</span> (response, statusText, xhr) &#123; </span><br><span class="line"> //response = <span class="built_in">eval</span>(<span class="string">"("</span> + response + <span class="string">")"</span>); </span><br><span class="line"> var successFn; </span><br><span class="line"> try &#123; successFn = <span class="built_in">eval</span>(options.successFn) &#125; catch (err) &#123; &#125;; </span><br><span class="line"> <span class="keyword">if</span> (successFn) &#123; </span><br><span class="line"> $.ajaxSetup(&#123; cache: <span class="literal">false</span> &#125;);//这个不能少，否则ie下会提示下载 </span><br><span class="line"> successFn(response, statusText, xhr, <span class="variable">$this</span>); </span><br><span class="line"> &#125; </span><br><span class="line"> <span class="variable">$this</span>.attr(<span class="string">"disabled"</span>, <span class="literal">false</span>); </span><br><span class="line"> <span class="variable">$input</span>.remove(); </span><br><span class="line"> &#125;</span><br><span class="line"> </span><br><span class="line"> &#125;);</span><br><span class="line"> &#125;)</span><br><span class="line"> <span class="variable">$input</span>.click()</span><br><span class="line"> &#125;); </span><br><span class="line"> </span><br><span class="line"> &#125;); </span><br><span class="line"> &#125; </span><br><span class="line"> &#125;); </span><br><span class="line">&#125;)(jQuery)</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用代码"><a href="#使用代码" class="headerlink" title="使用代码"></a>使用代码</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$(“.upload-quan”).upload(&#123;</span><br><span class="line">uploadData: &#123;&#125;,</span><br><span class="line">uploadUrl : “”,</span><br><span class="line">inputName: “upfile”,</span><br><span class="line">fileType: “bmp|png|jpeg|jpg|gif”,</span><br><span class="line">successFn: <span class="keyword">function</span> (response, statusText, xhr, <span class="variable">$this</span>) &#123;</span><br><span class="line">console.log(response);</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" data-id="ckghv65s0000c5vfy7f4v5nfx" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
 
     </footer>
   </div>
@@ -641,55 +710,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="ckghv65s3000j5vfy3ghp1vdq" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="ckgjbcpzv000gfhfy576thvlx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-求两个数的比例" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/">求两个数的比例</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="比例计算"><a href="#比例计算" class="headerlink" title="比例计算"></a>比例计算</h2><p>1、计算长宽比例（长200 * 宽180）</p>
-<p>2、设A为长，B为宽，C为A和B的最大公约数 （20）</p>
-<p>3、得到 A/C : B/C   =&gt;（10 : 9）</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" data-id="ckghv65s7000q5vfydvma8s78" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
 
     </footer>
   </div>
@@ -723,7 +747,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
     </div>
   </div>
 
@@ -733,7 +757,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/b%E6%A0%91/" style="font-size: 10px;">b树</a> <a href="/tags/css/" style="font-size: 16.67px;">css</a> <a href="/tags/html/" style="font-size: 16.67px;">html</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/php/" style="font-size: 13.33px;">php</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 16.67px;">web前端</a> <a href="/tags/%E5%87%BB%E7%A9%BF/" style="font-size: 10px;">击穿</a> <a href="/tags/%E7%A9%BF%E9%80%8F/" style="font-size: 10px;">穿透</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 20px;">算法</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 10px;">索引</a> <a href="/tags/%E9%94%81/" style="font-size: 10px;">锁</a> <a href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" style="font-size: 10px;">雪崩，队列</a>
+      <a href="/tags/b%E6%A0%91/" style="font-size: 10px;">b树</a> <a href="/tags/css/" style="font-size: 16.67px;">css</a> <a href="/tags/html/" style="font-size: 16.67px;">html</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/php/" style="font-size: 13.33px;">php</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/tcc/" style="font-size: 10px;">tcc</a> <a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 16.67px;">web前端</a> <a href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" style="font-size: 10px;">xa两段提交</a> <a href="/tags/%E5%87%BB%E7%A9%BF/" style="font-size: 10px;">击穿</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">分布式事务</a> <a href="/tags/%E7%A9%BF%E9%80%8F/" style="font-size: 10px;">穿透</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 20px;">算法</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 10px;">索引</a> <a href="/tags/%E9%94%81/" style="font-size: 10px;">锁</a> <a href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" style="font-size: 10px;">雪崩，队列</a>
     </div>
   </div>
 
@@ -759,6 +783,10 @@
           </li>
         
           <li>
+            <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
+          </li>
+        
+          <li>
             <a href="/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">mysql知识点整理(持续更新)</a>
           </li>
         
@@ -768,10 +796,6 @@
         
           <li>
             <a href="/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/">2进制10进制转换</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/">HTTP状态码</a>
           </li>
         
       </ul>
