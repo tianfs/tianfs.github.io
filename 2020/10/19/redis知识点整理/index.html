@@ -15,7 +15,7 @@
 <meta property="og:description" content="redis一、redis支持的数据类型string（字符串） 描述:二进制安全，基本的常用的数据类型，大能存储 512MB 基本用法:1、写入： SET key “value”2、读取： GET key 使用场景:常用的kv存取hash（哈希） 描述:是一个键值(key&#x3D;&gt;value)对集合，也就是一个key对应多个kv 基本用法:1、写入：多个kv：HMSET hash_key field">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-10-19T04:46:47.000Z">
-<meta property="article:modified_time" content="2020-10-20T11:07:41.506Z">
+<meta property="article:modified_time" content="2020-10-22T09:26:09.116Z">
 <meta property="article:author" content="tianfs">
 <meta property="article:tag" content="redis">
 <meta property="article:tag" content="穿透">
@@ -139,11 +139,24 @@
 <li>缺点：<br>主库挂了以后服务将不能写入<h4 id="2、Sentinel模式（哨兵）："><a href="#2、Sentinel模式（哨兵）：" class="headerlink" title="2、Sentinel模式（哨兵）："></a>2、Sentinel模式（哨兵）：</h4>建立在主从模式的基础上，监听redis的mater的状态，如果master挂掉了，会在slave上选出一台机器作为master<br>使用时需要连接sentinel的ip和port而不是redis的</li>
 </ul>
 <h4 id="3、Cluster模式："><a href="#3、Cluster模式：" class="headerlink" title="3、Cluster模式："></a>3、Cluster模式：</h4><p>在需要更大规模的存储的时候主从模式或sentinel模式就不能很好的满足需求了<br>cluster模式的解决单机Redis容量有限的问题，将Redis的数据根据一定的规则分配到多台机器<br>redis版本低的话需要安装对应版本的ruby<br>去中心化的，每个节点（master）都是平等的，连接哪个节点都可以获取和设置数据。</p>
+<h3 id="四、内存回收机制"><a href="#四、内存回收机制" class="headerlink" title="四、内存回收机制"></a>四、内存回收机制</h3><h4 id="1、内存使用达到maxmemory上限时候触发的溢出回收策略"><a href="#1、内存使用达到maxmemory上限时候触发的溢出回收策略" class="headerlink" title="1、内存使用达到maxmemory上限时候触发的溢出回收策略"></a>1、内存使用达到maxmemory上限时候触发的溢出回收策略</h4><ul>
+<li>noeviction（默认）: 不会删除任何数据，拒绝所有写入操作并返 回客户端错误信息，此 时Redis只响应读操作。</li>
+<li>volatile-lru: 根据LRU算法删除设置了超时属性（expire）的键，直到腾出足够空间为止。如果没有可删除的键对象，回退到noeviction策略。</li>
+<li>volatile-ttl: 根据键值对象的ttl属性，删除最近将要过期数据。如果没有，回退到noeviction策略。</li>
+<li>allkeys-lru: 根据LRU算法删除键，不管数据有没有设置超时属性，直到腾出足够空间为止。</li>
+<li>volatile-random: 随机删除过期键，直到腾出足够空间为止。</li>
+<li>allkeys-random: 随机删除所有键，直到腾出足够空间为止。</li>
+</ul>
+<p>*** volatile-xxx 策略只会针对带过期时间的 key 进行淘汰，allkeys-xxx 策略会对所有的 key 进行淘汰</p>
+<h4 id="2、删除过期时间的键对象"><a href="#2、删除过期时间的键对象" class="headerlink" title="2、删除过期时间的键对象"></a>2、删除过期时间的键对象</h4><ul>
+<li>惰性删除 ： 当用户访问已经过期的对象的时候才删除</li>
+<li>定时任务删除 ： 内部维护了一个定时任务，默认每秒运行10次<br>1）定时任务在每个数据库空间采用慢模式随机检查20个键，当发现过期时，删除对应的键。<br>2）如果超过检查数25%的键过期，循环执行回收逻辑直到不足25%或 运行超时为止，慢模式下超时时间为25毫秒。<br>3）如果之前回收键逻辑超时，则在Redis触发内部事件之前再次以快模式运行回收过期键任务，快模式下超时时间为1毫秒且2秒内只能运行1次。<br>4）快慢两种模式内部删除逻辑相同，只是执行的超时时间不同</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgjbcpzw000jfhfy6l6p6qxz" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgkoxq1w000l0tfybwx2apn6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
