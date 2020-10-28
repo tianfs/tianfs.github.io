@@ -7,15 +7,15 @@
   
   <title>docker遇到的一些问题 | 田丰硕个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="docker个人遇到的问题一些备注1) 如果出现 bash: vim : command not found  需要安装下vim 123456$ apt-get update$ apt-get install vim&#96;&#96;&#96; 2) 如果出现 bash: apt-get : command not found  尝试使用yum安装&#96;&#96;&#96; bash$ yum install vim -y 3) 如果容器">
+  <meta name="description" content="docker个人遇到的问题一些备注1) 如果出现 bash: vim : command not found  需要安装下vim 123456$ apt-get update$ apt-get install vim&#96;&#96;&#96; 2) 如果出现 bash: apt-get : command not found  尝试使用yum安装&#96;&#96;&#96; bash$ yum install vim -y  3) 如果容">
 <meta property="og:type" content="article">
 <meta property="og:title" content="docker遇到的一些问题">
 <meta property="og:url" content="http://blog.tianfs.com/2020/10/21/docker%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="田丰硕个人博客">
-<meta property="og:description" content="docker个人遇到的问题一些备注1) 如果出现 bash: vim : command not found  需要安装下vim 123456$ apt-get update$ apt-get install vim&#96;&#96;&#96; 2) 如果出现 bash: apt-get : command not found  尝试使用yum安装&#96;&#96;&#96; bash$ yum install vim -y 3) 如果容器">
+<meta property="og:description" content="docker个人遇到的问题一些备注1) 如果出现 bash: vim : command not found  需要安装下vim 123456$ apt-get update$ apt-get install vim&#96;&#96;&#96; 2) 如果出现 bash: apt-get : command not found  尝试使用yum安装&#96;&#96;&#96; bash$ yum install vim -y  3) 如果容">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-10-21T04:46:47.000Z">
-<meta property="article:modified_time" content="2020-10-28T11:01:09.368Z">
+<meta property="article:modified_time" content="2020-10-28T11:04:33.575Z">
 <meta property="article:author" content="tianfs">
 <meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary">
@@ -99,11 +99,17 @@
       
         <h3 id="docker个人遇到的问题一些备注"><a href="#docker个人遇到的问题一些备注" class="headerlink" title="docker个人遇到的问题一些备注"></a>docker个人遇到的问题一些备注</h3><p>1) 如果出现 bash: vim : command not found  需要安装下vim</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ apt-get update</span><br><span class="line">$ apt-get install vim</span><br><span class="line">``` </span><br><span class="line">2) 如果出现 bash: apt-get : <span class="built_in">command</span> not found  尝试使用yum安装</span><br><span class="line">``` bash</span><br><span class="line">$ yum install vim -y</span><br></pre></td></tr></table></figure>
+
 <p>3) 如果容器内出现 [Errno 13] Permission denied (错误描述如下)</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ yum install vim -y</span><br><span class="line">  Loaded plugins: fastestmirror, ovl</span><br><span class="line">  ovl: Error <span class="keyword">while</span> doing RPMdb copy-up:</span><br><span class="line">  [Errno 13] Permission denied: <span class="string">'/var/lib/rpm/Basenames'</span></span><br><span class="line">  You need to be root to perform this <span class="built_in">command</span>.</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>是因为进入用户不是root权限,进入容器时增加 –user root 参数 （docker exec -it –user root  容器 bash）<br>4) 查看所有容器的ip<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker inspect --format=<span class="string">'&#123;&#123;.Name&#125;&#125; - &#123;&#123;range.NetworkSettings.Networks&#125;&#125;&#123;&#123;.IPAddress&#125;&#125;&#123;&#123;end&#125;&#125;'</span> $(docker ps -aq)</span><br></pre></td></tr></table></figure>
-<h3 id="docker网络模式"><a href="#docker网络模式" class="headerlink" title="docker网络模式"></a>docker网络模式</h3><h4 id="bridge模式-默认-（–network-bridge）"><a href="#bridge模式-默认-（–network-bridge）" class="headerlink" title="bridge模式(默认)（–network=bridge）"></a>bridge模式(默认)（–network=bridge）</h4></li>
+<li>是因为进入用户不是root权限,进入容器时增加 –user root 参数 （docker exec -it –user root  容器 bash）</li>
+</ul>
+<p>4) 查看所有容器的ip</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker inspect --format=<span class="string">'&#123;&#123;.Name&#125;&#125; - &#123;&#123;range.NetworkSettings.Networks&#125;&#125;&#123;&#123;.IPAddress&#125;&#125;&#123;&#123;end&#125;&#125;'</span> $(docker ps -aq)</span><br></pre></td></tr></table></figure>
+
+<h3 id="docker网络模式"><a href="#docker网络模式" class="headerlink" title="docker网络模式"></a>docker网络模式</h3><h4 id="bridge模式-默认-（–network-bridge）"><a href="#bridge模式-默认-（–network-bridge）" class="headerlink" title="bridge模式(默认)（–network=bridge）"></a>bridge模式(默认)（–network=bridge）</h4><ul>
 <li>创建一个名为docker0的虚拟网桥,并将容器连接到一个docker0虚拟网桥,所有网桥下的容器共享Network Namespace</li>
 </ul>
 <ul>
@@ -119,7 +125,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" data-id="ckgtai7so000b9vfy4rucd6u7" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" data-id="ckgtakpd5000adgfygp5mcnbt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li></ul>
