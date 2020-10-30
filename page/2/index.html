@@ -86,6 +86,82 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-MySQL修改root密码的几种方法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/mysql/">mysql</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/">MySQL修改root密码的几种方法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="方法1：-用SET-PASSWORD命令"><a href="#方法1：-用SET-PASSWORD命令" class="headerlink" title="方法1： 用SET PASSWORD命令"></a>方法1： 用SET PASSWORD命令</h3><p>首先登录MySQL。</p>
+<p>格式：mysql&gt; set password for 用户名@localhost = password(‘新密码’);</p>
+<p>例子：mysql&gt; set password for root@localhost = password(‘admin100’);</p>
+<p>上面例子将用户root的密码更改为admin100</p>
+<h3 id="方法2：用mysqladmin"><a href="#方法2：用mysqladmin" class="headerlink" title="方法2：用mysqladmin"></a>方法2：用mysqladmin</h3><p>格式：mysqladmin -u用户名 -p旧密码 password 新密码</p>
+<p>例子：mysqladmin -uroot -p123456 password admin100</p>
+<p>上面例子将用户root原来的密码123456改为新密码admin100</p>
+<h3 id="方法3：用UPDATE直接编辑user表"><a href="#方法3：用UPDATE直接编辑user表" class="headerlink" title="方法3：用UPDATE直接编辑user表"></a>方法3：用UPDATE直接编辑user表</h3><p>首先登录MySQL。</p>
+<p>mysql&gt; use mysql;</p>
+<p>mysql&gt; update user set password=password(‘admin100’) where user=’root’ and host=’localhost’;</p>
+<p>mysql&gt; flush privileges;</p>
+<h3 id="方法4：在忘记root密码的时候，可以这样。"><a href="#方法4：在忘记root密码的时候，可以这样。" class="headerlink" title="方法4：在忘记root密码的时候，可以这样。"></a>方法4：在忘记root密码的时候，可以这样。</h3><p>以windows为例：</p>
+<ol>
+<li><p>关闭正在运行的MySQL服务。</p>
+</li>
+<li><p>打开DOS窗口，转到mysql\bin目录。</p>
+</li>
+<li><p>输入mysqld –skip-grant-tables 回车。–skip-grant-tables 的意思是启动MySQL服务的时候跳过权限表认证。</p>
+</li>
+<li><p>再开一个DOS窗口（因为刚才那个DOS窗口已经不能动了），转到mysql\bin目录。</p>
+</li>
+<li><p>输入mysql回车，如果成功，将出现MySQL提示符 &gt;。</p>
+</li>
+<li><p>连接权限数据库： use mysql; 。</p>
+</li>
+<li><p>改密码：update user set password=password(“admin100”) where user=”root”;（别忘了最后加分号） 。</p>
+</li>
+<li><p>刷新权限（必须步骤）：flush privileges;。</p>
+</li>
+<li><p>退出  quit。</p>
+</li>
+<li><p>注销系统，再进入，使用用户名root和刚才设置的新密码admin100登录。</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="ckgwgrao50006enh53hcoers5" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-css去除webkit内核的默认样式" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" class="article-date">
@@ -121,51 +197,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="ckgwgpxi9000ad4h539lc9tfb" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-css定位绝对居中办法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/">css定位绝对居中办法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">position: absolute;</span><br><span class="line">left: 50%;</span><br><span class="line">top: 50%;</span><br><span class="line">transform: translate(-50%, -50%);</span><br><span class="line">-webkit-transform:translate(-50%, -50%);</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="ckgwgpxic000fd4h5byuddig2" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="ckgwgrao7000aenh54qf52k7e" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
@@ -211,104 +243,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" data-id="ckgwgpxif000ld4h541a44iaq" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" data-id="ckgwgraod000lenh5g6nzh31c" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-求两个数的比例" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/">求两个数的比例</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="比例计算"><a href="#比例计算" class="headerlink" title="比例计算"></a>比例计算</h2><p>1、计算长宽比例（长200 * 宽180）</p>
-<p>2、设A为长，B为宽，C为A和B的最大公约数 （20）</p>
-<p>3、得到 A/C : B/C   =&gt;（10 : 9）</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" data-id="ckgwgpxii000rd4h526zc4dj5" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-用css3实现响应式布局" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/">用css3 media实现响应式布局</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>##前言<br>响应式布局，说直白点就是一个网站能够兼容多个终端，可以按不同的分辨率显示不同的状态。而实现这个就要用到css3的Media Queries（媒介查询）。这个功能非常的强大，但是有优点的同时，缺点也是会存在的。那就是兼容各种设备工作量大，效率低下，加载时间长等。但是学起来很容易，看完下面的代码你就会了。</p>
-<p>###示例代码</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">.page&#123;</span><br><span class="line">    width:960px;</span><br><span class="line">    height:1000px;</span><br><span class="line">    margin:0 auto;</span><br><span class="line">    background:<span class="comment">#CCC;</span></span><br><span class="line">&#125;</span><br><span class="line">/* 设备最大宽度960px */</span><br><span class="line">@media screen and (max–width: 960px) &#123;</span><br><span class="line">    .page&#123;</span><br><span class="line">        width:100%;</span><br><span class="line">        background:<span class="comment">#69F;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">/* 宽度大于480px且小于768px */</span><br><span class="line">@media screen and (min–width: 480px) and (max–width:768px) &#123;</span><br><span class="line">    .page&#123;</span><br><span class="line">        width:100%;</span><br><span class="line">        background:<span class="comment">#F00;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">/* 设备最大宽度480px */</span><br><span class="line">@media screen and (max–width:480px)&#123;</span><br><span class="line">    .page&#123;</span><br><span class="line">        width:100%;</span><br><span class="line">        background:<span class="comment">#00FF00;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样就可以在不同的分辨率下采取不同的样式了。</p>
-<p>另外还有一点，如果是移动端开发，一定要在头部加上以下代码。</p>
-<meta name=“viewport” content=“width=device-width; initial-scale=1.0”>
-怎么样，很容易吧。当然这只是响应式布局的一部分，其他的可以网上搜索相关资料。以上，只是个人对于响应式布局的一些理解，技术更新的速度很快，所以我们也要与时俱进。
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" data-id="ckgwgpxil0010d4h5btjoc93f" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
 
     </footer>
   </div>
@@ -358,10 +296,104 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" data-id="ckgwgpxip0017d4h5f1jgbe6r" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" data-id="ckgwgraoh000venh596il9n2b" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-求两个数的比例" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/">求两个数的比例</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="比例计算"><a href="#比例计算" class="headerlink" title="比例计算"></a>比例计算</h2><p>1、计算长宽比例（长200 * 宽180）</p>
+<p>2、设A为长，B为宽，C为A和B的最大公约数 （20）</p>
+<p>3、得到 A/C : B/C   =&gt;（10 : 9）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" data-id="ckgwgraoi000xenh58oznh2q8" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-用css3实现响应式布局" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/">用css3 media实现响应式布局</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##前言<br>响应式布局，说直白点就是一个网站能够兼容多个终端，可以按不同的分辨率显示不同的状态。而实现这个就要用到css3的Media Queries（媒介查询）。这个功能非常的强大，但是有优点的同时，缺点也是会存在的。那就是兼容各种设备工作量大，效率低下，加载时间长等。但是学起来很容易，看完下面的代码你就会了。</p>
+<p>###示例代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">.page&#123;</span><br><span class="line">    width:960px;</span><br><span class="line">    height:1000px;</span><br><span class="line">    margin:0 auto;</span><br><span class="line">    background:<span class="comment">#CCC;</span></span><br><span class="line">&#125;</span><br><span class="line">/* 设备最大宽度960px */</span><br><span class="line">@media screen and (max–width: 960px) &#123;</span><br><span class="line">    .page&#123;</span><br><span class="line">        width:100%;</span><br><span class="line">        background:<span class="comment">#69F;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">/* 宽度大于480px且小于768px */</span><br><span class="line">@media screen and (min–width: 480px) and (max–width:768px) &#123;</span><br><span class="line">    .page&#123;</span><br><span class="line">        width:100%;</span><br><span class="line">        background:<span class="comment">#F00;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">/* 设备最大宽度480px */</span><br><span class="line">@media screen and (max–width:480px)&#123;</span><br><span class="line">    .page&#123;</span><br><span class="line">        width:100%;</span><br><span class="line">        background:<span class="comment">#00FF00;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样就可以在不同的分辨率下采取不同的样式了。</p>
+<p>另外还有一点，如果是移动端开发，一定要在头部加上以下代码。</p>
+<meta name=“viewport” content=“width=device-width; initial-scale=1.0”>
+怎么样，很容易吧。当然这只是响应式布局的一部分，其他的可以网上搜索相关资料。以上，只是个人对于响应式布局的一些理解，技术更新的速度很快，所以我们也要与时俱进。
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" data-id="ckgwgraoj0011enh583135g0j" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
 
     </footer>
   </div>
@@ -446,7 +478,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/php%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" data-id="ckgwgpxj6002td4h57dll2rgx" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/php%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" data-id="ckgwgrap9002uenh59x5j1j8h" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/" rel="tag">php</a></li></ul>
@@ -500,7 +532,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E9%80%9A%E8%BF%87PHP%E7%94%9F%E6%88%90PHP/" data-id="ckgwgpxin0013d4h56b0x9od7" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/%E9%80%9A%E8%BF%87PHP%E7%94%9F%E6%88%90PHP/" data-id="ckgwgraok0014enh534o9d27m" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/" rel="tag">php</a></li></ul>
@@ -551,7 +583,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/hello-world/" data-id="ckgwgpxia000bd4h5b9bl4362" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/hello-world/" data-id="ckgwgraob000henh55cf5ase9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -602,7 +634,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/08/order-by-rand%E5%BC%95%E5%8F%91%E7%9A%84%E5%A4%A7%E6%8A%A5%E9%94%99/" data-id="ckgwgpxig000nd4h57sbrc9gt" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/08/order-by-rand%E5%BC%95%E5%8F%91%E7%9A%84%E5%A4%A7%E6%8A%A5%E9%94%99/" data-id="ckgwgraoe000menh58xc2a8ux" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
@@ -683,11 +715,11 @@
           </li>
         
           <li>
-            <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
+            <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
           </li>
         
           <li>
-            <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
+            <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
           </li>
         
       </ul>
