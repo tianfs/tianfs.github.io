@@ -14,21 +14,21 @@
 <meta property="og:site_name" content="田丰硕个人博客">
 <meta property="og:description" content="序言 本文继续mac os系统演示 本文基于本地开发安装环境用于演示 nginx-1.19.3、php-7.3、redis:6.0一、安装docker1$ brew cask install docker 二、安装需要了解的概念和基础命令1、docker的组成docker由 仓库、镜像、容器三大部分组成1）镜像：可以想想成为模版，例如windows系统的镜像，2）容器：通过启动镜像来生成容器，就是">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://pic.tianfs.com/uPic/fLoeSW.png">
-<meta property="og:image" content="https://pic.tianfs.com/uPic/iH1PtX.png">
-<meta property="og:image" content="https://pic.tianfs.com/uPic/sJ46Dc.png">
-<meta property="og:image" content="https://pic.tianfs.com/uPic/Fd7VpT.png">
-<meta property="og:image" content="https://pic.tianfs.com/uPic/rc1Frn.png">
-<meta property="og:image" content="https://pic.tianfs.com/uPic/dIgSAi.png">
-<meta property="og:image" content="https://pic.tianfs.com/uPic/67lyX4.png">
-<meta property="og:image" content="https://pic.tianfs.com/uPic/wn49vN.png">
+<meta property="og:image" content="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/://pic.tianfs.com/uPic/fLoeSW.png">
+<meta property="og:image" content="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/://pic.tianfs.com/uPic/iH1PtX.png">
+<meta property="og:image" content="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/://pic.tianfs.com/uPic/sJ46Dc.png">
+<meta property="og:image" content="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/://pic.tianfs.com/uPic/Fd7VpT.png">
+<meta property="og:image" content="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/://pic.tianfs.com/uPic/rc1Frn.png">
+<meta property="og:image" content="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/://pic.tianfs.com/uPic/dIgSAi.png">
+<meta property="og:image" content="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/://pic.tianfs.com/uPic/67lyX4.png">
+<meta property="og:image" content="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/://pic.tianfs.com/uPic/wn49vN.png">
 <meta property="article:published_time" content="2020-10-21T04:46:47.000Z">
-<meta property="article:modified_time" content="2020-10-30T15:51:22.852Z">
+<meta property="article:modified_time" content="2020-10-30T16:19:12.250Z">
 <meta property="article:author" content="tianfs">
 <meta property="article:tag" content="docker">
 <meta property="article:tag" content="php环境">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://pic.tianfs.com/uPic/fLoeSW.png">
+<meta name="twitter:image" content="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/://pic.tianfs.com/uPic/fLoeSW.png">
   
     <link rel="alternate" href="/atom.xml" title="田丰硕个人博客" type="application/atom+xml">
   
@@ -112,16 +112,16 @@
 <li>本文基于本地开发安装环境用于演示</li>
 <li>nginx-1.19.3、php-7.3、redis:6.0<h3 id="一、安装docker"><a href="#一、安装docker" class="headerlink" title="一、安装docker"></a>一、安装docker</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew cask install docker</span><br></pre></td></tr></table></figure>
 <h3 id="二、安装需要了解的概念和基础命令"><a href="#二、安装需要了解的概念和基础命令" class="headerlink" title="二、安装需要了解的概念和基础命令"></a>二、安装需要了解的概念和基础命令</h3><h4 id="1、docker的组成"><a href="#1、docker的组成" class="headerlink" title="1、docker的组成"></a>1、docker的组成</h4>docker由 仓库、镜像、容器三大部分组成<br>1）镜像：可以想想成为模版，例如windows系统的镜像，<br>2）容器：通过启动镜像来生成容器，就是我们环境中真实要使用到的服务存储的地方 一般由 一个linux系统内包含一个应用服务组成（例如linux中安装了一个php）<br>3）仓库：用来集中存储镜像的的地方，一般我们使用 docker hub （hub.docker.com）<br>容器与镜像的关系类似于面向对象编程中的对象与类</li>
-<li>如果用git来对比举例:<br>镜像则为一个维护好的master主分支<br>容器则是我们自己定义使用的开发分支，但是不能合并到主分支<br>仓库则为git的代码存放仓库了<h4 id="2、环境的安装方式"><a href="#2、环境的安装方式" class="headerlink" title="2、环境的安装方式"></a>2、环境的安装方式</h4>1）使用docker安装一个linux虚拟机，然后在虚拟机中使用linux相关命令安装php相关开发环境，这就和docker没啥太大关系了<br>2）使用docker分别nginx、PHP、redis等多个应用服务容器然后用docker的网关进行链接通信<br><img src="https://pic.tianfs.com/uPic/fLoeSW.png" alt="fLoeSW"><h4 id="3、环境安装方法"><a href="#3、环境安装方法" class="headerlink" title="3、环境安装方法"></a>3、环境安装方法</h4></li>
+<li>如果用git来对比举例:<br>镜像则为一个维护好的master主分支<br>容器则是我们自己定义使用的开发分支，但是不能合并到主分支<br>仓库则为git的代码存放仓库了<h4 id="2、环境的安装方式"><a href="#2、环境的安装方式" class="headerlink" title="2、环境的安装方式"></a>2、环境的安装方式</h4>1）使用docker安装一个linux虚拟机，然后在虚拟机中使用linux相关命令安装php相关开发环境，这就和docker没啥太大关系了<br>2）使用docker分别nginx、PHP、redis等多个应用服务容器然后用docker的网关进行链接通信<br><img src="://pic.tianfs.com/uPic/fLoeSW.png" alt="fLoeSW"><h4 id="3、环境安装方法"><a href="#3、环境安装方法" class="headerlink" title="3、环境安装方法"></a>3、环境安装方法</h4></li>
 <li>分为普通基础安装：<br>一个一个安装，官方样例经常出现的方式</li>
 <li>使用docker-composer安装：<br>使用docker compose 配置文件（yml文件），配置应用程序需要的所有服务，然后使用一个命令自动安装所有东西（例如php 的composer.json 和compose install）</li>
 <li>本文会先介绍基础安装，然后介绍 docker-composer 方式 <h3 id="4、常用基础命令"><a href="#4、常用基础命令" class="headerlink" title="4、常用基础命令"></a>4、常用基础命令</h3>1) docker images(docker image ls) :来列出本地主机上已经下载的镜像<br>2) docker pull :用来从远程仓库下载镜像<br>3) docker search :在仓库中搜索镜像<br>4）docker run ：运行镜像生成并生成容器<br>5）docker ps ：查看正在运行的容器的列表<br>6）docker ps -a:查看本地已经生成的容器（包含未运行的）<br>7）docker exec :进入到容器中，可以想想未ssh进入到了一个linux系统</li>
 </ul>
 <h2 id="三、安装nginx"><a href="#三、安装nginx" class="headerlink" title="三、安装nginx"></a>三、安装nginx</h2><h4 id="1、下载nginx镜像"><a href="#1、下载nginx镜像" class="headerlink" title="1、下载nginx镜像"></a>1、下载nginx镜像</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker pull nginx:1.19.3</span><br></pre></td></tr></table></figure>
-<p>这样nginx镜像就下载下来了，可以用 docker images 查看<br><img src="https://pic.tianfs.com/uPic/iH1PtX.png" alt="iH1PtX"></p>
+<p>这样nginx镜像就下载下来了，可以用 docker images 查看<br><img src="://pic.tianfs.com/uPic/iH1PtX.png" alt="iH1PtX"></p>
 <h4 id="2、运行镜像生成容器"><a href="#2、运行镜像生成容器" class="headerlink" title="2、运行镜像生成容器"></a>2、运行镜像生成容器</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name nginx-1.19.3</span><br><span class="line">-v ~/mycode:/usr/share/nginx/html </span><br><span class="line">-v ~/docker-volumes/nginx/config:/etc/nginx/conf.d </span><br><span class="line">-v /tmp/docker-log/nginx:/var/<span class="built_in">log</span>/nginx</span><br><span class="line"> -p 80:80 -d nginx:1.19.3</span><br></pre></td></tr></table></figure>
 <p>参数说明：<br>-v 表示目录映射关系（前者是宿主机目录，后者是映射到宿主机上的目录），可以使用多个－v做多个目录或文件映射。注意：最好做目录映射，在宿主机上做修改，然后共享到容器上<br>–name nginx-1.19.3：设置容器名称。<br>-p 80:80： 端口进行映射，将本地 80 端口映射到容器内部的 80 端口。<br>-d： 设置容器在在后台一直运行。</p>
-<p><img src="https://pic.tianfs.com/uPic/sJ46Dc.png" alt="sJ46Dc"></p>
+<p><img src="://pic.tianfs.com/uPic/sJ46Dc.png" alt="sJ46Dc"></p>
 <h4 id="3、创建配置文件、进入容器逛一逛"><a href="#3、创建配置文件、进入容器逛一逛" class="headerlink" title="3、创建配置文件、进入容器逛一逛"></a>3、创建配置文件、进入容器逛一逛</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker <span class="built_in">exec</span> -it  nginx-1.19.3</span><br></pre></td></tr></table></figure>
 <p>进来后可以看看nginx的配置文件等信息， </p>
 <p>现在我们已经把配置文件映射到宿主机上了我们可一到宿主机的对应目录调调改改nginx配置文件</p>
@@ -153,7 +153,7 @@
 </li>
 <li><p>注意事项<br>1) 如果指定ip需要自己创建一个网络空间 不能使用默认的，这也解决了每次容器ip变动的问题</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network local_net bridge</span><br></pre></td></tr></table></figure>
-<p><img src="https://pic.tianfs.com/uPic/Fd7VpT.png" alt="Fd7VpT"><br>2) 关于虚拟域名配置<br>这就要做一下nginx容器的host配置如上yml文件中extra_hosts，当前宿主机的本地host也要加</p>
+<p><img src="://pic.tianfs.com/uPic/Fd7VpT.png" alt="Fd7VpT"><br>2) 关于虚拟域名配置<br>这就要做一下nginx容器的host配置如上yml文件中extra_hosts，当前宿主机的本地host也要加</p>
 </li>
 </ul>
 <p>然后修改nginx的配置 如下是我的meidaifu.conf的配置</p>
@@ -162,10 +162,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">nginx:</span><br><span class="line">    container_name: local-nginx-1.19.3</span><br><span class="line">    image: nginx:1.19.3</span><br><span class="line">    ports:</span><br><span class="line">      - &quot;80:80&quot;</span><br><span class="line">    volumes:</span><br><span class="line">      - ~&#x2F;mycode:&#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html</span><br><span class="line">      - ~&#x2F;docker-volumes&#x2F;nginx&#x2F;config:&#x2F;etc&#x2F;nginx&#x2F;conf.d</span><br><span class="line">      - &#x2F;tmp&#x2F;docker-log&#x2F;nginx:&#x2F;var&#x2F;log&#x2F;nginx</span><br><span class="line">    networks:</span><br><span class="line">      local_net:</span><br><span class="line">        ipv4_address: 172.25.0.3</span><br><span class="line">    extra_hosts:</span><br><span class="line">    - &quot;local.testdoctor.meidaifu.com:127.0.0.1&quot;</span><br><span class="line">    - &quot;local.patient.meidaifu.com:127.0.0.1&quot;</span><br><span class="line">    depends_on:</span><br><span class="line">      - php</span><br></pre></td></tr></table></figure>
 <h3 id="3、运行docker-compose"><a href="#3、运行docker-compose" class="headerlink" title="3、运行docker compose"></a>3、运行docker compose</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://pic.tianfs.com/uPic/rc1Frn.png" alt="rc1Frn"><br>然后就可以运行了。</p>
-<p>如果可以在果面版的docker中查看的更清楚<br><img src="https://pic.tianfs.com/uPic/dIgSAi.png" alt="dIgSAi"></p>
-<p>docker-compose down 停止并删除容器<br><img src="https://pic.tianfs.com/uPic/67lyX4.png" alt="67lyX4"></p>
-<p>docker-compose stop 停止并不删除容器<br><img src="https://pic.tianfs.com/uPic/wn49vN.png" alt="wn49vN"></p>
+<p><img src="://pic.tianfs.com/uPic/rc1Frn.png" alt="rc1Frn"><br>然后就可以运行了。</p>
+<p>如果可以在果面版的docker中查看的更清楚<br><img src="://pic.tianfs.com/uPic/dIgSAi.png" alt="dIgSAi"></p>
+<p>docker-compose down 停止并删除容器<br><img src="://pic.tianfs.com/uPic/67lyX4.png" alt="67lyX4"></p>
+<p>docker-compose stop 停止并不删除容器<br><img src="://pic.tianfs.com/uPic/wn49vN.png" alt="wn49vN"></p>
 <h3 id="4、使用dockerfile自动增加PHP扩展"><a href="#4、使用dockerfile自动增加PHP扩展" class="headerlink" title="4、使用dockerfile自动增加PHP扩展"></a>4、使用dockerfile自动增加PHP扩展</h3><p>当前目录创建 phpfile/Dockerfile</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># base image</span></span><br><span class="line">FROM php:7.3-fpm</span><br><span class="line"></span><br><span class="line"><span class="comment"># MAINTAINER</span></span><br><span class="line">MAINTAINER tianfs</span><br><span class="line"></span><br><span class="line"><span class="comment"># running required command</span></span><br><span class="line">RUN docker-php-ext-install pdo_mysql</span><br></pre></td></tr></table></figure>
 
@@ -174,13 +174,13 @@
 <p>build 和image 同时出现 则image 将为build后镜像生成的名字和tag<br>然后</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
 <p>然后你就可以拿这你的配置文件 到处耍了。</p>
-<h2 id="六、注意事项"><a href="#六、注意事项" class="headerlink" title="六、注意事项"></a>六、注意事项</h2><p>查看另一片文章<a href="https://tianfs.com" target="_blank" rel="noopener">docker遇到的相关问题</a></p>
+<h2 id="六、注意事项"><a href="#六、注意事项" class="headerlink" title="六、注意事项"></a>六、注意事项</h2><p>查看另一片文章<a href="://tianfs.com">docker遇到的相关问题</a></p>
 <h2 id="七、延伸思考"><a href="#七、延伸思考" class="headerlink" title="七、延伸思考"></a>七、延伸思考</h2><p>1、这种搭建方式是否符合最佳事实践方案标准？<br>2、如果多台服务器需要部署如何管理？</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" data-id="ckgwfpof6002t92h5hjrwal90" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" data-id="ckgwgpxj4002qd4h5dyu2dmen" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li></ul>
