@@ -86,6 +86,53 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-css去除webkit内核的默认样式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/">css去除webkit内核的默认样式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##前言<br>做移动端的朋友应该知道，iphone的默认按钮是个很恶心的圆角，select下拉框也有默认样式无法修改。</p>
+<p>###解决办法<br>这时候可以用到的<br>在按钮和select样式里加入下面css<br>–webkit–appearance:none //去除默认样</p>
+<p>###示例代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">input&#123;</span><br><span class="line"> background:<span class="comment">#FF9933;</span></span><br><span class="line"> border–radius:5px;</span><br><span class="line"> color:<span class="comment">#fff;</span></span><br><span class="line"> padding:3px 20px;</span><br><span class="line">–webkit–appearance:none;</span><br><span class="line">&#125;</span><br><span class="line">select&#123;</span><br><span class="line"> background:url(images/img1.jpg) no–repeat;</span><br><span class="line"> background–size:20px;</span><br><span class="line"> background–position:95% center;</span><br><span class="line"> padding:3px 10px;</span><br><span class="line"> width:30%;</span><br><span class="line">–webkit–appearance:none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="ckgvue44f00047ify40o56pmg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-css定位绝对居中办法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" class="article-date">
@@ -118,7 +165,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="ckgtani84000anxfyfq6280yw" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="ckgvue44i00067ifygx4s2u98" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
@@ -164,7 +211,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" data-id="ckgtani8a000nnxfy3s6t0zwp" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" data-id="ckgvue44r000l7ify2wsm1sn1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
@@ -209,10 +256,59 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" data-id="ckgtani8e000ynxfydk53f0xq" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" data-id="ckgvue44w000s7ifygjql39r2" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-用css3实现响应式布局" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/">用css3 media实现响应式布局</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##前言<br>响应式布局，说直白点就是一个网站能够兼容多个终端，可以按不同的分辨率显示不同的状态。而实现这个就要用到css3的Media Queries（媒介查询）。这个功能非常的强大，但是有优点的同时，缺点也是会存在的。那就是兼容各种设备工作量大，效率低下，加载时间长等。但是学起来很容易，看完下面的代码你就会了。</p>
+<p>###示例代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">.page&#123;</span><br><span class="line">    width:960px;</span><br><span class="line">    height:1000px;</span><br><span class="line">    margin:0 auto;</span><br><span class="line">    background:<span class="comment">#CCC;</span></span><br><span class="line">&#125;</span><br><span class="line">/* 设备最大宽度960px */</span><br><span class="line">@media screen and (max–width: 960px) &#123;</span><br><span class="line">    .page&#123;</span><br><span class="line">        width:100%;</span><br><span class="line">        background:<span class="comment">#69F;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">/* 宽度大于480px且小于768px */</span><br><span class="line">@media screen and (min–width: 480px) and (max–width:768px) &#123;</span><br><span class="line">    .page&#123;</span><br><span class="line">        width:100%;</span><br><span class="line">        background:<span class="comment">#F00;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">/* 设备最大宽度480px */</span><br><span class="line">@media screen and (max–width:480px)&#123;</span><br><span class="line">    .page&#123;</span><br><span class="line">        width:100%;</span><br><span class="line">        background:<span class="comment">#00FF00;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样就可以在不同的分辨率下采取不同的样式了。</p>
+<p>另外还有一点，如果是移动端开发，一定要在头部加上以下代码。</p>
+<meta name=“viewport” content=“width=device-width; initial-scale=1.0”>
+怎么样，很容易吧。当然这只是响应式布局的一部分，其他的可以网上搜索相关资料。以上，只是个人对于响应式布局的一些理解，技术更新的速度很快，所以我们也要与时俱进。
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" data-id="ckgvue44z000y7ifydd89gxby" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
 
     </footer>
   </div>
@@ -262,59 +358,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" data-id="ckgtani8f0010nxfy7pn7521k" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" data-id="ckgvue45200167ify1uodb5pk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-用css3实现响应式布局" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/">用css3 media实现响应式布局</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>##前言<br>响应式布局，说直白点就是一个网站能够兼容多个终端，可以按不同的分辨率显示不同的状态。而实现这个就要用到css3的Media Queries（媒介查询）。这个功能非常的强大，但是有优点的同时，缺点也是会存在的。那就是兼容各种设备工作量大，效率低下，加载时间长等。但是学起来很容易，看完下面的代码你就会了。</p>
-<p>###示例代码</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">.page&#123;</span><br><span class="line">    width:960px;</span><br><span class="line">    height:1000px;</span><br><span class="line">    margin:0 auto;</span><br><span class="line">    background:<span class="comment">#CCC;</span></span><br><span class="line">&#125;</span><br><span class="line">/* 设备最大宽度960px */</span><br><span class="line">@media screen and (max–width: 960px) &#123;</span><br><span class="line">    .page&#123;</span><br><span class="line">        width:100%;</span><br><span class="line">        background:<span class="comment">#69F;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">/* 宽度大于480px且小于768px */</span><br><span class="line">@media screen and (min–width: 480px) and (max–width:768px) &#123;</span><br><span class="line">    .page&#123;</span><br><span class="line">        width:100%;</span><br><span class="line">        background:<span class="comment">#F00;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">/* 设备最大宽度480px */</span><br><span class="line">@media screen and (max–width:480px)&#123;</span><br><span class="line">    .page&#123;</span><br><span class="line">        width:100%;</span><br><span class="line">        background:<span class="comment">#00FF00;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样就可以在不同的分辨率下采取不同的样式了。</p>
-<p>另外还有一点，如果是移动端开发，一定要在头部加上以下代码。</p>
-<meta name=“viewport” content=“width=device-width; initial-scale=1.0”>
-怎么样，很容易吧。当然这只是响应式布局的一部分，其他的可以网上搜索相关资料。以上，只是个人对于响应式布局的一些理解，技术更新的速度很快，所以我们也要与时俱进。
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" data-id="ckgtani8i0017nxfybt268bem" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
 
     </footer>
   </div>
@@ -399,7 +446,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/php%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" data-id="ckgtani8z002pnxfy8mif29gk" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/php%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" data-id="ckgvue45p002u7ify3itqaz6p" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/" rel="tag">php</a></li></ul>
@@ -453,7 +500,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E9%80%9A%E8%BF%87PHP%E7%94%9F%E6%88%90PHP/" data-id="ckgtani8g0013nxfy1k3s1067" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/%E9%80%9A%E8%BF%87PHP%E7%94%9F%E6%88%90PHP/" data-id="ckgvue45000127ify7i5o4vmh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/" rel="tag">php</a></li></ul>
@@ -504,7 +551,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/hello-world/" data-id="ckgtani88000jnxfy2bzj3g9l" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/hello-world/" data-id="ckgvue44o000f7ifyb9qc58z4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -555,7 +602,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/08/order-by-rand%E5%BC%95%E5%8F%91%E7%9A%84%E5%A4%A7%E6%8A%A5%E9%94%99/" data-id="ckgtani8a000pnxfy8vjxdvj8" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/08/order-by-rand%E5%BC%95%E5%8F%91%E7%9A%84%E5%A4%A7%E6%8A%A5%E9%94%99/" data-id="ckgvue44t000m7ifybmsx72yb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
@@ -592,7 +639,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kibana/" rel="tag">kibana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kibana/" rel="tag">kibana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
     </div>
   </div>
 
@@ -602,7 +649,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/b%E6%A0%91/" style="font-size: 10px;">b树</a> <a href="/tags/css/" style="font-size: 16.67px;">css</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/html/" style="font-size: 16.67px;">html</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/kibana/" style="font-size: 10px;">kibana</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/php/" style="font-size: 13.33px;">php</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/tcc/" style="font-size: 10px;">tcc</a> <a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 16.67px;">web前端</a> <a href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" style="font-size: 10px;">xa两段提交</a> <a href="/tags/%E5%87%BB%E7%A9%BF/" style="font-size: 10px;">击穿</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">分布式事务</a> <a href="/tags/%E7%A9%BF%E9%80%8F/" style="font-size: 10px;">穿透</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 20px;">算法</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 10px;">索引</a> <a href="/tags/%E9%94%81/" style="font-size: 10px;">锁</a> <a href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" style="font-size: 10px;">雪崩，队列</a>
+      <a href="/tags/b%E6%A0%91/" style="font-size: 10px;">b树</a> <a href="/tags/css/" style="font-size: 16.67px;">css</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/html/" style="font-size: 16.67px;">html</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/kibana/" style="font-size: 10px;">kibana</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/php/" style="font-size: 13.33px;">php</a> <a href="/tags/php%E7%8E%AF%E5%A2%83/" style="font-size: 10px;">php环境</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/tcc/" style="font-size: 10px;">tcc</a> <a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 16.67px;">web前端</a> <a href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" style="font-size: 10px;">xa两段提交</a> <a href="/tags/%E5%87%BB%E7%A9%BF/" style="font-size: 10px;">击穿</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">分布式事务</a> <a href="/tags/%E7%A9%BF%E9%80%8F/" style="font-size: 10px;">穿透</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 20px;">算法</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 10px;">索引</a> <a href="/tags/%E9%94%81/" style="font-size: 10px;">锁</a> <a href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" style="font-size: 10px;">雪崩，队列</a>
     </div>
   </div>
 
@@ -628,6 +675,10 @@
           </li>
         
           <li>
+            <a href="/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">docker安装php开发环境</a>
+          </li>
+        
+          <li>
             <a href="/2020/10/20/elasticsearch%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">elasticsearch知识整理</a>
           </li>
         
@@ -637,10 +688,6 @@
         
           <li>
             <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
-          </li>
-        
-          <li>
-            <a href="/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">mysql知识点整理(持续更新)</a>
           </li>
         
       </ul>
