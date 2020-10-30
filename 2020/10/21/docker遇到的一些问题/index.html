@@ -15,8 +15,12 @@
 <meta property="og:description" content="docker个人遇到的问题一些备注1) 如果出现 bash: vim : command not found  需要安装下vim 12$ apt-get update$ apt-get install vim  2) 如果出现 bash: apt-get : command not found  尝试使用yum安装 1$ yum install vim -y  3) 如果容器内出现 [Errno">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://pic.tianfs.com/uPic/4hNwhh.png">
+<meta property="og:image" content="http://pic.tianfs.com/uPic/vWMAEu.png">
+<meta property="og:image" content="http://pic.tianfs.com/uPic/ESCn9R.png">
+<meta property="og:image" content="http://pic.tianfs.com/uPic/7Ojq4g.png">
+<meta property="og:image" content="http://pic.tianfs.com/uPic/CnSpBL.png">
 <meta property="article:published_time" content="2020-10-21T04:46:47.000Z">
-<meta property="article:modified_time" content="2020-10-30T05:19:33.716Z">
+<meta property="article:modified_time" content="2020-10-30T06:09:45.739Z">
 <meta property="article:author" content="tianfs">
 <meta property="article:tag" content="docker">
 <meta name="twitter:card" content="summary">
@@ -120,19 +124,19 @@
 <li>创建一个名为docker0的虚拟网桥,并将容器连接到一个docker0虚拟网桥,所有网桥下的容器共享Network Namespace</li>
 </ul>
 <ul>
-<li>可以关闭容器见通信，在DOCKER_OPTS变量中设置–icc=false，这样只有使用–link才能使两个容器通信。<h4 id="host模式（–network-host）"><a href="#host模式（–network-host）" class="headerlink" title="host模式（–network=host）"></a>host模式（–network=host）</h4></li>
+<li>可以关闭容器见通信，在DOCKER_OPTS变量中设置–icc=false，这样只有使用–link才能使两个容器通信。<br><img src="http://pic.tianfs.com/uPic/vWMAEu.png" alt="vWMAEu"><h4 id="host模式（–network-host）"><a href="#host模式（–network-host）" class="headerlink" title="host模式（–network=host）"></a>host模式（–network=host）</h4></li>
 </ul>
 <ul>
 <li>容器和宿主机共享Network，使用宿主机的IP和端口,容器可以直接使用宿主机的IP地址与外界通信</li>
-<li>网络性能比较好，网络的隔离性不好，<h4 id="none模式-（–network-none）"><a href="#none模式-（–network-none）" class="headerlink" title="none模式 （–network=none）"></a>none模式 （–network=none）</h4></li>
-<li>拥有自己的Network Namespace，该模式默认关闭了容器的网络功能，需要自己配置。<h4 id="container模式-（–network-container-NAME-or-ID）"><a href="#container模式-（–network-container-NAME-or-ID）" class="headerlink" title="container模式 （–network=container:NAME_or_ID）"></a>container模式 （–network=container:NAME_or_ID）</h4></li>
-<li>容器和另外一个容器共享Network namespace,而不是和宿主机共享</li>
+<li>网络性能比较好，网络的隔离性不好，<br><img src="http://pic.tianfs.com/uPic/ESCn9R.png" alt="ESCn9R"><h4 id="none模式-（–network-none）"><a href="#none模式-（–network-none）" class="headerlink" title="none模式 （–network=none）"></a>none模式 （–network=none）</h4></li>
+<li>拥有自己的Network Namespace，该模式默认关闭了容器的网络功能，需要自己配置。<br><img src="http://pic.tianfs.com/uPic/7Ojq4g.png" alt="7Ojq4g"><h4 id="container模式-（–network-container-NAME-or-ID）"><a href="#container模式-（–network-container-NAME-or-ID）" class="headerlink" title="container模式 （–network=container:NAME_or_ID）"></a>container模式 （–network=container:NAME_or_ID）</h4></li>
+<li>容器和另外一个容器共享Network namespace,而不是和宿主机共享<br><img src="http://pic.tianfs.com/uPic/CnSpBL.png" alt="CnSpBL"></li>
 </ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" data-id="ckgvue44l000b7ifyasle8hf7" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" data-id="ckgvv4ahj000acifyaiod87k6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li></ul>
@@ -216,11 +220,11 @@
           </li>
         
           <li>
-            <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
+            <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
           </li>
         
           <li>
-            <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
+            <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
           </li>
         
       </ul>
