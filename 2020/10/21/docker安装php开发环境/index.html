@@ -14,6 +14,7 @@
 <meta property="og:site_name" content="田丰硕个人博客">
 <meta property="og:description" content="序言 本文继续mac os系统演示 本文基于本地开发安装环境用于演示 nginx-1.19.3、php-7.3、redis:6.0一、安装docker1$ brew cask install docker 二、安装需要了解的概念和基础命令1、docker的组成docker由 仓库、镜像、容器三大部分组成1）镜像：可以想想成为模版，例如windows系统的镜像，2）容器：通过启动镜像来生成容器，就是">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://pic.tianfs.com/uPic/fLoeSW.png">
 <meta property="og:image" content="http://pic.tianfs.com/uPic/iH1PtX.png">
 <meta property="og:image" content="http://pic.tianfs.com/uPic/sJ46Dc.png">
 <meta property="og:image" content="http://pic.tianfs.com/uPic/Fd7VpT.png">
@@ -22,12 +23,12 @@
 <meta property="og:image" content="http://pic.tianfs.com/uPic/67lyX4.png">
 <meta property="og:image" content="http://pic.tianfs.com/uPic/wn49vN.png">
 <meta property="article:published_time" content="2020-10-21T04:46:47.000Z">
-<meta property="article:modified_time" content="2020-10-30T06:35:22.378Z">
+<meta property="article:modified_time" content="2020-10-30T07:45:37.720Z">
 <meta property="article:author" content="tianfs">
 <meta property="article:tag" content="docker">
 <meta property="article:tag" content="php环境">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://pic.tianfs.com/uPic/iH1PtX.png">
+<meta name="twitter:image" content="http://pic.tianfs.com/uPic/fLoeSW.png">
   
     <link rel="alternate" href="/atom.xml" title="田丰硕个人博客" type="application/atom+xml">
   
@@ -111,7 +112,7 @@
 <li>本文基于本地开发安装环境用于演示</li>
 <li>nginx-1.19.3、php-7.3、redis:6.0<h3 id="一、安装docker"><a href="#一、安装docker" class="headerlink" title="一、安装docker"></a>一、安装docker</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew cask install docker</span><br></pre></td></tr></table></figure>
 <h3 id="二、安装需要了解的概念和基础命令"><a href="#二、安装需要了解的概念和基础命令" class="headerlink" title="二、安装需要了解的概念和基础命令"></a>二、安装需要了解的概念和基础命令</h3><h4 id="1、docker的组成"><a href="#1、docker的组成" class="headerlink" title="1、docker的组成"></a>1、docker的组成</h4>docker由 仓库、镜像、容器三大部分组成<br>1）镜像：可以想想成为模版，例如windows系统的镜像，<br>2）容器：通过启动镜像来生成容器，就是我们环境中真实要使用到的服务存储的地方 一般由 一个linux系统内包含一个应用服务组成（例如linux中安装了一个php）<br>3）仓库：用来集中存储镜像的的地方，一般我们使用 docker hub （hub.docker.com）<br>容器与镜像的关系类似于面向对象编程中的对象与类</li>
-<li>如果用git来对比举例:<br>镜像则为一个维护好的master主分支<br>容器则是我们自己定义使用的开发分支，但是不能合并到主分支<br>仓库则为git的代码存放仓库了<h4 id="2、环境的安装方式"><a href="#2、环境的安装方式" class="headerlink" title="2、环境的安装方式"></a>2、环境的安装方式</h4>1）使用docker安装一个linux虚拟机，然后在虚拟机中使用linux相关命令安装php相关开发环境，这就和docker没啥太大关系了<br>2）使用docker分别nginx、PHP、redis等多个应用服务容器然后用docker的网关进行链接通信<h4 id="3、环境安装方法"><a href="#3、环境安装方法" class="headerlink" title="3、环境安装方法"></a>3、环境安装方法</h4></li>
+<li>如果用git来对比举例:<br>镜像则为一个维护好的master主分支<br>容器则是我们自己定义使用的开发分支，但是不能合并到主分支<br>仓库则为git的代码存放仓库了<h4 id="2、环境的安装方式"><a href="#2、环境的安装方式" class="headerlink" title="2、环境的安装方式"></a>2、环境的安装方式</h4>1）使用docker安装一个linux虚拟机，然后在虚拟机中使用linux相关命令安装php相关开发环境，这就和docker没啥太大关系了<br>2）使用docker分别nginx、PHP、redis等多个应用服务容器然后用docker的网关进行链接通信<br><img src="http://pic.tianfs.com/uPic/fLoeSW.png" alt="fLoeSW"><h4 id="3、环境安装方法"><a href="#3、环境安装方法" class="headerlink" title="3、环境安装方法"></a>3、环境安装方法</h4></li>
 <li>分为普通基础安装：<br>一个一个安装，官方样例经常出现的方式</li>
 <li>使用docker-composer安装：<br>使用docker compose 配置文件（yml文件），配置应用程序需要的所有服务，然后使用一个命令自动安装所有东西（例如php 的composer.json 和compose install）</li>
 <li>本文会先介绍基础安装，然后介绍 docker-composer 方式 <h3 id="4、常用基础命令"><a href="#4、常用基础命令" class="headerlink" title="4、常用基础命令"></a>4、常用基础命令</h3>1) docker images(docker image ls) :来列出本地主机上已经下载的镜像<br>2) docker pull :用来从远程仓库下载镜像<br>3) docker search :在仓库中搜索镜像<br>4）docker run ：运行镜像生成并生成容器<br>5）docker ps ：查看正在运行的容器的列表<br>6）docker ps -a:查看本地已经生成的容器（包含未运行的）<br>7）docker exec :进入到容器中，可以想想未ssh进入到了一个linux系统</li>
@@ -169,7 +170,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" data-id="ckgvx869l002saefy1a62bt5w" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" data-id="ckgvycxrx002sdwfyforkh5wt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li></ul>
