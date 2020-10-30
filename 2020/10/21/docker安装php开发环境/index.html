@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://pic.tianfs.com/uPic/67lyX4.png">
 <meta property="og:image" content="http://pic.tianfs.com/uPic/wn49vN.png">
 <meta property="article:published_time" content="2020-10-21T04:46:47.000Z">
-<meta property="article:modified_time" content="2020-10-30T14:06:08.541Z">
+<meta property="article:modified_time" content="2020-10-30T15:08:36.320Z">
 <meta property="article:author" content="tianfs">
 <meta property="article:tag" content="docker">
 <meta property="article:tag" content="php环境">
@@ -167,11 +167,11 @@
 <p>docker-compose down 停止并删除容器<br><img src="http://pic.tianfs.com/uPic/67lyX4.png" alt="67lyX4"></p>
 <p>docker-compose stop 停止并不删除容器<br><img src="http://pic.tianfs.com/uPic/wn49vN.png" alt="wn49vN"></p>
 <h3 id="4、使用dockerfile自动增加PHP扩展"><a href="#4、使用dockerfile自动增加PHP扩展" class="headerlink" title="4、使用dockerfile自动增加PHP扩展"></a>4、使用dockerfile自动增加PHP扩展</h3><p>当前目录创建 phpfile/Dockerfile</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># base image</span></span><br><span class="line">FROM php:7.3-fpm</span><br><span class="line"></span><br><span class="line"><span class="comment"># MAINTAINER</span></span><br><span class="line">MAINTAINER tianfs</span><br><span class="line"></span><br><span class="line"><span class="comment"># running required command</span></span><br><span class="line">RUN docker-php-ext-install pdo</span><br><span class="line">RUN docker-php-ext-install pdo_mysql</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># base image</span></span><br><span class="line">FROM php:7.3-fpm</span><br><span class="line"></span><br><span class="line"><span class="comment"># MAINTAINER</span></span><br><span class="line">MAINTAINER tianfs</span><br><span class="line"></span><br><span class="line"><span class="comment"># running required command</span></span><br><span class="line">RUN docker-php-ext-install pdo_mysql</span><br></pre></td></tr></table></figure>
 
 <p>然后修改 compose文件中php的配置为</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">php:</span><br><span class="line">  container_name: local-php-7.3-fpm</span><br><span class="line">  build: .&#x2F;phpfile</span><br><span class="line">  volumes:</span><br><span class="line">    - ~&#x2F;mycode:&#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html</span><br><span class="line">  networks:</span><br><span class="line">    local_net:</span><br><span class="line">      ipv4_address: 172.25.0.2</span><br><span class="line">  stdin_open: true</span><br><span class="line">  tty: true</span><br><span class="line">  expose:</span><br><span class="line">    - 9000</span><br></pre></td></tr></table></figure>
-<p>然后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">php:</span><br><span class="line">  container_name: local-php-7.3-fpm</span><br><span class="line">  build:</span><br><span class="line">    context: .&#x2F;phpfile</span><br><span class="line">    dockerfile: Dockerfile</span><br><span class="line">  image: php:7.3-fpm-local</span><br><span class="line">  volumes:</span><br><span class="line">    - ~&#x2F;mycode:&#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html</span><br><span class="line">  networks:</span><br><span class="line">    local_net:</span><br><span class="line">      ipv4_address: 172.25.0.2</span><br><span class="line">  stdin_open: true</span><br><span class="line">  tty: true</span><br><span class="line">  expose:</span><br><span class="line">    - 9000</span><br></pre></td></tr></table></figure>
+<p>build 和image 同时出现 则image 将为build后镜像生成的名字和tag<br>然后</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d</span><br></pre></td></tr></table></figure>
 <p>然后你就可以拿这你的配置文件 到处耍了。</p>
 <h2 id="六、注意事项"><a href="#六、注意事项" class="headerlink" title="六、注意事项"></a>六、注意事项</h2><p>查看另一片文章<a href="https://tianfs.com" target="_blank" rel="noopener">docker遇到的相关问题</a></p>
@@ -180,7 +180,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" data-id="ckgwc8k4h002m3dh5143p1zzz" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" data-id="ckgwe6uq8002swoh52396ccl4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li></ul>
