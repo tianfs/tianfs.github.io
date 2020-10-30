@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://pic.tianfs.com/uPic/67lyX4.png">
 <meta property="og:image" content="http://pic.tianfs.com/uPic/wn49vN.png">
 <meta property="article:published_time" content="2020-10-21T04:46:47.000Z">
-<meta property="article:modified_time" content="2020-10-30T12:48:16.921Z">
+<meta property="article:modified_time" content="2020-10-30T12:53:23.521Z">
 <meta property="article:author" content="tianfs">
 <meta property="article:tag" content="docker">
 <meta property="article:tag" content="php环境">
@@ -133,8 +133,9 @@
 <h2 id="三、安装php"><a href="#三、安装php" class="headerlink" title="三、安装php"></a>三、安装php</h2><h4 id="1、下载php"><a href="#1、下载php" class="headerlink" title="1、下载php"></a>1、下载php</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker pull php:7.3</span><br></pre></td></tr></table></figure>
 <h4 id="2、运行镜像生成容器-1"><a href="#2、运行镜像生成容器-1" class="headerlink" title="2、运行镜像生成容器"></a>2、运行镜像生成容器</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name  php-7.3</span><br><span class="line">-v ~/mycode:/usr/share/nginx/html </span><br><span class="line">--expose=9000 </span><br><span class="line">-d php:7.3</span><br></pre></td></tr></table></figure>
 <p>参数说明：<br>-expose 对其他容器报漏9000端口,但不能和主机通信 。<br>重点说明：<br>-此处php挂在的目录需要与nginx中的www目录相同，因为正常来说nginx和php在一台机器上，www目录要php和nginx都能访问到</p>
-<p>-可以运行后发现好多扩展没有，可以使用进入docker容器使用docker提供的命令进行安装 例如mysql</p>
+<p>-可以运行后发现好多扩展没有，可以使用进入docker容器使用docker提供的命令进行安装 例如mysql<br>因为使用的源是fpm包 所以很多扩展都没有装</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker-php-ext-install pdo</span><br><span class="line">$ docker-php-ext-install pdo_mysql</span><br></pre></td></tr></table></figure>
+<p>如果使用的是php:7.3 就会默认开通很多扩展了</p>
 <h2 id="四、容器和容器间通信"><a href="#四、容器和容器间通信" class="headerlink" title="四、容器和容器间通信"></a>四、容器和容器间通信</h2><ul>
 <li><p>现在已经安装了nginx和php了为啥还是不能解析php文件呢<br>原因在于nginx和php两个容器之间还有没进行通信<br>那么怎么进行通信呢<br>1、我们要修修改nginx中fastcgi中请求php的地址参数 fastcgi_pass 127.0.0.1:9000; 改为 fastcgi_pass 172.25.0.2:9000;<br>2、重启nginx，就可以了呀</p>
 </li>
@@ -180,7 +181,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" data-id="ckgw96xc2002rbeh53iac6mkn" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" data-id="ckgw9co36002reph550jzaigq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li></ul>
@@ -273,11 +274,11 @@
           </li>
         
           <li>
-            <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
+            <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
           </li>
         
           <li>
-            <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
+            <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
           </li>
         
       </ul>

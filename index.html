@@ -146,7 +146,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" data-id="ckgw96xap000abeh58hwodzks" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" data-id="ckgw9co2b000aeph5emvyhe3u" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li></ul>
@@ -210,8 +210,9 @@
 <h2 id="三、安装php"><a href="#三、安装php" class="headerlink" title="三、安装php"></a>三、安装php</h2><h4 id="1、下载php"><a href="#1、下载php" class="headerlink" title="1、下载php"></a>1、下载php</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker pull php:7.3</span><br></pre></td></tr></table></figure>
 <h4 id="2、运行镜像生成容器-1"><a href="#2、运行镜像生成容器-1" class="headerlink" title="2、运行镜像生成容器"></a>2、运行镜像生成容器</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name  php-7.3</span><br><span class="line">-v ~/mycode:/usr/share/nginx/html </span><br><span class="line">--expose=9000 </span><br><span class="line">-d php:7.3</span><br></pre></td></tr></table></figure>
 <p>参数说明：<br>-expose 对其他容器报漏9000端口,但不能和主机通信 。<br>重点说明：<br>-此处php挂在的目录需要与nginx中的www目录相同，因为正常来说nginx和php在一台机器上，www目录要php和nginx都能访问到</p>
-<p>-可以运行后发现好多扩展没有，可以使用进入docker容器使用docker提供的命令进行安装 例如mysql</p>
+<p>-可以运行后发现好多扩展没有，可以使用进入docker容器使用docker提供的命令进行安装 例如mysql<br>因为使用的源是fpm包 所以很多扩展都没有装</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker-php-ext-install pdo</span><br><span class="line">$ docker-php-ext-install pdo_mysql</span><br></pre></td></tr></table></figure>
+<p>如果使用的是php:7.3 就会默认开通很多扩展了</p>
 <h2 id="四、容器和容器间通信"><a href="#四、容器和容器间通信" class="headerlink" title="四、容器和容器间通信"></a>四、容器和容器间通信</h2><ul>
 <li><p>现在已经安装了nginx和php了为啥还是不能解析php文件呢<br>原因在于nginx和php两个容器之间还有没进行通信<br>那么怎么进行通信呢<br>1、我们要修修改nginx中fastcgi中请求php的地址参数 fastcgi_pass 127.0.0.1:9000; 改为 fastcgi_pass 172.25.0.2:9000;<br>2、重启nginx，就可以了呀</p>
 </li>
@@ -257,7 +258,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" data-id="ckgw96xc2002rbeh53iac6mkn" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" data-id="ckgw9co36002reph550jzaigq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li></ul>
@@ -316,10 +317,88 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/20/elasticsearch%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="ckgw96xay000lbeh56kt8aojy" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/20/elasticsearch%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="ckgw9co2f000geph56vuy2y15" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kibana/" rel="tag">kibana</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-分布式知识整理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="article-date">
+  <time datetime="2020-10-19T04:46:47.000Z" itemprop="datePublished">2020-10-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一、分布式事务"><a href="#一、分布式事务" class="headerlink" title="一、分布式事务"></a>一、分布式事务</h3><h4 id="1、tcc（最终一致性）"><a href="#1、tcc（最终一致性）" class="headerlink" title="1、tcc（最终一致性）"></a>1、tcc（最终一致性）</h4><ul>
+<li>一般使用tcc分布式事务框架</li>
+<li>实现的功能需要修改的代码比较多，需要个个系统配合完成try、commit和cancel方法</li>
+<li>有try、commit和cancel三个阶段</li>
+<li>TCC是业务层面的分布式事务，最终一致性，不会一直持有资源的锁。</li>
+<li>try阶段保证各自服务本地资源一致</li>
+<li>commit 和cancel只会有一个被执行 </li>
+<li>try阶段有服务失败将触发cancel 如果cancel失败，那么走补偿机制，保证最终一致性</li>
+<li>不会阻塞资源</li>
+<li>执行流程<br>1) 成功流程：事务框架-&gt;try（请求所有服务预留业务资源,不阻塞）-&gt;成功-&gt;commit(所有服务正式提交修改)<br>2) 失败流程：事务框架-&gt;try（请求所有服务预留业务资源,不阻塞）-&gt;失败-&gt;cancel(告知所有服务取消预约)<br>3) commit/cancel 如果失败了，那么走补偿机制，保证最终一致性<h4 id="3、xa两段提交（强一致性）（阻塞）"><a href="#3、xa两段提交（强一致性）（阻塞）" class="headerlink" title="3、xa两段提交（强一致性）（阻塞）"></a>3、xa两段提交（强一致性）（阻塞）</h4></li>
+<li>分为协调者(xa协调工具)、参与者(各服务)</li>
+<li>XA是资源层面的分布式事务，强一致性，在两阶段提交的整个过程中，一直会持有资源的锁。</li>
+<li>只有try 和commit 两个阶段</li>
+<li>MySQL中只有InnoDB引擎支持XA协议</li>
+<li>MySQL中只有当隔离级别为Serializable（最高界别，串行）时候才能使用分布式事务</li>
+<li>执行流程<br>1) 成功流程：协调者-&gt;try（询问所有服务是否可以执行,持有资源的锁）-&gt;成功-&gt;协调者通知commit(所有服务正式提交修改),解除资源锁定<br>2) 失败流程：协调者-&gt;try（询问所有服务是否可以执行,持有资源的锁）-&gt;失败-&gt;协调者通知rollback,解除资源锁定</li>
+</ul>
+<h4 id="2、mq事务消息（最终一致性）"><a href="#2、mq事务消息（最终一致性）" class="headerlink" title="2、mq事务消息（最终一致性）"></a>2、mq事务消息（最终一致性）</h4><ul>
+<li>实现的功能需要修改的代码相对较少，消费端几乎不需要任何修改</li>
+<li>只能保证（生产端的业务和消息投递到mq同时成功）</li>
+<li>消费端消费失败走补偿机制，保证最终一致性</li>
+<li>执行流程<br>1) 服务a向mq发送prepare消息（本地事务，消费端不会收到）-&gt;mq得到返回给服务a执行结果-&gt;只能服务a本地业务<br>2) 服务a本地业务执行成功-&gt;向mq发送事务消息的提交commitlog-&gt;消息出现在真实的mq消息中-&gt;消费端接收处理<br>3) 服务a本地业务执行失败-&gt;向mq发送事务消息的撤销commitlog-&gt;移除事务消息<br>4) 如果mq未收到事务的commit/rollback则会回查事务状态，然后继续执行<h4 id="4、最大努力通知"><a href="#4、最大努力通知" class="headerlink" title="4、最大努力通知"></a>4、最大努力通知</h4></li>
+<li>不可靠消息：业务活动主动方，在完成业务处理之后，向业务活动的被动方发送消息，直到通知N次后不再通知，允许消息丢失(不可靠消息)。</li>
+<li>定期校对：业务活动的被动方，根据定时策略，向业务活动主动方查询(主动方提供查询接口)，恢复丢失的业务消息。<h4 id="5、可靠消息最终一致性"><a href="#5、可靠消息最终一致性" class="headerlink" title="5、可靠消息最终一致性"></a>5、可靠消息最终一致性</h4></li>
+<li>是指产生消息的业务动作与消息发送的一致</li>
+<li>如果业务操作成功，那么由这个业务操作所产生的消息一定要成功投递出去</li>
+<li>异步确保性</li>
+<li>一般可以使用mq事务消息实现<h3 id="二、分布式锁"><a href="#二、分布式锁" class="headerlink" title="二、分布式锁"></a>二、分布式锁</h3><h4 id="1、基于缓存（Redis等）实现分布式锁"><a href="#1、基于缓存（Redis等）实现分布式锁" class="headerlink" title="1、基于缓存（Redis等）实现分布式锁"></a>1、基于缓存（Redis等）实现分布式锁</h4></li>
+<li>主要使用命令：<br>1）SETNX key val：当且仅当key不存在时，set一个key为val的字符串，返回1；若key存在，则什么都不做，返回0。<br>2）expire key timeout：为key设置一个超时时间，单位为second，超过这个时间锁会自动释放，避免死锁。<br>2）delete key ：删除key。</li>
+<li>实现思想：<br>1）获取锁的时候，使用setnx加锁，并使用expire命令为锁添加一个超时时间，超过该时间则自动释放锁，锁的value值为一个随机生成的UUID，通过此在释放锁的时候进行判断。<br>2）获取锁的时候还设置一个获取的超时时间，若超过这个时间则放弃获取锁。<br>3）释放锁的时候，通过UUID判断是不是该锁，若是该锁，则执行delete进行锁释放。</li>
+</ul>
+<h4 id="2、基于Zookeeper实现分布式锁"><a href="#2、基于Zookeeper实现分布式锁" class="headerlink" title="2、基于Zookeeper实现分布式锁"></a>2、基于Zookeeper实现分布式锁</h4><p>因为需要频繁的创建和删除节点，性能上不如Redis方式。</p>
+<ul>
+<li>实现思想：<br>1）创建一个目录mylock；<br>2）线程A想获取锁就在mylock目录下创建临时顺序节点；<br>3）获取mylock目录下所有的子节点，然后获取比自己小的兄弟节点，如果不存在，则说明当前线程顺序号最小，获得锁；<br>4）线程B获取所有节点，判断自己不是最小节点，设置监听比自己次小的节点；<br>5）线程A处理完，删除自己的节点，线程B监听到变更事件，判断自己是不是最小的节点，如果是则获得锁。</li>
+</ul>
+<h4 id="3、基于数据库实现分布式锁；"><a href="#3、基于数据库实现分布式锁；" class="headerlink" title="3、基于数据库实现分布式锁；"></a>3、基于数据库实现分布式锁；</h4><p>性能差，不推荐，不需要了解</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="ckgw9co2l000teph56ho4exep" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li></ul>
 
     </footer>
   </div>
@@ -410,88 +489,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgw96xb0000rbeh53l04f42c" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgw9co2m000yeph5fhm213el" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-分布式知识整理" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="article-date">
-  <time datetime="2020-10-19T04:46:47.000Z" itemprop="datePublished">2020-10-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一、分布式事务"><a href="#一、分布式事务" class="headerlink" title="一、分布式事务"></a>一、分布式事务</h3><h4 id="1、tcc（最终一致性）"><a href="#1、tcc（最终一致性）" class="headerlink" title="1、tcc（最终一致性）"></a>1、tcc（最终一致性）</h4><ul>
-<li>一般使用tcc分布式事务框架</li>
-<li>实现的功能需要修改的代码比较多，需要个个系统配合完成try、commit和cancel方法</li>
-<li>有try、commit和cancel三个阶段</li>
-<li>TCC是业务层面的分布式事务，最终一致性，不会一直持有资源的锁。</li>
-<li>try阶段保证各自服务本地资源一致</li>
-<li>commit 和cancel只会有一个被执行 </li>
-<li>try阶段有服务失败将触发cancel 如果cancel失败，那么走补偿机制，保证最终一致性</li>
-<li>不会阻塞资源</li>
-<li>执行流程<br>1) 成功流程：事务框架-&gt;try（请求所有服务预留业务资源,不阻塞）-&gt;成功-&gt;commit(所有服务正式提交修改)<br>2) 失败流程：事务框架-&gt;try（请求所有服务预留业务资源,不阻塞）-&gt;失败-&gt;cancel(告知所有服务取消预约)<br>3) commit/cancel 如果失败了，那么走补偿机制，保证最终一致性<h4 id="3、xa两段提交（强一致性）（阻塞）"><a href="#3、xa两段提交（强一致性）（阻塞）" class="headerlink" title="3、xa两段提交（强一致性）（阻塞）"></a>3、xa两段提交（强一致性）（阻塞）</h4></li>
-<li>分为协调者(xa协调工具)、参与者(各服务)</li>
-<li>XA是资源层面的分布式事务，强一致性，在两阶段提交的整个过程中，一直会持有资源的锁。</li>
-<li>只有try 和commit 两个阶段</li>
-<li>MySQL中只有InnoDB引擎支持XA协议</li>
-<li>MySQL中只有当隔离级别为Serializable（最高界别，串行）时候才能使用分布式事务</li>
-<li>执行流程<br>1) 成功流程：协调者-&gt;try（询问所有服务是否可以执行,持有资源的锁）-&gt;成功-&gt;协调者通知commit(所有服务正式提交修改),解除资源锁定<br>2) 失败流程：协调者-&gt;try（询问所有服务是否可以执行,持有资源的锁）-&gt;失败-&gt;协调者通知rollback,解除资源锁定</li>
-</ul>
-<h4 id="2、mq事务消息（最终一致性）"><a href="#2、mq事务消息（最终一致性）" class="headerlink" title="2、mq事务消息（最终一致性）"></a>2、mq事务消息（最终一致性）</h4><ul>
-<li>实现的功能需要修改的代码相对较少，消费端几乎不需要任何修改</li>
-<li>只能保证（生产端的业务和消息投递到mq同时成功）</li>
-<li>消费端消费失败走补偿机制，保证最终一致性</li>
-<li>执行流程<br>1) 服务a向mq发送prepare消息（本地事务，消费端不会收到）-&gt;mq得到返回给服务a执行结果-&gt;只能服务a本地业务<br>2) 服务a本地业务执行成功-&gt;向mq发送事务消息的提交commitlog-&gt;消息出现在真实的mq消息中-&gt;消费端接收处理<br>3) 服务a本地业务执行失败-&gt;向mq发送事务消息的撤销commitlog-&gt;移除事务消息<br>4) 如果mq未收到事务的commit/rollback则会回查事务状态，然后继续执行<h4 id="4、最大努力通知"><a href="#4、最大努力通知" class="headerlink" title="4、最大努力通知"></a>4、最大努力通知</h4></li>
-<li>不可靠消息：业务活动主动方，在完成业务处理之后，向业务活动的被动方发送消息，直到通知N次后不再通知，允许消息丢失(不可靠消息)。</li>
-<li>定期校对：业务活动的被动方，根据定时策略，向业务活动主动方查询(主动方提供查询接口)，恢复丢失的业务消息。<h4 id="5、可靠消息最终一致性"><a href="#5、可靠消息最终一致性" class="headerlink" title="5、可靠消息最终一致性"></a>5、可靠消息最终一致性</h4></li>
-<li>是指产生消息的业务动作与消息发送的一致</li>
-<li>如果业务操作成功，那么由这个业务操作所产生的消息一定要成功投递出去</li>
-<li>异步确保性</li>
-<li>一般可以使用mq事务消息实现<h3 id="二、分布式锁"><a href="#二、分布式锁" class="headerlink" title="二、分布式锁"></a>二、分布式锁</h3><h4 id="1、基于缓存（Redis等）实现分布式锁"><a href="#1、基于缓存（Redis等）实现分布式锁" class="headerlink" title="1、基于缓存（Redis等）实现分布式锁"></a>1、基于缓存（Redis等）实现分布式锁</h4></li>
-<li>主要使用命令：<br>1）SETNX key val：当且仅当key不存在时，set一个key为val的字符串，返回1；若key存在，则什么都不做，返回0。<br>2）expire key timeout：为key设置一个超时时间，单位为second，超过这个时间锁会自动释放，避免死锁。<br>2）delete key ：删除key。</li>
-<li>实现思想：<br>1）获取锁的时候，使用setnx加锁，并使用expire命令为锁添加一个超时时间，超过该时间则自动释放锁，锁的value值为一个随机生成的UUID，通过此在释放锁的时候进行判断。<br>2）获取锁的时候还设置一个获取的超时时间，若超过这个时间则放弃获取锁。<br>3）释放锁的时候，通过UUID判断是不是该锁，若是该锁，则执行delete进行锁释放。</li>
-</ul>
-<h4 id="2、基于Zookeeper实现分布式锁"><a href="#2、基于Zookeeper实现分布式锁" class="headerlink" title="2、基于Zookeeper实现分布式锁"></a>2、基于Zookeeper实现分布式锁</h4><p>因为需要频繁的创建和删除节点，性能上不如Redis方式。</p>
-<ul>
-<li>实现思想：<br>1）创建一个目录mylock；<br>2）线程A想获取锁就在mylock目录下创建临时顺序节点；<br>3）获取mylock目录下所有的子节点，然后获取比自己小的兄弟节点，如果不存在，则说明当前线程顺序号最小，获得锁；<br>4）线程B获取所有节点，判断自己不是最小节点，设置监听比自己次小的节点；<br>5）线程A处理完，删除自己的节点，线程B监听到变更事件，判断自己是不是最小的节点，如果是则获得锁。</li>
-</ul>
-<h4 id="3、基于数据库实现分布式锁；"><a href="#3、基于数据库实现分布式锁；" class="headerlink" title="3、基于数据库实现分布式锁；"></a>3、基于数据库实现分布式锁；</h4><p>性能差，不推荐，不需要了解</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="ckgw96xb3000zbeh5e933bi4c" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li></ul>
 
     </footer>
   </div>
@@ -623,7 +624,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgw96xc4002ubeh58eyu6eci" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgw9co37002seph565yhc9cw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li></ul>
@@ -669,7 +670,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/09/27/bitmap/" data-id="ckgw96xal0004beh5ebqcd3vl" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/09/27/bitmap/" data-id="ckgw9co230001eph5f69c380h" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
@@ -717,7 +718,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" data-id="ckgw96xaa0000beh554swd1ws" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" data-id="ckgw9co1w0000eph58t5je47x" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
@@ -793,7 +794,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="ckgw96xah0001beh546g26mxj" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="ckgw9co270004eph5h67p72zh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
@@ -837,7 +838,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" data-id="ckgw96xam0005beh5ahb5eblj" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" data-id="ckgw9co280005eph5atdlbr49" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/" rel="tag">http</a></li></ul>
@@ -918,11 +919,11 @@
           </li>
         
           <li>
-            <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
+            <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
           </li>
         
           <li>
-            <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
+            <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
           </li>
         
       </ul>
