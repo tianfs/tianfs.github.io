@@ -86,6 +86,75 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-http和tcp和udp" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/11/01/http%E5%92%8Ctcp%E5%92%8Cudp/" class="article-date">
+  <time datetime="2020-11-01T03:46:47.000Z" itemprop="datePublished">2020-11-01</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E7%BD%91%E7%BB%9C/">网络</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/11/01/http%E5%92%8Ctcp%E5%92%8Cudp/">php版bitmap</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="网络概念"><a href="#网络概念" class="headerlink" title="网络概念"></a>网络概念</h3><p>1、七层模型：<br>有应用层 表示层 会话层 传输层 网络层 数据链路层 物理层<br><img src="https://pic.tianfs.com/uPic/1LWZC6.png" alt="1LWZC6"><br>大致举例<br><img src="https://pic.tianfs.com/uPic/BzTWFr.png" alt="BzTWFr"><br>2、4层模型（tcp/ip协议族）：<br>应用层，传输层，网络层，网络接入层四个层次<br><img src="https://pic.tianfs.com/uPic/mCRJF1.png" alt="mCRJF1"><br>3、http属于应用层、tcp和udp属于传输层<br>4、IP （网际协议）、TCP（传输控制协议）、HTTP（应用层协议）、UDP（用户数据报协议）<br>5、传输层用来传输网络数据，应用层用来定义传输的网络数据的规则使其有意义</p>
+<h3 id="http"><a href="#http" class="headerlink" title="http"></a>http</h3><p>1、属于应用层<br>2、http基于tcp通过三次握手建立链接<br>3、www浏览的一个协议<br>4、http/1.1开始使用长链接</p>
+<h4 id="重要概念"><a href="#重要概念" class="headerlink" title="重要概念"></a>重要概念</h4><p>1.连接(Connection)：一个传输层的实际环流，它是建立在两个相互通讯的应用程序之间。<br>2.消息(Message)：HTTP通讯的基本单位，包括一个结构化的八元组序列并通过连接传输。<br>3.请求(Request)：一个从客户端到服务器的请求信息包括应用于资源的方法、资源的标识符和协议的版本号<br>4.响应(Response)：一个从服务器返回的信息包括HTTP协议的版本号、请求的状态(例如“成功”或“没找到”)和文档的MIME类型。<br>5.资源(Resource)：由URI标识的网络数据对象或服务。<br>6.实体(Entity)：数据资源或来自服务资源的回映的一种特殊表示方法，它可能被包围在一个请求或响应信息中。一个实体包括实体头信息和实体的本身内容。<br>7.客户机(Client)：一个为发送请求目的而建立连接的应用程序。<br>8.用户代理(Useragent)：初始化一个请求的客户机。它们是浏览器、编辑器或其它用户工具。<br>9.服务器(Server)：一个接受连接并对请求返回信息的应用程序。<br>10.源服务器(Originserver)：是一个给定资源可以在其上驻留或被创建的服务器。<br>11.代理(Proxy)：一个中间程序，它可以充当一个服务器，也可以充当一个客户机，为其它客户机建立请求。请求是通过可能的翻译在内部或经过传递到其它的服务器中。一个代理在发送请求信息之前，必须解释并且如果可能重写它。<br>代理经常作为通过防火墙的客户机端的门户，代理还可以作为一个帮助应用来通过协议处理没有被用户代理完成的请求。<br>12.网关(Gateway)：一个作为其它服务器中间媒介的服务器。与代理不同的是，网关接受请求就好象对被请求的资源来说它就是源服务器；发出请求的客户机并没有意识到它在同网关打交道。<br>网关经常作为通过防火墙的服务器端的门户，网关还可以作为一个协议翻译器以便存取那些存储在非HTTP系统中的资源。<br>13.通道(Tunnel)：是作为两个连接中继的中介程序。一旦激活，通道便被认为不属于HTTP通讯，尽管通道可能是被一个HTTP请求初始化的。当被中继的连接两端关闭时，通道便消失。当一个门户(Portal)必须存在或中介(Intermediary)不能解释中继的通讯时通道被经常使用。<br>14.缓存(Cache)：反应信息的局域存储。</p>
+<h3 id="tcp"><a href="#tcp" class="headerlink" title="tcp"></a>tcp</h3><p>1、属于传输层<br>2、面向链接，三次握手进行链接通信<br>3、对比udp速度慢、传输可靠、适用传输大量数据</p>
+<h4 id="重要概念-1"><a href="#重要概念-1" class="headerlink" title="重要概念"></a>重要概念</h4><ol>
+<li>*源端口和目的端口字段—— socket（IP+端口号）。TCP的包是没有IP地址的，那是IP层上的事。但是有源端口和目标端口。</li>
+<li>*序列号 SEQ ——当前报文段的序号。</li>
+<li>确认应答号 AN ——期望收到对方的下一个报文段的数据的第一个字节的序号；</li>
+<li>紧急  URG ——当  URG  =  1  时，表明紧急指针字段有效。它告诉系统此报文段中有紧急数据，应尽快传送(相当于高优先级的数据)；</li>
+<li>*确认 ACK ——当 ACK = 1 时。表示确认应答号 AN 有效。</li>
+<li>推送  PSH  (PuSH) —— 接收  TCP  收到  PSH  =  1  的报文段，就尽快地交付接收应用进程，而不再等到整个缓存都填满了后再向上交付；</li>
+<li>复位  RST  (ReSeT) —— 当  RST  =  1  时，表明  TCP  连接中出现严重差错（如由于主机崩溃或其他原因），必须释放连接，然后再重新建立传输连接；</li>
+<li>*同步 SYN —— 同步  SYN  =  1  表示这是一个连接请求报文。</li>
+<li>终止 FIN (Finish) —— 用来释放一个连接。FIN=  1  表明发送端的数据已发送完毕，并要求释放传输连接；</li>
+<li>窗口字段 —— 占 2 字节，用来让对方设置发送窗口的依据，单位为字节。窗口值是[ 0, 216-1 ]之间的整数；</li>
+<li>检验和 —— 占 2 字节。检验和字段检验的范围包括首部和数据这两部分。在计算检验和时，要在TCP 报文段的前面加上 12 字节的伪部(协议字段为6，表示TCP)；</li>
+<li>紧急指针字段 —— 占 16 位，指出在本报文段中紧急数据共有多少个字节(紧急数据放在本报文段数据的最前面)；</li>
+<li>选项字段 —— 长度可变。① 最大报文段长度 MSS：MSS是指在TCP连接建立时，收发双发协商的通信时每一个报文段所能承载的数据字段的最大长度（并不是TCP报文段的最大长度，而是：MSS=TCP报文段长度-TCP首部长度），单位为字节（双方提供的MSS中的最小值，为本次连接的最大MSS值）；② 窗口扩大选项；③ 时间戳选项； ④ 选择确认选项；<h4 id="tcp三次握手"><a href="#tcp三次握手" class="headerlink" title="tcp三次握手"></a>tcp三次握手</h4></li>
+</ol>
+<ul>
+<li>第一次握手：客户端向服务器发送请求报文段，其中同步位SYN=1，序号SEQ=x（表明传送数据时的第一个数据字节的序号是x），等待服务器确认；</li>
+<li>第二次握手：服务器收到客户端发来的请求，如果同意建立连接，就发回一个确认报文段，该报文段中同步位SYN=1，确认号ACK=x+1，序号SEQ=y；</li>
+<li>第三次握手：客户端收到服务器的确认报文段后，还需要向服务器给出确认，向其发送确认包ACK(ack=y+1)，进而完成三次握手。</li>
+<li>通过这样的三次握手，客户端与服务端建立起可靠的双工的连接，开始传送数据。</li>
+<li>为了保证服务端能收接受到客户端的信息并能做出正确的应答而进行前两次(第一次和第二次)握手</li>
+<li>为了保证客户端能够接收到服务端的信息并能做出正确的应答而进行后两次(第二次和第三次)握手。<h3 id="udp"><a href="#udp" class="headerlink" title="udp"></a>udp</h3>1、属于传输层<br>2、非面向链接，直接通过ip发送消息<br>3、速度快、传输不可靠、适用传输少量数据允许丢包</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/11/01/http%E5%92%8Ctcp%E5%92%8Cudp/" data-id="ckhbv3r35000bmrfyfds66b4e" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/udp/" rel="tag">udp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-docker安装php开发环境" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/10/22/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="article-date">
@@ -185,7 +254,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/22/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" data-id="ckgwh2xin002olch5c4p49ku2" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/22/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" data-id="ckhbv3r41002rmrfy7d8279tz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li></ul>
@@ -257,7 +326,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" data-id="ckgwh2xhy000clch55mju9tpg" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/21/docker%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98/" data-id="ckhbv3r320006mrfyco3n24cf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/" rel="tag">docker</a></li></ul>
@@ -312,108 +381,19 @@
 浏览器输入<a href="http://127.0.0.1:5601就可以打开kibana的界面了。">http://127.0.0.1:5601就可以打开kibana的界面了。</a></li>
 <li>遇到问题<br>1）访问提示 Kibana server is not ready yet<br>第一：把KB和ES版本调整为统一版本<br>第二：将配置文件kibana.yml中的elasticsearch.url改为正确的链接<br>第三：保持kibana和elasticsearch在同一个网络模式下，可以使用默认的bridge网络下的段的地址172.17.0.x<br>注意，默认为bridge网络，此网络下两个容器无法用127.0.0.x 的本地ip进行通信访问，如果想用要都切换到host模式</li>
 </ul>
+<h3 id="二、常用命令"><a href="#二、常用命令" class="headerlink" title="二、常用命令"></a>二、常用命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">GET _search</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"query"</span>: &#123;</span><br><span class="line">    <span class="string">"match_all"</span>: &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">GET _cluster/health</span><br><span class="line">GET _cat/nodes</span><br><span class="line"></span><br><span class="line"><span class="comment">#创建，自动生成id</span></span><br><span class="line">POST users/_doc</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"user"</span>:<span class="string">"Mike"</span>,</span><br><span class="line">  <span class="string">"post_date"</span>:<span class="string">"2019-04-15T12:12:12"</span>,</span><br><span class="line">  <span class="string">"message"</span>:<span class="string">"trying out Kibana"</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#创建，手动指定id,id存在报错</span></span><br><span class="line">PUT users/_doc/1?op_type=create</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"user"</span>:<span class="string">"Mike"</span>,</span><br><span class="line">  <span class="string">"post_date"</span>:<span class="string">"2019-04-15T12:12:12"</span>,</span><br><span class="line">  <span class="string">"message"</span>:<span class="string">"trying out Kibana123123"</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#根据id查询一条</span></span><br><span class="line">GET users/_doc/1</span><br><span class="line"></span><br><span class="line"><span class="comment">#(index方式创建)删除原来的文档，写入新的，版本加一</span></span><br><span class="line">PUT users/_doc/1</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"user"</span>:<span class="string">"MIke"</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#根据ID修改文档的内容，没有的字段会新增</span></span><br><span class="line">POST users/_update/1/</span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"doc"</span>:&#123;</span><br><span class="line">    <span class="string">"post_date"</span>:<span class="string">"2019-04-15T12:12:12"</span>,</span><br><span class="line">     <span class="string">"message"</span>:<span class="string">"trying out Kibana123123"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#根据删除</span></span><br><span class="line">DELETE users/_doc/1</span><br><span class="line"></span><br><span class="line"><span class="comment">#批量增删改</span></span><br><span class="line">PUT _bulk</span><br><span class="line"><span class="comment">#根据id批量读</span></span><br><span class="line">GET _mget</span><br><span class="line"><span class="comment">#读全部</span></span><br><span class="line">POST kibana_sample_data_ecommerce/_msearch</span><br><span class="line">&#123;&#125;</span><br><span class="line">&#123;<span class="string">"query"</span>:&#123;<span class="string">"match_all"</span>:&#123;&#125;&#125;,<span class="string">"size"</span>:1&#125;</span><br><span class="line"><span class="comment">#match:会将搜索田间分词，然后到索引里面找</span></span><br><span class="line"><span class="comment">#match_phrase:习语匹配，查询确切的phase，在对查询字段定义了分词器的情况下，会使用分词器对输入进行分词，然后返回满足下述两个条件的document:</span></span><br><span class="line"><span class="comment">#term 是代表完全匹配(相当mysql与全等用 )</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="三、索引settings和mappings"><a href="#三、索引settings和mappings" class="headerlink" title="三、索引settings和mappings"></a>三、索引settings和mappings</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">PUT loaravel-log-2020.11.05</span><br><span class="line">&#123;</span><br><span class="line">  &quot;settings&quot;: &#123;</span><br><span class="line">    &quot;number_of_shards&quot;: 2,&#x2F;&#x2F;主分片数</span><br><span class="line">    &quot;number_of_replicas&quot;: 1 &#x2F;&#x2F;每一个主分片有多少个副本分片</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;mappings&quot;: &#123;</span><br><span class="line">    &quot;properties&quot;: &#123;</span><br><span class="line">      &quot;path&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;type&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;messgae&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;text&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;tags&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;text&quot;,&#x2F;&#x2F;可以寸数组</span><br><span class="line">        &quot;fields&quot;: &#123;</span><br><span class="line">          &quot;keyword&quot;: &#123;</span><br><span class="line">            &quot;type&quot;: &quot;keyword&quot;,</span><br><span class="line">            &quot;ignore_above&quot;: 256</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;host&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;keyword&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;@timestamp&quot;: &#123; &#x2F;&#x2F;带@的是系统预留字段 固定类型</span><br><span class="line">        &quot;type&quot;: &quot;date&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;@version&quot;: &#123;</span><br><span class="line">        &quot;type&quot;: &quot;text&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="四、重要知识点"><a href="#四、重要知识点" class="headerlink" title="四、重要知识点"></a>四、重要知识点</h3><p>查询搜索条件算分<br>索引的命名规则<br>创建一个新indx时 设置 setting mapping（字段类型，分词规则）<br>index template<br>聚合统计搜索使用（aggs） bucket按照规则诗句划分不同的组（相当于mysql group），metric 用于数据集的统计（可以统计bucket生成的数据集中的字段进行分析，例如平均值）<br>search -》协调节点-》查询所有分片-》取回id和排序合并-》去对应分片的数据节点取出具体doc信息<br>主节点 index（存储索引index信息，索引关联对应的分片） -》</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/20/elasticsearch%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="ckgwh2xi2000nlch5hkjz2v0s" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/20/elasticsearch%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="ckhbv3r34000amrfy48xk5na3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kibana/" rel="tag">kibana</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-redis知识点整理" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" class="article-date">
-  <time datetime="2020-10-19T04:46:47.000Z" itemprop="datePublished">2020-10-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h2><h3 id="一、redis支持的数据类型"><a href="#一、redis支持的数据类型" class="headerlink" title="一、redis支持的数据类型"></a>一、redis支持的数据类型</h3><h4 id="string（字符串）"><a href="#string（字符串）" class="headerlink" title="string（字符串）"></a>string（字符串）</h4><ul>
-<li>描述:<br>二进制安全，基本的常用的数据类型，大能存储 512MB</li>
-<li>基本用法:<br>1、写入： SET key “value”<br>2、读取： GET key</li>
-<li>使用场景:<br>常用的kv存取<h4 id="hash（哈希）"><a href="#hash（哈希）" class="headerlink" title="hash（哈希）"></a>hash（哈希）</h4></li>
-<li>描述:<br>是一个键值(key=&gt;value)对集合，也就是一个key对应多个kv</li>
-<li>基本用法:<br>1、写入：<br>多个kv：HMSET hash_key field_key1 “val1” field_key2 “val2”<br>一个kv：HSET hash_key field_key3 “val3”<br>2、读取：<br>HGET hash_key field_key1</li>
-<li>使用场景:<br>例如存用户信息<h4 id="list（列表）"><a href="#list（列表）" class="headerlink" title="list（列表）"></a>list（列表）</h4></li>
-<li>描述：<br>按照插入顺序排序,你可以添加一个元素到列表的头部（左边）或者尾部（右边），常用实现队列，一个列表最多可以包含 232 - 1 个元素 (4294967295, 每个列表超过40亿个元素)</li>
-<li>基本用法:<br>1、头部插入:<br>LPUSH listKey val1<br>LPUSH listKey val2<br>LPUSH listKey val3<br>尾部取出：<br>RPOP listKey //val3</li>
-</ul>
-<p>2、尾部插入:<br>RPUSH listKey val1<br>RPUSH listKey val2<br>RPUSH listKey val3<br>头部取出：<br>RPOP listKey //val1</p>
-<ul>
-<li>使用场景:<br>队列实现，消息队列，商品抢购等等需要有序排队的情况<h4 id="set（集合）"><a href="#set（集合）" class="headerlink" title="set（集合）"></a>set（集合）</h4></li>
-<li>描述：<br>String 类型的无序集合。成员是唯一的，不能出现重复的数据。</li>
-<li>基本用法：<br>1、写入：<br>SADD set_key val1 [val…]<br>SADD set_key val2 [val…]<br>2、读取：<br>SMEMBERS set_key //读所有合集中的成员<br>SCARD set_key //获取集合的成员数<br>SREM set_key val2 [val…] //移除集合中一个或多个成员</li>
-<li>使用场景:<br>例如存一个人的粉丝，交集、并集、差集等操作，可以非常方便的实现如共同关注等功能<h4 id="zset-sorted-set：有序集合"><a href="#zset-sorted-set：有序集合" class="headerlink" title="zset(sorted set：有序集合)"></a>zset(sorted set：有序集合)</h4></li>
-<li>描述：<br>String 类型的有序集合。不能出现重复的数据，每个元素都会关联一个 double 类型的分数(score)，分数可重复</li>
-<li>基本用法：<br>1、写入：ZADD key 分数(int) val(value) [分数(int) val(value) …]<br>2、读取：<br>ZRANGE key 0 10 WITHSCORES //从小到大取10个  从大到小用ZREVRANGE<br>ZRANGE key 0 -1 WITHSCORES //返回所有</li>
-<li>使用场景:<br>例如排行榜<h3 id="二、缓存穿透、缓存击穿、缓存雪崩区别"><a href="#二、缓存穿透、缓存击穿、缓存雪崩区别" class="headerlink" title="二、缓存穿透、缓存击穿、缓存雪崩区别"></a>二、缓存穿透、缓存击穿、缓存雪崩区别</h3><h4 id="1、缓存穿透（缓存和数据库中都没有的数据）："><a href="#1、缓存穿透（缓存和数据库中都没有的数据）：" class="headerlink" title="1、缓存穿透（缓存和数据库中都没有的数据）："></a>1、缓存穿透（缓存和数据库中都没有的数据）：</h4></li>
-<li>描述:<br>缓存和数据库中都没有的数据，而用户不断发起请求。常规情况存储层查不到数据则不写入缓存，导致这个不存在的数据每次请求都要到存储层去查询</li>
-<li>解决:<br>1)增加查询参数校验，避免一些超过常规情况和非法的参数请求进来，例如（id：-1）<br>2)针对在数据库中找不到记录的，仍然将该空数据存入缓存中，设置一个较短的过期时间，如30秒（设置太长会导致正常情况也没法使用）<br>3)布隆过滤器(Bloom Filter)，可以快速确定数据是否存在<h4 id="2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）："><a href="#2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）：" class="headerlink" title="2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）："></a>2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）：</h4></li>
-<li>描述:<br>缓存击穿表示某个key的缓存非常热门，有很高的并发一直在访问，如果该缓存失效，那同时会走数据库，压垮数据库。</li>
-<li>解决:<br>1、让该热门key的缓存永不过期。<br>2、增加根据key增加互斥锁，通过redis的setnx实现互斥锁<h4 id="3、缓存雪崩（大面积缓存同时到期）"><a href="#3、缓存雪崩（大面积缓存同时到期）" class="headerlink" title="3、缓存雪崩（大面积缓存同时到期）"></a>3、缓存雪崩（大面积缓存同时到期）</h4></li>
-<li>描述:<br>大面积缓存同时到期，导致大量请求来访问数据库</li>
-<li>解决:<br>1、设置缓存过期时间时加上一个随机值，避免缓存在同一时间过期<h3 id="三、HyperLogLog使用与应用场景"><a href="#三、HyperLogLog使用与应用场景" class="headerlink" title="三、HyperLogLog使用与应用场景"></a>三、HyperLogLog使用与应用场景</h3><h4 id="1、HyperLogLog："><a href="#1、HyperLogLog：" class="headerlink" title="1、HyperLogLog："></a>1、HyperLogLog：</h4></li>
-<li>用来做基数统计的算法，结果有 0.81%的误差，和bitmap相比更节省内存</li>
-<li>bitmap用来数组来表示各元素是否出现</li>
-<li>HyperLogLog基数统计的算法（去重后的次数），非redis独有</li>
-<li>占用内存小</li>
-<li>hyperloglog key占用了12K的内存用于标记基数<h4 id="2、基本使用"><a href="#2、基本使用" class="headerlink" title="2、基本使用"></a>2、基本使用</h4></li>
-<li>pfadd 添加 :pfadd m1 1 2 3 4 1 2 3 2 2 2 2</li>
-<li>pfcount 获得基数值: pfcount m1 //4</li>
-<li>pfmerge 合并多个key:<br>pfadd m1 1 2 3 4 1 2 3 2 2 2 2 //1<br>pfcount m1 //4<br>pfadd m2 3 3 3 4 4 4 5 5 5 6 6 6 1 //1<br>pfcount m2 //5<br>pfmerge mergeDes m1 m2 //ok<br>pfcount mergeDes //6<h4 id="2、使用场景"><a href="#2、使用场景" class="headerlink" title="2、使用场景"></a>2、使用场景</h4></li>
-<li>需要统计的数据基数很大</li>
-<li>可以和bitmap配合使用，bitmap标示存在的元素，hyperloglog用来计数</li>
-<li>统计注册IP数、在线人数、每日访问的uv、ip等<h3 id="四、redis的集群高可用方案"><a href="#四、redis的集群高可用方案" class="headerlink" title="四、redis的集群高可用方案"></a>四、redis的集群高可用方案</h3><h4 id="1、主从模式："><a href="#1、主从模式：" class="headerlink" title="1、主从模式："></a>1、主从模式：</h4>一个master可以拥有多个slave，但是一个slave只能对应一个master<br>主可以读写，从只能读</li>
-<li>缺点：<br>主库挂了以后服务将不能写入<h4 id="2、Sentinel模式（哨兵）："><a href="#2、Sentinel模式（哨兵）：" class="headerlink" title="2、Sentinel模式（哨兵）："></a>2、Sentinel模式（哨兵）：</h4>建立在主从模式的基础上，监听redis的mater的状态，如果master挂掉了，会在slave上选出一台机器作为master<br>使用时需要连接sentinel的ip和port而不是redis的</li>
-</ul>
-<h4 id="3、Cluster模式："><a href="#3、Cluster模式：" class="headerlink" title="3、Cluster模式："></a>3、Cluster模式：</h4><p>在需要更大规模的存储的时候主从模式或sentinel模式就不能很好的满足需求了<br>cluster模式的解决单机Redis容量有限的问题，将Redis的数据根据一定的规则分配到多台机器<br>redis版本低的话需要安装对应版本的ruby<br>去中心化的，每个节点（master）都是平等的，连接哪个节点都可以获取和设置数据。</p>
-<h3 id="四、内存回收机制"><a href="#四、内存回收机制" class="headerlink" title="四、内存回收机制"></a>四、内存回收机制</h3><h4 id="1、内存使用达到maxmemory上限时候触发的溢出回收策略"><a href="#1、内存使用达到maxmemory上限时候触发的溢出回收策略" class="headerlink" title="1、内存使用达到maxmemory上限时候触发的溢出回收策略"></a>1、内存使用达到maxmemory上限时候触发的溢出回收策略</h4><ul>
-<li>noeviction（默认）: 不会删除任何数据，拒绝所有写入操作并返 回客户端错误信息，此 时Redis只响应读操作。</li>
-<li>volatile-lru: 根据LRU算法删除设置了超时属性（expire）的键，直到腾出足够空间为止。如果没有可删除的键对象，回退到noeviction策略。</li>
-<li>volatile-ttl: 根据键值对象的ttl属性，删除最近将要过期数据。如果没有，回退到noeviction策略。</li>
-<li>allkeys-lru: 根据LRU算法删除键，不管数据有没有设置超时属性，直到腾出足够空间为止。</li>
-<li>volatile-random: 随机删除过期键，直到腾出足够空间为止。</li>
-<li>allkeys-random: 随机删除所有键，直到腾出足够空间为止。</li>
-</ul>
-<p>*** volatile-xxx 策略只会针对带过期时间的 key 进行淘汰，allkeys-xxx 策略会对所有的 key 进行淘汰</p>
-<h4 id="2、删除过期时间的键对象"><a href="#2、删除过期时间的键对象" class="headerlink" title="2、删除过期时间的键对象"></a>2、删除过期时间的键对象</h4><ul>
-<li>惰性删除 ： 当用户访问已经过期的对象的时候才删除</li>
-<li>定时任务删除 ： 内部维护了一个定时任务，默认每秒运行10次<br>1）定时任务在每个数据库空间采用慢模式随机检查20个键，当发现过期时，删除对应的键。<br>2）如果超过检查数25%的键过期，循环执行回收逻辑直到不足25%或 运行超时为止，慢模式下超时时间为25毫秒。<br>3）如果之前回收键逻辑超时，则在Redis触发内部事件之前再次以快模式运行回收过期键任务，快模式下超时时间为1毫秒且2秒内只能运行1次。<br>4）快慢两种模式内部删除逻辑相同，只是执行的超时时间不同</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgwh2xi4000tlch5h0kt3ttl" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
 
     </footer>
   </div>
@@ -488,10 +468,133 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="ckgwh2xi80013lch52uxv31k8" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="ckhbv3r3f000tmrfydbawbugx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-redis知识点整理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" class="article-date">
+  <time datetime="2020-10-19T04:46:47.000Z" itemprop="datePublished">2020-10-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h2><h3 id="一、redis支持的数据类型"><a href="#一、redis支持的数据类型" class="headerlink" title="一、redis支持的数据类型"></a>一、redis支持的数据类型</h3><h4 id="string（字符串）"><a href="#string（字符串）" class="headerlink" title="string（字符串）"></a>string（字符串）</h4><ul>
+<li>描述:<br>二进制安全，基本的常用的数据类型，大能存储 512MB</li>
+<li>基本用法:<br>1、写入： SET key “value”<br>2、读取： GET key</li>
+<li>使用场景:<br>常用的kv存取<h4 id="hash（哈希）"><a href="#hash（哈希）" class="headerlink" title="hash（哈希）"></a>hash（哈希）</h4></li>
+<li>描述:<br>是一个键值(key=&gt;value)对集合，也就是一个key对应多个kv</li>
+<li>基本用法:<br>1、写入：<br>多个kv：HMSET hash_key field_key1 “val1” field_key2 “val2”<br>一个kv：HSET hash_key field_key3 “val3”<br>2、读取：<br>HGET hash_key field_key1</li>
+<li>使用场景:<br>例如存用户信息<h4 id="list（列表）"><a href="#list（列表）" class="headerlink" title="list（列表）"></a>list（列表）</h4></li>
+<li>描述：<br>按照插入顺序排序,你可以添加一个元素到列表的头部（左边）或者尾部（右边），常用实现队列，一个列表最多可以包含 232 - 1 个元素 (4294967295, 每个列表超过40亿个元素)</li>
+<li>基本用法:<br>1、头部插入:<br>LPUSH listKey val1<br>LPUSH listKey val2<br>LPUSH listKey val3<br>尾部取出：<br>RPOP listKey //val3</li>
+</ul>
+<p>2、尾部插入:<br>RPUSH listKey val1<br>RPUSH listKey val2<br>RPUSH listKey val3<br>头部取出：<br>RPOP listKey //val1</p>
+<ul>
+<li><p>使用场景:<br>队列实现，消息队列，商品抢购等等需要有序排队的情况</p>
+<h4 id="set（集合）"><a href="#set（集合）" class="headerlink" title="set（集合）"></a>set（集合）</h4></li>
+<li><p>描述：<br>String 类型的无序集合。成员是唯一的，不能出现重复的数据。</p>
+</li>
+<li><p>基本用法：<br>1、写入：<br>SADD set_key val1 [val…]<br>SADD set_key val2 [val…]<br>2、读取：<br>SMEMBERS set_key //读所有合集中的成员<br>SCARD set_key //获取集合的成员数<br>SREM set_key val2 [val…] //移除集合中一个或多个成员</p>
+</li>
+<li><p>使用场景:<br>例如存一个人的粉丝，交集、并集、差集等操作，可以非常方便的实现如共同关注等功能</p>
+<h4 id="zset-sorted-set：有序集合"><a href="#zset-sorted-set：有序集合" class="headerlink" title="zset(sorted set：有序集合)"></a>zset(sorted set：有序集合)</h4></li>
+<li><p>描述：<br>String 类型的有序集合。不能出现重复的数据，每个元素都会关联一个 double 类型的分数(score)，分数可重复</p>
+</li>
+<li><p>常用命令：<br>zadd(key, score, member)：向名称为key的zset中添加元素member，score用于排序。如果该元素已经存在，则根据score更新该元素的顺序。<br>zrem(key, member) ：删除名称为key的zset中的元素member<br>zincrby(key, increment, member) ：如果在名称为key的zset中已经存在元素member，则该元素的score增加increment；否则向集合中添加该元素，其score的值为increment<br>zrank(key, member) ：返回名称为key的zset（元素已按score从小到大排序）中member元素的rank（即index，从0开始），若没有member元素，返回“nil”<br>zrevrank(key, member) ：返回名称为key的zset（元素已按score从大到小排序）中member元素的rank（即index，从0开始），若没有member元素，返回“nil”<br>zrange(key, start, end)：返回名称为key的zset（元素已按score从小到大排序）中的index从start到end的所有元素<br>zrevrange(key, start, end)：返回名称为key的zset（元素已按score从大到小排序）中的index从start到end的所有元素<br>zrangebyscore(key, min, max)：返回名称为key的zset中score &gt;= min且score &lt;= max的所有元素<br>zcard(key)：返回名称为key的zset的基数<br>zscore(key, element)：返回名称为key的zset中元素element的score<br>zremrangebyrank(key, min, max)：删除名称为key的zset中rank &gt;= min且rank &lt;= max的所有元素<br>zremrangebyscore(key, min, max) ：删除名称为key的zset中score &gt;= min且score &lt;= max的所有元素</p>
+</li>
+<li><p>使用场景:<br>例如排行榜</p>
+</li>
+<li><p>跳表（集合对象的一种编码结构，skiplist，还有一种ziplist）<br>1、元素数量小于128 、所有member长度都小于64 使用ziplist<br>2、数据量大时针对redis的有序集合和zset的底层依赖是跳表实现的<br>3、zset支持快速的插入和删除 首选链表<br>4、zset支持范围查询：让链表排序，但是查找的时间复杂度O(n) 效率不高，要满足范围查询的话效率也比较低<br>5、为了效率为链表增加索引，如果只增加一层索引的话数据量大的时候效率还是很慢，所以要增加多级索引<br>6、所以这种链表增加多级索引的结构就是跳表<br>7、 结构上来讲：跳表在原有的链表上每两个增加一个一个指针<br><img src="https://pic.tianfs.com/uPic/LIYmGu.png" alt="LIYmGu"><br>8、根据多层链表的想法可以在继续增加层数，增加节点和节点指针的链接的跨度，类似二分查找<br><img src="https://pic.tianfs.com/uPic/vRYN3z.png" alt="vRYN3z"><br><img src="https://pic.tianfs.com/uPic/qtUmEe.png" alt="qtUmEe"><br>9、为了解决插入会打乱链接结构问题问题，在插入时会随机出来一个要插入的层数，这样新插入的节点不会影响其他节点的层数，只需要修改新节点的前后指针<br><img src="https://pic.tianfs.com/uPic/ZirHwu.png" alt="ZirHwu"></p>
+<h3 id="二、缓存穿透、缓存击穿、缓存雪崩区别"><a href="#二、缓存穿透、缓存击穿、缓存雪崩区别" class="headerlink" title="二、缓存穿透、缓存击穿、缓存雪崩区别"></a>二、缓存穿透、缓存击穿、缓存雪崩区别</h3><h4 id="1、缓存穿透（缓存和数据库中都没有的数据）："><a href="#1、缓存穿透（缓存和数据库中都没有的数据）：" class="headerlink" title="1、缓存穿透（缓存和数据库中都没有的数据）："></a>1、缓存穿透（缓存和数据库中都没有的数据）：</h4></li>
+<li><p>描述:<br>缓存和数据库中都没有的数据，而用户不断发起请求。常规情况存储层查不到数据则不写入缓存，导致这个不存在的数据每次请求都要到存储层去查询</p>
+</li>
+<li><p>解决:<br>1)增加查询参数校验，避免一些超过常规情况和非法的参数请求进来，例如（id：-1）<br>2)针对在数据库中找不到记录的，仍然将该空数据存入缓存中，设置一个较短的过期时间，如30秒（设置太长会导致正常情况也没法使用）<br>3)布隆过滤器(Bloom Filter)，可以快速确定数据是否存在</p>
+<h4 id="2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）："><a href="#2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）：" class="headerlink" title="2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）："></a>2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）：</h4></li>
+<li><p>描述:<br>缓存击穿表示某个key的缓存非常热门，有很高的并发一直在访问，如果该缓存失效，那同时会走数据库，压垮数据库。</p>
+</li>
+<li><p>解决:<br>1、让该热门key的缓存永不过期。<br>2、增加根据key增加互斥锁，通过redis的setnx实现互斥锁</p>
+<h4 id="3、缓存雪崩（大面积缓存同时到期）"><a href="#3、缓存雪崩（大面积缓存同时到期）" class="headerlink" title="3、缓存雪崩（大面积缓存同时到期）"></a>3、缓存雪崩（大面积缓存同时到期）</h4></li>
+<li><p>描述:<br>大面积缓存同时到期，导致大量请求来访问数据库</p>
+</li>
+<li><p>解决:<br>1、设置缓存过期时间时加上一个随机值，避免缓存在同一时间过期</p>
+<h3 id="三、HyperLogLog使用与应用场景"><a href="#三、HyperLogLog使用与应用场景" class="headerlink" title="三、HyperLogLog使用与应用场景"></a>三、HyperLogLog使用与应用场景</h3><h4 id="1、HyperLogLog："><a href="#1、HyperLogLog：" class="headerlink" title="1、HyperLogLog："></a>1、HyperLogLog：</h4></li>
+<li><p>用来做基数统计的算法，结果有 0.81%的误差，和bitmap相比更节省内存</p>
+</li>
+<li><p>bitmap用来数组来表示各元素是否出现</p>
+</li>
+<li><p>HyperLogLog基数统计的算法（去重后的次数），非redis独有</p>
+</li>
+<li><p>占用内存小</p>
+</li>
+<li><p>hyperloglog key占用了12K的内存用于标记基数</p>
+<h4 id="2、基本使用"><a href="#2、基本使用" class="headerlink" title="2、基本使用"></a>2、基本使用</h4></li>
+<li><p>pfadd 添加 :pfadd m1 1 2 3 4 1 2 3 2 2 2 2</p>
+</li>
+<li><p>pfcount 获得基数值: pfcount m1 //4</p>
+</li>
+<li><p>pfmerge 合并多个key:<br>pfadd m1 1 2 3 4 1 2 3 2 2 2 2 //1<br>pfcount m1 //4<br>pfadd m2 3 3 3 4 4 4 5 5 5 6 6 6 1 //1<br>pfcount m2 //5<br>pfmerge mergeDes m1 m2 //ok<br>pfcount mergeDes //6</p>
+<h4 id="2、使用场景"><a href="#2、使用场景" class="headerlink" title="2、使用场景"></a>2、使用场景</h4></li>
+<li><p>需要统计的数据基数很大</p>
+</li>
+<li><p>可以和bitmap配合使用，bitmap标示存在的元素，hyperloglog用来计数</p>
+</li>
+<li><p>统计注册IP数、在线人数、每日访问的uv、ip等</p>
+<h3 id="四、redis的集群高可用方案"><a href="#四、redis的集群高可用方案" class="headerlink" title="四、redis的集群高可用方案"></a>四、redis的集群高可用方案</h3><h4 id="1、主从模式："><a href="#1、主从模式：" class="headerlink" title="1、主从模式："></a>1、主从模式：</h4><p>一个master可以拥有多个slave，但是一个slave只能对应一个master<br>主可以读写，从只能读</p>
+</li>
+<li><p>缺点：<br>主库挂了以后服务将不能写入</p>
+<h4 id="2、Sentinel模式（哨兵）："><a href="#2、Sentinel模式（哨兵）：" class="headerlink" title="2、Sentinel模式（哨兵）："></a>2、Sentinel模式（哨兵）：</h4><p>建立在主从模式的基础上，监听redis的mater的状态，如果master挂掉了，会在slave上选出一台机器作为master<br>使用时需要连接sentinel的ip和port而不是redis的</p>
+</li>
+</ul>
+<h4 id="3、Cluster模式："><a href="#3、Cluster模式：" class="headerlink" title="3、Cluster模式："></a>3、Cluster模式：</h4><p>在需要更大规模的存储的时候主从模式或sentinel模式就不能很好的满足需求了<br>cluster模式的解决单机Redis容量有限的问题，将Redis的数据根据一定的规则分配到多台机器<br>redis版本低的话需要安装对应版本的ruby<br>去中心化的，每个节点（master）都是平等的，连接哪个节点都可以获取和设置数据。</p>
+<h3 id="四、内存回收机制"><a href="#四、内存回收机制" class="headerlink" title="四、内存回收机制"></a>四、内存回收机制</h3><h4 id="1、内存使用达到maxmemory上限时候触发的溢出回收策略"><a href="#1、内存使用达到maxmemory上限时候触发的溢出回收策略" class="headerlink" title="1、内存使用达到maxmemory上限时候触发的溢出回收策略"></a>1、内存使用达到maxmemory上限时候触发的溢出回收策略</h4><ul>
+<li>noeviction（默认）: 不会删除任何数据，拒绝所有写入操作并返 回客户端错误信息，此 时Redis只响应读操作。</li>
+<li>volatile-lru: 根据LRU算法删除设置了超时属性（expire）的键，直到腾出足够空间为止。如果没有可删除的键对象，回退到noeviction策略。</li>
+<li>volatile-ttl: 根据键值对象的ttl属性，删除最近将要过期数据。如果没有，回退到noeviction策略。</li>
+<li>allkeys-lru: 根据LRU算法删除键，不管数据有没有设置超时属性，直到腾出足够空间为止。</li>
+<li>volatile-random: 随机删除过期键，直到腾出足够空间为止。</li>
+<li>allkeys-random: 随机删除所有键，直到腾出足够空间为止。</li>
+</ul>
+<p>*** volatile-xxx 策略只会针对带过期时间的 key 进行淘汰，allkeys-xxx 策略会对所有的 key 进行淘汰</p>
+<h4 id="2、删除过期时间的键对象"><a href="#2、删除过期时间的键对象" class="headerlink" title="2、删除过期时间的键对象"></a>2、删除过期时间的键对象</h4><ul>
+<li>惰性删除 ： 当用户访问已经过期的对象的时候才删除</li>
+<li>定时任务删除 ： 内部维护了一个定时任务，默认每秒运行10次<br>1）定时任务在每个数据库空间采用慢模式随机检查20个键，当发现过期时，删除对应的键。<br>2）如果超过检查数25%的键过期，循环执行回收逻辑直到不足25%或 运行超时为止，慢模式下超时时间为25毫秒。<br>3）如果之前回收键逻辑超时，则在Redis触发内部事件之前再次以快模式运行回收过期键任务，快模式下超时时间为1毫秒且2秒内只能运行1次。<br>4）快慢两种模式内部删除逻辑相同，只是执行的超时时间不同</li>
+</ul>
+<h3 id="五、其他知识点汇总"><a href="#五、其他知识点汇总" class="headerlink" title="五、其他知识点汇总"></a>五、其他知识点汇总</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckhbv3r43002umrfye1zofovy" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
 
     </footer>
   </div>
@@ -589,8 +692,8 @@
 <li>默认select不加锁，UPDATE、INSERT、DELETE默认都是排它锁，可以通过（lock in share mode）和（for update）加共享锁和排他锁：</li>
 <li>Record Lock：单个记录上的索引加锁，Gap Lock：间隙锁，对索引项之间的间隙加锁，但不包括记录本身，Next-Key Lock：Gap Lock + Record Lock，锁定一个范围，并且锁定记录本身。</li>
 <li>如果不通过索引条件检索数据，那么 InnoDB 将对表中所有记录加锁，实际效果跟表锁一样（where不命中索引就锁表）。</li>
-</ul>
-<h4 id="2、myisam："><a href="#2、myisam：" class="headerlink" title="2、myisam："></a>2、myisam：</h4><ul>
+<li>不擅长快速插入（插入前要排序，消耗时间）</li>
+<li>.ibd文件存放索引和数据<h4 id="2、myisam："><a href="#2、myisam：" class="headerlink" title="2、myisam："></a>2、myisam：</h4></li>
 <li>MySQL 8.0弃用 </li>
 <li>MySQL 5.5 之前的默认存储引擎</li>
 <li>支持表锁</li>
@@ -619,11 +722,12 @@
 <li>filtered //查询的表行占表的百分比</li>
 <li>Extra //包含不适合在其它列中显示但十分重要的额外信息<br><img src="https://tva1.sinaimg.cn/large/0081Kckwly1gk54fpvopzj30u01sjnpd.jpg" alt="explain图"></li>
 </ul>
+<h4 id="八、优化方向"><a href="#八、优化方向" class="headerlink" title="八、优化方向"></a>八、优化方向</h4><p>1、正确的字段类型和长度<br>2、选择何时的存储引擎<br>3、推荐使用utf8mb4字符集，可以存表情，可以表示4个字节宽位，排序规则上general_ci 更快，unicode_ci 更准确。ci不区分大小写，cs区分大小写<br>4、少用多表操作（子查询，联合查询），而是将SQL拆分多次执行。如果查询很很小，会增加查询缓存的利用率。<br>5、慢sql查询处理<br>定位执行较慢的查询语句<br>show variables like “slow_query%”;<br>show variables like “%long_query%”;<br>开启日志<br>set global slow_query_log=1;<br>set long_query_time=0.5;<br>6、尽量不要出现null值 给默认值 （null不会走索引）<br>7、索引建立<br>8、使用explain检查sql的执行情况<br>9、开启表缓存 query_cache_type=On|1 ，查看show variables like ‘%query_cache%’;<br>10、主从配置<br>11、分库，分表</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgwh2xio002plch51u1jg37y" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckhbv3r41002smrfybfmvhwsf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li></ul>
@@ -669,7 +773,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/09/27/bitmap/" data-id="ckgwh2xhs0005lch50p4gft0a" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/09/27/bitmap/" data-id="ckhbv3r2z0004mrfyhpa766hw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
@@ -717,54 +821,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" data-id="ckgwh2xhh0000lch5988l8vx3" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" data-id="ckhbv3r2w0001mrfy1fbpe2ee" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-HTTP状态码" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/php/">php</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/">HTTP状态码</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>HTTP状态码（HTTP Status Code）是用来表示网页服务器HTTP 响应状态的3位数字代码。它由RFC 2616规范定义的，并得到RFC 2518、RFC 2817、RFC 2295、RFC 2774、RFC 4918等规范扩展。所有状态码的第一个数字代表了响应的五种状态之一</p>
-<p>HTTP/1.1定义的状态码值和对应的原因短语（Reason-Phrase）的例子。<br>1XX表示:消息<br>这一类型的状态码，代表请求已被接受，需要继续处理。这类响应是临时响应，只包含状态行和某些可选的响应头信息，并以空行结束。由于HTTP/1.0 协议中没有定义任何1xx状态码，所以除非在某些试验条件下，服务器禁止向此类客户端发送1xx响应。 这些状态码代表的响应都是信息性的，标示客户应该采取的其他行动。<br>100 : Continue  客户端应当继续发送请求。这个临时响应是用来通知客户端它的部分请求已经被服务器接收，且仍未被拒绝。客户端应当继续发送请求的剩余部分.<br>101 : witching Protocols 服务器已经理解了客户端的请求，并将通过Upgrade消息头通知客户端采用不同的协议来完成这个请求。在发送完这个响应最后的空行后，服务器将会切换到 在Upgrade消息头中定义的那些协议。: 只有在切换新的协议更有好处的时候才应该采取类似措施.<br>102: Processing  由WebDAV（RFC 2518）扩展的状态码，代表处理将被继续执行。<br>2XX表示:成功<br>这一类型的状态码，代表请求已成功被服务器接收、理解、并接受。<br>200 : OK<br>201 : Created 已创建<br>202 : Accepted 接收<br>203 : Non-Authoritative Information 非认证信息<br>204 : No Content 无内容<br>205 : Reset Content 重置内容<br>206 : Partial Content 服务器已经成功处理了部分GET请求。类似于FlashGet或者迅雷这类的HTTP 下载工具都是使用此类响应实现断点续传或者将一个大文档分解为多个下载段同时下载。<br>207: Multi-Status 由WebDAV(RFC 2518)扩展的状态码，代表之后的消息体将是一个XML消息，并且可能依照之前子请求数量的不同，包含一系列独立的响应代码.<br>3XX表示: 重定向<br>这类状态码代表需要客户端采取进一步的操作才能完成请求。通常，这些状态码用来重定向，后续的请求地址（重定向目标）在本次响应的Location域中指明。<br>300 : Multiple Choices 多路选择<br>301 : Moved Permanently  永久转移<br>302 : Found 暂时转移<br>303 : See Other 参见其它<br>304 : Not Modified 未修改<br>305 : Use Proxy 使用代理<br>306: Switch Proxy  在最新版的规范中，306状态码已经不再被使用。<br>307 : Temporary Redirect 请求的资源现在临时从不同的URI响应请求。由于这样的重定向是临时的，客户端应当继续向原有地址发送以后的请求。只有在Cache-Control或 Expires中进行了指定的情况下，这个响应才是可缓存的。<br>4XX表示: 客户端错误<br>这类的状态码代表了客户端看起来可能发生了错误，妨碍了服务器的处理。<br>400 : Bad Request 错误请求<br>401 : Unauthorized 未认证<br>402 : Payment Required 需要付费<br>403 : Forbidden 禁止<br>404 : Not Found  请求失败，请求所希望得到的资源未被在服务器上发现<br>405 : Method Not Allowed 方法不允许<br>406 : Not Acceptable 不接受<br>407 : Proxy Authentication Required 需要代理认证<br>408 : Request Time-out 请求超时<br>409 : Conflict 冲突<br>410 : Gone 失败<br>411 : Length Required 需要长度<br>412 : Precondition Failed 条件失败<br>413 : Request Entity Too Large 请求实体太大<br>414 : Request-URI Too Large 请求URI太长<br>415 : Unsupported Media Type 不支持媒体类型<br>416 : Requested range not satisfiable 如果请求中包含了Range请求头，并且Range中指定的任何数据范围都与当前资源的可用范围不重合，同时请求中又没有定义If-Range请求头，那 么服务器就应当返回416状态码。<br>417 : Expectation Failed 在请求头Expect中指定的预期内容无法被服务器满足<br>421 :There are too many connections from your internet address 从当前客户端所在的IP地址到服务器的连接数超过了服务器许可的最大范围。通常，这里的IP地址指的是从服务器上看到的客户端地址.<br>422: Unprocessable Entity 请求格式正确，但是由于含有语义错误，无法响应。（RFC 4918 WebDAV）<br>423: Locked 当前资源被锁定。（RFC 4918 WebDAV）<br>424: Failed Dependency 由于之前的某个请求发生的错误，导致当前请求失败，例如PROPPATCH。（RFC 4918 WebDAV）<br>425: Unordered Collection 在WebDav Advanced Collections草案中定义，但是未出现在《WebDAV顺序集协议》（RFC 3658）中。<br>426:Upgrade Required 客户端应当切换到TLS/1.0。（RFC 2817）<br>449: Retry With 由微软扩展，代表请求应当在执行完适当的操作后进行重试。<br>5XX表示: 服务器错误<br>这类状态码代表了服务器在处理请求的过程中有错误或者异常状态发生<br>500 : Internal Server Error  服务器遇到了一个未曾预料的状况，导致了它无法完成对请求的处理。一般来说，这个问题都会在服务器的程序码出错时出现<br>501 : Not Implemented 未实现<br>502 : Bad Gateway  作为网关或者代理工作的服务器尝试执行请求时，从上游服务器接收到无效的响应<br>503 : Service Unavailable 由于临时的服务器维护或者过载，服务器当前无法处理请求。这个状况是临时的，并且将在一段时间以后恢复。<br>504 : Gateway Time-out 网关超时<br>505 : HTTP Version not supported  服务器不支持，或者拒绝支持在请求中使用的HTTP版本。这暗示着服务器不能或不愿使用与客户端相同的版本。响应中应当包含一个描述了为何版本不被支持以及服务器支持哪些协议的实体。<br>506 : Variant Also Negotiates 由《透明内容协商协议》（RFC 2295）扩展，代表服务器存在内部配置错误：被请求的协商变元资源被配置为在透明内容协商中使用自己，因此在一个协商处理中不是一个合适的重点。<br>507 : Insufficient Storage 服务器无法存储完成请求所必须的内容。这个状况被认为是临时的。WebDAV（RFC 4918）<br>509 : Bandwidth Limit Exceeded 服务器达到带宽限制。这不是一个官方的状态码，但是仍被广泛使用。<br>510 : Not Extended 获取资源所需要的策略并没有没满足。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" data-id="ckgwh2xho0001lch5g4h0edux" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/" rel="tag">http</a></li></ul>
 
     </footer>
   </div>
@@ -837,7 +897,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="ckgwh2xhr0004lch59pq846hk" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="ckhbv3r2o0000mrfyh418ganu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
@@ -853,7 +913,7 @@
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
   </nav>
 
 </section>
@@ -864,7 +924,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/php/">php</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/">后端技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/php/">php</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/">后端技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BD%91%E7%BB%9C/">网络</a></li></ul>
     </div>
   </div>
 
@@ -874,7 +934,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kibana/" rel="tag">kibana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kibana/" rel="tag">kibana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/" rel="tag">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
     </div>
   </div>
 
@@ -884,7 +944,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/b%E6%A0%91/" style="font-size: 10px;">b树</a> <a href="/tags/css/" style="font-size: 16.67px;">css</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/html/" style="font-size: 16.67px;">html</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/kibana/" style="font-size: 10px;">kibana</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/php/" style="font-size: 13.33px;">php</a> <a href="/tags/php%E7%8E%AF%E5%A2%83/" style="font-size: 10px;">php环境</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/tcc/" style="font-size: 10px;">tcc</a> <a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 16.67px;">web前端</a> <a href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" style="font-size: 10px;">xa两段提交</a> <a href="/tags/%E5%87%BB%E7%A9%BF/" style="font-size: 10px;">击穿</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">分布式事务</a> <a href="/tags/%E7%A9%BF%E9%80%8F/" style="font-size: 10px;">穿透</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 20px;">算法</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 10px;">索引</a> <a href="/tags/%E9%94%81/" style="font-size: 10px;">锁</a> <a href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" style="font-size: 10px;">雪崩，队列</a>
+      <a href="/tags/b%E6%A0%91/" style="font-size: 10px;">b树</a> <a href="/tags/css/" style="font-size: 16.67px;">css</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/html/" style="font-size: 16.67px;">html</a> <a href="/tags/http/" style="font-size: 13.33px;">http</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/kibana/" style="font-size: 10px;">kibana</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/php/" style="font-size: 13.33px;">php</a> <a href="/tags/php%E7%8E%AF%E5%A2%83/" style="font-size: 10px;">php环境</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/tcc/" style="font-size: 10px;">tcc</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 16.67px;">web前端</a> <a href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" style="font-size: 10px;">xa两段提交</a> <a href="/tags/%E5%87%BB%E7%A9%BF/" style="font-size: 10px;">击穿</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">分布式事务</a> <a href="/tags/%E7%A9%BF%E9%80%8F/" style="font-size: 10px;">穿透</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 20px;">算法</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 10px;">索引</a> <a href="/tags/%E9%94%81/" style="font-size: 10px;">锁</a> <a href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" style="font-size: 10px;">雪崩，队列</a>
     </div>
   </div>
 
@@ -893,7 +953,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
     </div>
   </div>
 
@@ -906,6 +966,10 @@
       <ul>
         
           <li>
+            <a href="/2020/11/01/http%E5%92%8Ctcp%E5%92%8Cudp/">php版bitmap</a>
+          </li>
+        
+          <li>
             <a href="/2020/10/22/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">docker安装php开发环境</a>
           </li>
         
@@ -915,10 +979,6 @@
         
           <li>
             <a href="/2020/10/20/elasticsearch%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">elasticsearch知识整理</a>
-          </li>
-        
-          <li>
-            <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
           </li>
         
           <li>

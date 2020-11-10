@@ -14,14 +14,19 @@
 <meta property="og:site_name" content="田丰硕个人博客">
 <meta property="og:description" content="redis一、redis支持的数据类型string（字符串） 描述:二进制安全，基本的常用的数据类型，大能存储 512MB 基本用法:1、写入： SET key “value”2、读取： GET key 使用场景:常用的kv存取hash（哈希） 描述:是一个键值(key&#x3D;&gt;value)对集合，也就是一个key对应多个kv 基本用法:1、写入：多个kv：HMSET hash_key field">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://pic.tianfs.com/uPic/LIYmGu.png">
+<meta property="og:image" content="https://pic.tianfs.com/uPic/vRYN3z.png">
+<meta property="og:image" content="https://pic.tianfs.com/uPic/qtUmEe.png">
+<meta property="og:image" content="https://pic.tianfs.com/uPic/ZirHwu.png">
 <meta property="article:published_time" content="2020-10-19T04:46:47.000Z">
-<meta property="article:modified_time" content="2020-10-22T09:26:09.116Z">
+<meta property="article:modified_time" content="2020-11-10T03:37:20.335Z">
 <meta property="article:author" content="tianfs">
 <meta property="article:tag" content="redis">
 <meta property="article:tag" content="穿透">
 <meta property="article:tag" content="击穿">
 <meta property="article:tag" content="雪崩，队列">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic.tianfs.com/uPic/LIYmGu.png">
   
     <link rel="alternate" href="/atom.xml" title="田丰硕个人博客" type="application/atom+xml">
   
@@ -112,31 +117,60 @@
 </ul>
 <p>2、尾部插入:<br>RPUSH listKey val1<br>RPUSH listKey val2<br>RPUSH listKey val3<br>头部取出：<br>RPOP listKey //val1</p>
 <ul>
-<li>使用场景:<br>队列实现，消息队列，商品抢购等等需要有序排队的情况<h4 id="set（集合）"><a href="#set（集合）" class="headerlink" title="set（集合）"></a>set（集合）</h4></li>
-<li>描述：<br>String 类型的无序集合。成员是唯一的，不能出现重复的数据。</li>
-<li>基本用法：<br>1、写入：<br>SADD set_key val1 [val…]<br>SADD set_key val2 [val…]<br>2、读取：<br>SMEMBERS set_key //读所有合集中的成员<br>SCARD set_key //获取集合的成员数<br>SREM set_key val2 [val…] //移除集合中一个或多个成员</li>
-<li>使用场景:<br>例如存一个人的粉丝，交集、并集、差集等操作，可以非常方便的实现如共同关注等功能<h4 id="zset-sorted-set：有序集合"><a href="#zset-sorted-set：有序集合" class="headerlink" title="zset(sorted set：有序集合)"></a>zset(sorted set：有序集合)</h4></li>
-<li>描述：<br>String 类型的有序集合。不能出现重复的数据，每个元素都会关联一个 double 类型的分数(score)，分数可重复</li>
-<li>基本用法：<br>1、写入：ZADD key 分数(int) val(value) [分数(int) val(value) …]<br>2、读取：<br>ZRANGE key 0 10 WITHSCORES //从小到大取10个  从大到小用ZREVRANGE<br>ZRANGE key 0 -1 WITHSCORES //返回所有</li>
-<li>使用场景:<br>例如排行榜<h3 id="二、缓存穿透、缓存击穿、缓存雪崩区别"><a href="#二、缓存穿透、缓存击穿、缓存雪崩区别" class="headerlink" title="二、缓存穿透、缓存击穿、缓存雪崩区别"></a>二、缓存穿透、缓存击穿、缓存雪崩区别</h3><h4 id="1、缓存穿透（缓存和数据库中都没有的数据）："><a href="#1、缓存穿透（缓存和数据库中都没有的数据）：" class="headerlink" title="1、缓存穿透（缓存和数据库中都没有的数据）："></a>1、缓存穿透（缓存和数据库中都没有的数据）：</h4></li>
-<li>描述:<br>缓存和数据库中都没有的数据，而用户不断发起请求。常规情况存储层查不到数据则不写入缓存，导致这个不存在的数据每次请求都要到存储层去查询</li>
-<li>解决:<br>1)增加查询参数校验，避免一些超过常规情况和非法的参数请求进来，例如（id：-1）<br>2)针对在数据库中找不到记录的，仍然将该空数据存入缓存中，设置一个较短的过期时间，如30秒（设置太长会导致正常情况也没法使用）<br>3)布隆过滤器(Bloom Filter)，可以快速确定数据是否存在<h4 id="2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）："><a href="#2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）：" class="headerlink" title="2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）："></a>2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）：</h4></li>
-<li>描述:<br>缓存击穿表示某个key的缓存非常热门，有很高的并发一直在访问，如果该缓存失效，那同时会走数据库，压垮数据库。</li>
-<li>解决:<br>1、让该热门key的缓存永不过期。<br>2、增加根据key增加互斥锁，通过redis的setnx实现互斥锁<h4 id="3、缓存雪崩（大面积缓存同时到期）"><a href="#3、缓存雪崩（大面积缓存同时到期）" class="headerlink" title="3、缓存雪崩（大面积缓存同时到期）"></a>3、缓存雪崩（大面积缓存同时到期）</h4></li>
-<li>描述:<br>大面积缓存同时到期，导致大量请求来访问数据库</li>
-<li>解决:<br>1、设置缓存过期时间时加上一个随机值，避免缓存在同一时间过期<h3 id="三、HyperLogLog使用与应用场景"><a href="#三、HyperLogLog使用与应用场景" class="headerlink" title="三、HyperLogLog使用与应用场景"></a>三、HyperLogLog使用与应用场景</h3><h4 id="1、HyperLogLog："><a href="#1、HyperLogLog：" class="headerlink" title="1、HyperLogLog："></a>1、HyperLogLog：</h4></li>
-<li>用来做基数统计的算法，结果有 0.81%的误差，和bitmap相比更节省内存</li>
-<li>bitmap用来数组来表示各元素是否出现</li>
-<li>HyperLogLog基数统计的算法（去重后的次数），非redis独有</li>
-<li>占用内存小</li>
-<li>hyperloglog key占用了12K的内存用于标记基数<h4 id="2、基本使用"><a href="#2、基本使用" class="headerlink" title="2、基本使用"></a>2、基本使用</h4></li>
-<li>pfadd 添加 :pfadd m1 1 2 3 4 1 2 3 2 2 2 2</li>
-<li>pfcount 获得基数值: pfcount m1 //4</li>
-<li>pfmerge 合并多个key:<br>pfadd m1 1 2 3 4 1 2 3 2 2 2 2 //1<br>pfcount m1 //4<br>pfadd m2 3 3 3 4 4 4 5 5 5 6 6 6 1 //1<br>pfcount m2 //5<br>pfmerge mergeDes m1 m2 //ok<br>pfcount mergeDes //6<h4 id="2、使用场景"><a href="#2、使用场景" class="headerlink" title="2、使用场景"></a>2、使用场景</h4></li>
-<li>需要统计的数据基数很大</li>
-<li>可以和bitmap配合使用，bitmap标示存在的元素，hyperloglog用来计数</li>
-<li>统计注册IP数、在线人数、每日访问的uv、ip等<h3 id="四、redis的集群高可用方案"><a href="#四、redis的集群高可用方案" class="headerlink" title="四、redis的集群高可用方案"></a>四、redis的集群高可用方案</h3><h4 id="1、主从模式："><a href="#1、主从模式：" class="headerlink" title="1、主从模式："></a>1、主从模式：</h4>一个master可以拥有多个slave，但是一个slave只能对应一个master<br>主可以读写，从只能读</li>
-<li>缺点：<br>主库挂了以后服务将不能写入<h4 id="2、Sentinel模式（哨兵）："><a href="#2、Sentinel模式（哨兵）：" class="headerlink" title="2、Sentinel模式（哨兵）："></a>2、Sentinel模式（哨兵）：</h4>建立在主从模式的基础上，监听redis的mater的状态，如果master挂掉了，会在slave上选出一台机器作为master<br>使用时需要连接sentinel的ip和port而不是redis的</li>
+<li><p>使用场景:<br>队列实现，消息队列，商品抢购等等需要有序排队的情况</p>
+<h4 id="set（集合）"><a href="#set（集合）" class="headerlink" title="set（集合）"></a>set（集合）</h4></li>
+<li><p>描述：<br>String 类型的无序集合。成员是唯一的，不能出现重复的数据。</p>
+</li>
+<li><p>基本用法：<br>1、写入：<br>SADD set_key val1 [val…]<br>SADD set_key val2 [val…]<br>2、读取：<br>SMEMBERS set_key //读所有合集中的成员<br>SCARD set_key //获取集合的成员数<br>SREM set_key val2 [val…] //移除集合中一个或多个成员</p>
+</li>
+<li><p>使用场景:<br>例如存一个人的粉丝，交集、并集、差集等操作，可以非常方便的实现如共同关注等功能</p>
+<h4 id="zset-sorted-set：有序集合"><a href="#zset-sorted-set：有序集合" class="headerlink" title="zset(sorted set：有序集合)"></a>zset(sorted set：有序集合)</h4></li>
+<li><p>描述：<br>String 类型的有序集合。不能出现重复的数据，每个元素都会关联一个 double 类型的分数(score)，分数可重复</p>
+</li>
+<li><p>常用命令：<br>zadd(key, score, member)：向名称为key的zset中添加元素member，score用于排序。如果该元素已经存在，则根据score更新该元素的顺序。<br>zrem(key, member) ：删除名称为key的zset中的元素member<br>zincrby(key, increment, member) ：如果在名称为key的zset中已经存在元素member，则该元素的score增加increment；否则向集合中添加该元素，其score的值为increment<br>zrank(key, member) ：返回名称为key的zset（元素已按score从小到大排序）中member元素的rank（即index，从0开始），若没有member元素，返回“nil”<br>zrevrank(key, member) ：返回名称为key的zset（元素已按score从大到小排序）中member元素的rank（即index，从0开始），若没有member元素，返回“nil”<br>zrange(key, start, end)：返回名称为key的zset（元素已按score从小到大排序）中的index从start到end的所有元素<br>zrevrange(key, start, end)：返回名称为key的zset（元素已按score从大到小排序）中的index从start到end的所有元素<br>zrangebyscore(key, min, max)：返回名称为key的zset中score &gt;= min且score &lt;= max的所有元素<br>zcard(key)：返回名称为key的zset的基数<br>zscore(key, element)：返回名称为key的zset中元素element的score<br>zremrangebyrank(key, min, max)：删除名称为key的zset中rank &gt;= min且rank &lt;= max的所有元素<br>zremrangebyscore(key, min, max) ：删除名称为key的zset中score &gt;= min且score &lt;= max的所有元素</p>
+</li>
+<li><p>使用场景:<br>例如排行榜</p>
+</li>
+<li><p>跳表（集合对象的一种编码结构，skiplist，还有一种ziplist）<br>1、元素数量小于128 、所有member长度都小于64 使用ziplist<br>2、数据量大时针对redis的有序集合和zset的底层依赖是跳表实现的<br>3、zset支持快速的插入和删除 首选链表<br>4、zset支持范围查询：让链表排序，但是查找的时间复杂度O(n) 效率不高，要满足范围查询的话效率也比较低<br>5、为了效率为链表增加索引，如果只增加一层索引的话数据量大的时候效率还是很慢，所以要增加多级索引<br>6、所以这种链表增加多级索引的结构就是跳表<br>7、 结构上来讲：跳表在原有的链表上每两个增加一个一个指针<br><img src="https://pic.tianfs.com/uPic/LIYmGu.png" alt="LIYmGu"><br>8、根据多层链表的想法可以在继续增加层数，增加节点和节点指针的链接的跨度，类似二分查找<br><img src="https://pic.tianfs.com/uPic/vRYN3z.png" alt="vRYN3z"><br><img src="https://pic.tianfs.com/uPic/qtUmEe.png" alt="qtUmEe"><br>9、为了解决插入会打乱链接结构问题问题，在插入时会随机出来一个要插入的层数，这样新插入的节点不会影响其他节点的层数，只需要修改新节点的前后指针<br><img src="https://pic.tianfs.com/uPic/ZirHwu.png" alt="ZirHwu"></p>
+<h3 id="二、缓存穿透、缓存击穿、缓存雪崩区别"><a href="#二、缓存穿透、缓存击穿、缓存雪崩区别" class="headerlink" title="二、缓存穿透、缓存击穿、缓存雪崩区别"></a>二、缓存穿透、缓存击穿、缓存雪崩区别</h3><h4 id="1、缓存穿透（缓存和数据库中都没有的数据）："><a href="#1、缓存穿透（缓存和数据库中都没有的数据）：" class="headerlink" title="1、缓存穿透（缓存和数据库中都没有的数据）："></a>1、缓存穿透（缓存和数据库中都没有的数据）：</h4></li>
+<li><p>描述:<br>缓存和数据库中都没有的数据，而用户不断发起请求。常规情况存储层查不到数据则不写入缓存，导致这个不存在的数据每次请求都要到存储层去查询</p>
+</li>
+<li><p>解决:<br>1)增加查询参数校验，避免一些超过常规情况和非法的参数请求进来，例如（id：-1）<br>2)针对在数据库中找不到记录的，仍然将该空数据存入缓存中，设置一个较短的过期时间，如30秒（设置太长会导致正常情况也没法使用）<br>3)布隆过滤器(Bloom Filter)，可以快速确定数据是否存在</p>
+<h4 id="2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）："><a href="#2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）：" class="headerlink" title="2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）："></a>2、缓存击穿（缓存没有数据和数据库中有数据，热门key，一般是缓存时间到期）：</h4></li>
+<li><p>描述:<br>缓存击穿表示某个key的缓存非常热门，有很高的并发一直在访问，如果该缓存失效，那同时会走数据库，压垮数据库。</p>
+</li>
+<li><p>解决:<br>1、让该热门key的缓存永不过期。<br>2、增加根据key增加互斥锁，通过redis的setnx实现互斥锁</p>
+<h4 id="3、缓存雪崩（大面积缓存同时到期）"><a href="#3、缓存雪崩（大面积缓存同时到期）" class="headerlink" title="3、缓存雪崩（大面积缓存同时到期）"></a>3、缓存雪崩（大面积缓存同时到期）</h4></li>
+<li><p>描述:<br>大面积缓存同时到期，导致大量请求来访问数据库</p>
+</li>
+<li><p>解决:<br>1、设置缓存过期时间时加上一个随机值，避免缓存在同一时间过期</p>
+<h3 id="三、HyperLogLog使用与应用场景"><a href="#三、HyperLogLog使用与应用场景" class="headerlink" title="三、HyperLogLog使用与应用场景"></a>三、HyperLogLog使用与应用场景</h3><h4 id="1、HyperLogLog："><a href="#1、HyperLogLog：" class="headerlink" title="1、HyperLogLog："></a>1、HyperLogLog：</h4></li>
+<li><p>用来做基数统计的算法，结果有 0.81%的误差，和bitmap相比更节省内存</p>
+</li>
+<li><p>bitmap用来数组来表示各元素是否出现</p>
+</li>
+<li><p>HyperLogLog基数统计的算法（去重后的次数），非redis独有</p>
+</li>
+<li><p>占用内存小</p>
+</li>
+<li><p>hyperloglog key占用了12K的内存用于标记基数</p>
+<h4 id="2、基本使用"><a href="#2、基本使用" class="headerlink" title="2、基本使用"></a>2、基本使用</h4></li>
+<li><p>pfadd 添加 :pfadd m1 1 2 3 4 1 2 3 2 2 2 2</p>
+</li>
+<li><p>pfcount 获得基数值: pfcount m1 //4</p>
+</li>
+<li><p>pfmerge 合并多个key:<br>pfadd m1 1 2 3 4 1 2 3 2 2 2 2 //1<br>pfcount m1 //4<br>pfadd m2 3 3 3 4 4 4 5 5 5 6 6 6 1 //1<br>pfcount m2 //5<br>pfmerge mergeDes m1 m2 //ok<br>pfcount mergeDes //6</p>
+<h4 id="2、使用场景"><a href="#2、使用场景" class="headerlink" title="2、使用场景"></a>2、使用场景</h4></li>
+<li><p>需要统计的数据基数很大</p>
+</li>
+<li><p>可以和bitmap配合使用，bitmap标示存在的元素，hyperloglog用来计数</p>
+</li>
+<li><p>统计注册IP数、在线人数、每日访问的uv、ip等</p>
+<h3 id="四、redis的集群高可用方案"><a href="#四、redis的集群高可用方案" class="headerlink" title="四、redis的集群高可用方案"></a>四、redis的集群高可用方案</h3><h4 id="1、主从模式："><a href="#1、主从模式：" class="headerlink" title="1、主从模式："></a>1、主从模式：</h4><p>一个master可以拥有多个slave，但是一个slave只能对应一个master<br>主可以读写，从只能读</p>
+</li>
+<li><p>缺点：<br>主库挂了以后服务将不能写入</p>
+<h4 id="2、Sentinel模式（哨兵）："><a href="#2、Sentinel模式（哨兵）：" class="headerlink" title="2、Sentinel模式（哨兵）："></a>2、Sentinel模式（哨兵）：</h4><p>建立在主从模式的基础上，监听redis的mater的状态，如果master挂掉了，会在slave上选出一台机器作为master<br>使用时需要连接sentinel的ip和port而不是redis的</p>
+</li>
 </ul>
 <h4 id="3、Cluster模式："><a href="#3、Cluster模式：" class="headerlink" title="3、Cluster模式："></a>3、Cluster模式：</h4><p>在需要更大规模的存储的时候主从模式或sentinel模式就不能很好的满足需求了<br>cluster模式的解决单机Redis容量有限的问题，将Redis的数据根据一定的规则分配到多台机器<br>redis版本低的话需要安装对应版本的ruby<br>去中心化的，每个节点（master）都是平等的，连接哪个节点都可以获取和设置数据。</p>
 <h3 id="四、内存回收机制"><a href="#四、内存回收机制" class="headerlink" title="四、内存回收机制"></a>四、内存回收机制</h3><h4 id="1、内存使用达到maxmemory上限时候触发的溢出回收策略"><a href="#1、内存使用达到maxmemory上限时候触发的溢出回收策略" class="headerlink" title="1、内存使用达到maxmemory上限时候触发的溢出回收策略"></a>1、内存使用达到maxmemory上限时候触发的溢出回收策略</h4><ul>
@@ -152,11 +186,11 @@
 <li>惰性删除 ： 当用户访问已经过期的对象的时候才删除</li>
 <li>定时任务删除 ： 内部维护了一个定时任务，默认每秒运行10次<br>1）定时任务在每个数据库空间采用慢模式随机检查20个键，当发现过期时，删除对应的键。<br>2）如果超过检查数25%的键过期，循环执行回收逻辑直到不足25%或 运行超时为止，慢模式下超时时间为25毫秒。<br>3）如果之前回收键逻辑超时，则在Redis触发内部事件之前再次以快模式运行回收过期键任务，快模式下超时时间为1毫秒且2秒内只能运行1次。<br>4）快慢两种模式内部删除逻辑相同，只是执行的超时时间不同</li>
 </ul>
-
+<h3 id="五、其他知识点汇总"><a href="#五、其他知识点汇总" class="headerlink" title="五、其他知识点汇总"></a>五、其他知识点汇总</h3>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckgwh2xi4000tlch5h0kt3ttl" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckhbv3r43002umrfye1zofovy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
@@ -167,19 +201,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2020/10/20/elasticsearch%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          elasticsearch知识整理
+          分布式知识整理
         
       </div>
     </a>
   
   
-    <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">分布式知识整理</div>
+      <div class="article-nav-title">mysql知识点整理(持续更新)</div>
     </a>
   
 </nav>
@@ -195,7 +229,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/php/">php</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/">后端技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/mysql/">mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/php/">php</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF%E6%8A%80%E6%9C%AF/">后端技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BD%91%E7%BB%9C/">网络</a></li></ul>
     </div>
   </div>
 
@@ -205,7 +239,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kibana/" rel="tag">kibana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kibana/" rel="tag">kibana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/" rel="tag">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
     </div>
   </div>
 
@@ -215,7 +249,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/b%E6%A0%91/" style="font-size: 10px;">b树</a> <a href="/tags/css/" style="font-size: 16.67px;">css</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/html/" style="font-size: 16.67px;">html</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/kibana/" style="font-size: 10px;">kibana</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/php/" style="font-size: 13.33px;">php</a> <a href="/tags/php%E7%8E%AF%E5%A2%83/" style="font-size: 10px;">php环境</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/tcc/" style="font-size: 10px;">tcc</a> <a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 16.67px;">web前端</a> <a href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" style="font-size: 10px;">xa两段提交</a> <a href="/tags/%E5%87%BB%E7%A9%BF/" style="font-size: 10px;">击穿</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">分布式事务</a> <a href="/tags/%E7%A9%BF%E9%80%8F/" style="font-size: 10px;">穿透</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 20px;">算法</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 10px;">索引</a> <a href="/tags/%E9%94%81/" style="font-size: 10px;">锁</a> <a href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" style="font-size: 10px;">雪崩，队列</a>
+      <a href="/tags/b%E6%A0%91/" style="font-size: 10px;">b树</a> <a href="/tags/css/" style="font-size: 16.67px;">css</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/html/" style="font-size: 16.67px;">html</a> <a href="/tags/http/" style="font-size: 13.33px;">http</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/kibana/" style="font-size: 10px;">kibana</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/php/" style="font-size: 13.33px;">php</a> <a href="/tags/php%E7%8E%AF%E5%A2%83/" style="font-size: 10px;">php环境</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/tcc/" style="font-size: 10px;">tcc</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 16.67px;">web前端</a> <a href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" style="font-size: 10px;">xa两段提交</a> <a href="/tags/%E5%87%BB%E7%A9%BF/" style="font-size: 10px;">击穿</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">分布式事务</a> <a href="/tags/%E7%A9%BF%E9%80%8F/" style="font-size: 10px;">穿透</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 20px;">算法</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 10px;">索引</a> <a href="/tags/%E9%94%81/" style="font-size: 10px;">锁</a> <a href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" style="font-size: 10px;">雪崩，队列</a>
     </div>
   </div>
 
@@ -224,7 +258,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
     </div>
   </div>
 
@@ -237,6 +271,10 @@
       <ul>
         
           <li>
+            <a href="/2020/11/01/http%E5%92%8Ctcp%E5%92%8Cudp/">php版bitmap</a>
+          </li>
+        
+          <li>
             <a href="/2020/10/22/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">docker安装php开发环境</a>
           </li>
         
@@ -246,10 +284,6 @@
         
           <li>
             <a href="/2020/10/20/elasticsearch%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">elasticsearch知识整理</a>
-          </li>
-        
-          <li>
-            <a href="/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">redis知识点整理(持续更新)</a>
           </li>
         
           <li>
