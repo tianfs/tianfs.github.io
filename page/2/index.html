@@ -86,6 +86,151 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-mysql知识点整理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" class="article-date">
+  <time datetime="2020-10-19T03:46:47.000Z" itemprop="datePublished">2020-10-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/">mysql知识点整理(持续更新)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h2><h3 id="一、锁相关"><a href="#一、锁相关" class="headerlink" title="一、锁相关"></a>一、锁相关</h3><h4 id="1、悲观锁："><a href="#1、悲观锁：" class="headerlink" title="1、悲观锁："></a>1、悲观锁：</h4><ul>
+<li>悲观的认为每次操作数据的时候都会有人来修改数据，所以使用数据时对其加锁，确保在自己使用的过程中数据不会被别人修改，使用完成后进行数据解锁。由于数据进行加锁，期间对该数据进行读写的其他线程都会进行等待。写入频繁使用悲观锁<h4 id="2、乐观锁："><a href="#2、乐观锁：" class="headerlink" title="2、乐观锁："></a>2、乐观锁：</h4></li>
+<li>所以每次获取数据的时候都不会进行加锁，但是在更新数据的时候需要判断该数据是否被别人修改过。一般是在sql的where上带版本号或时间戳，写代码时候自己实现，读取频繁使用乐观锁<h4 id="3、共享锁：-自己读写，其他读"><a href="#3、共享锁：-自己读写，其他读" class="headerlink" title="3、共享锁：(自己读写，其他读)"></a>3、共享锁：(自己读写，其他读)</h4></li>
+<li>如果事务T对数据A加上共享锁后，则其他事务只能对A再加共享锁，不能加排他锁。获准共享锁的事务只能读数据，不能修改数据。<h4 id="4、排他锁：-只能自己读写"><a href="#4、排他锁：-只能自己读写" class="headerlink" title="4、排他锁：(只能自己读写)"></a>4、排他锁：(只能自己读写)</h4></li>
+<li>如果事务T对数据A加上排他锁后，则其他事务不能再对A加任任何类型的封锁。获准排他锁的事务既能读数据，又能修改数据。<h4 id="5、简要说明为什么会发生死锁"><a href="#5、简要说明为什么会发生死锁" class="headerlink" title="5、简要说明为什么会发生死锁?"></a>5、简要说明为什么会发生死锁?</h4></li>
+<li>若干事务相互等待释放封锁，就陷入无限期等待状态，系统就进入死锁<h4 id="6、解决死锁的方法应从预防和解除的两个方面着手："><a href="#6、解决死锁的方法应从预防和解除的两个方面着手：" class="headerlink" title="6、解决死锁的方法应从预防和解除的两个方面着手："></a>6、解决死锁的方法应从预防和解除的两个方面着手：</h4></li>
+<li>死锁的预防方法：<br>①要求每一个事务必须一次封锁所要使用的全部数据（要么全成功，要么全不成功）<br>②规定封锁数据的顺序，所有事务必须按这个顺序实行封锁。</li>
+<li>允许死锁发生，然后解除它，如果发现死锁，则将其中一个代价较小的事物撤消<br>，回滚这个事务，并释放此事务持有的封锁，使其他事务继续运行。</li>
+</ul>
+<h3 id="二、事务隔离级别"><a href="#二、事务隔离级别" class="headerlink" title="二、事务隔离级别"></a>二、事务隔离级别</h3><h4 id="1、Read-uncommitted（读未提交）（脏读）"><a href="#1、Read-uncommitted（读未提交）（脏读）" class="headerlink" title="1、Read uncommitted（读未提交）（脏读）:"></a>1、Read uncommitted（读未提交）（脏读）:</h4><ul>
+<li>在该隔离级别，所有事务都可以看到其它未提交事务的执行结果。可能会出现脏读。<h4 id="2、Read-Committed（读已提交，简称：-RC）（幻读）："><a href="#2、Read-Committed（读已提交，简称：-RC）（幻读）：" class="headerlink" title="2、Read Committed（读已提交，简称： RC）（幻读）："></a>2、Read Committed（读已提交，简称： RC）（幻读）：</h4></li>
+<li>一个事务只能看见已经提交事务所做的改变。因为同一事务的其它实例在该实例处理期间可能会有新的 commit，所以可能出现幻读。<h4 id="3、Repeatable-Read（可重复读，简称：RR）（默认，结果相同）："><a href="#3、Repeatable-Read（可重复读，简称：RR）（默认，结果相同）：" class="headerlink" title="3、Repeatable Read（可重复读，简称：RR）（默认，结果相同）："></a>3、Repeatable Read（可重复读，简称：RR）（默认，结果相同）：</h4></li>
+<li>这是 MySQL 的默认事务隔离级别，它确保同一事务的多个实例在并发读取数据时，会看到同样的数据行。消除了脏读、不可重复读，默认也不会出现幻读。<h4 id="4、Serializable（串行）："><a href="#4、Serializable（串行）：" class="headerlink" title="4、Serializable（串行）："></a>4、Serializable（串行）：</h4></li>
+<li>这是最高的隔离级别，它通过强制事务排序，使之不可能相互冲突，从而解决幻读问题。<h3 id="三、索引"><a href="#三、索引" class="headerlink" title="三、索引"></a>三、索引</h3><a href="https://www.cnblogs.com/gdjk/p/10668868.html" target="_blank" rel="noopener">摘自</a><h4 id="1、重要概念"><a href="#1、重要概念" class="headerlink" title="1、重要概念"></a>1、重要概念</h4></li>
+<li>基数：单个列唯一键（distict_keys）的数量叫做基数。</li>
+<li>回表：当对一个列创建索引之后，索引会包含该列的键值及键值对应行所在的rowid。通过索引中记录的rowid访问表中的数据就叫回表。回表次数太多会严重影响SQL性能，如果回表次数太多，就不应该走索引扫描，应该直接走全表扫描。<br>EXPLAIN命令结果中的Using Index意味着不会回表，通过索引就可以获得主要的数据。Using Where则意味着需要回表取数据。</li>
+</ul>
+<h4 id="2、优化原则"><a href="#2、优化原则" class="headerlink" title="2、优化原则"></a>2、优化原则</h4><ul>
+<li>适合索引的列是出现在where子句中的列，或者连接子句中指定的列；</li>
+<li>基数- 较小的类，索引效果较差，没有必要在此列建立索引；</li>
+<li>使用短索引，如果对长字符串列进行索引，应该指定一个前缀长度，这样能够节省大量索引空间；</li>
+<li>不要过度索引。索引需要额外的磁盘空间，并降低写操作的性能。在修改表内容的时候，索引会进行更新甚至重构，索引列越多，这个时间就会越长。所以只保持需要的索引有利于查询即可。<h3 id="四、b-tree索、b-tree索引、hash索引"><a href="#四、b-tree索、b-tree索引、hash索引" class="headerlink" title="四、b-tree索、b-tree索引、hash索引"></a>四、b-tree索、b-tree索引、hash索引</h3><h4 id="1、b-tree"><a href="#1、b-tree" class="headerlink" title="1、b+tree"></a>1、b+tree</h4></li>
+<li>B+ 树是 B 树的变体，定义基本与 B 树一致，与 B 树的不同点</li>
+<li>所有叶子节点中包含了全部关键字的信息</li>
+<li>非叶子节点上只存储 key 的信息，这样相对 B 树，可以增加每一页中存储 key 的数量</li>
+<li>B 树是纵向扩展，最终变成一个 “瘦高个”，而 B+ 树是横向扩展的，最终会变成一个 “矮胖子”</li>
+<li>各叶子节点用指针进行连接</li>
+<li>mysql使用b+树索引</li>
+<li>innodb索引和数据存在一个文件中</li>
+<li>myisam下索引叶子节点保存数据的地址而不是数据本身<h4 id="2、b-tree"><a href="#2、b-tree" class="headerlink" title="2、b-tree"></a>2、b-tree</h4></li>
+<li>多路搜索树，每个结点存储M/2到M个关键字，非叶子结点存储指向关键字范围的子结点；</li>
+<li>所有关键字在整颗树中出现，且只出现一次，非叶子结点可以命中；</li>
+<li>树的每个节点都包含key值和data值，叶子节点可以看作外部节点，不包含任何信息；</li>
+<li>如果 data 比较大时，每一页存储的 key 会比较少；当数据比较多时，同样会有：“要经历多层节点才能查询在叶子节点的数据” 的问题。<h4 id="3、mysql中的b-tree"><a href="#3、mysql中的b-tree" class="headerlink" title="3、mysql中的b+tree"></a>3、mysql中的b+tree</h4></li>
+<li>在B-树基础上，为叶子结点增加链表指针，所有关键字都在叶子结点中出现，非叶子结点作为叶子结点的索引；B+树总是到叶子结点才命中；</li>
+<li>主聚集索引（clustered index）和辅助索引（secondary index）</li>
+<li>具体行数据在在聚集索引上，辅助索引叶子节点存储聚集索引的key值，也就是主见</li>
+<li>辅助索引的叶子节点并不包含行记录的全部数据</li>
+<li>树的磁盘读写代价更低 </li>
+<li>树的查询效率更加稳定 <h4 id="4、B-树："><a href="#4、B-树：" class="headerlink" title="4、B*树："></a>4、B*树：</h4></li>
+<li>在B+树基础上，为非叶子结点也增加链表指针，将结点的最低利用率从1/2提高到2/3；<h4 id="5、mysql中的hash-索引"><a href="#5、mysql中的hash-索引" class="headerlink" title="5、mysql中的hash 索引"></a>5、mysql中的hash 索引</h4></li>
+<li>Hash索引仅仅能满足“=”,“IN”,“&lt;=&gt;”查询，不能使用范围查询</li>
+<li>联合索引中，Hash索引不能利用部分索引键查询</li>
+<li>Hash索引无法避免数据的排序操作</li>
+<li>Hash索引任何时候都不能避免表扫描</li>
+<li>Hash索引遇到大量Hash值相等的情况后性能并不一定会比BTree高</li>
+</ul>
+<h3 id="五、分库、分表"><a href="#五、分库、分表" class="headerlink" title="五、分库、分表"></a>五、分库、分表</h3><h4 id="1、为什么要分表："><a href="#1、为什么要分表：" class="headerlink" title="1、为什么要分表："></a>1、为什么要分表：</h4><ul>
+<li>减小数据库的单表负担，缩短查询时间，减少锁等待的情况。<h4 id="表垂直分区"><a href="#表垂直分区" class="headerlink" title="表垂直分区"></a>表垂直分区</h4></li>
+<li>减少一个表中的字段，根据id关联起来<h4 id="表水平分区"><a href="#表水平分区" class="headerlink" title="表水平分区"></a>表水平分区</h4></li>
+<li>使用规则（例如按id哈希、id区间、时间）分组，可以单库多表或多库多表<h4 id="分库分表后查询问题"><a href="#分库分表后查询问题" class="headerlink" title="分库分表后查询问题"></a>分库分表后查询问题</h4></li>
+<li>单库多表<br>如果分表为myisam引擎的表，可以创建一个merge引擎的集合表来查询（merge引擎要求被合并表中不能又重复字段）<br>如果是innodb引擎，只能根据规则单独查询在合并或使用搜索引擎解决</li>
+<li>多库多表<br>将数据通过同步插件(例如logstash)或者mq同步到Elasticsearch，然后通过lasticsearch查询，<br>如果数据量过大可以引入hbase 将数据存到hbase中，然后通过lasticsearch存储hbase的rowkey，然后查到rowkey去hbase中取数据</li>
+</ul>
+<h3 id="六、引擎"><a href="#六、引擎" class="headerlink" title="六、引擎"></a>六、引擎</h3><h4 id="1、innodb："><a href="#1、innodb：" class="headerlink" title="1、innodb："></a>1、innodb：</h4><ul>
+<li>MySQL 5.5 之后的默认存储引擎</li>
+<li>默认引擎</li>
+<li>支持行锁</li>
+<li>索引叶子节点存储数据</li>
+<li>支持事务</li>
+<li>默认select不加锁，UPDATE、INSERT、DELETE默认都是排它锁，可以通过（lock in share mode）和（for update）加共享锁和排他锁：</li>
+<li>Record Lock：单个记录上的索引加锁，Gap Lock：间隙锁，对索引项之间的间隙加锁，但不包括记录本身，Next-Key Lock：Gap Lock + Record Lock，锁定一个范围，并且锁定记录本身。</li>
+<li>如果不通过索引条件检索数据，那么 InnoDB 将对表中所有记录加锁，实际效果跟表锁一样（where不命中索引就锁表）。</li>
+<li>不擅长快速插入（插入前要排序，消耗时间）</li>
+<li>.ibd文件存放索引和数据<h4 id="2、myisam："><a href="#2、myisam：" class="headerlink" title="2、myisam："></a>2、myisam：</h4></li>
+<li>MySQL 8.0弃用 </li>
+<li>MySQL 5.5 之前的默认存储引擎</li>
+<li>支持表锁</li>
+<li>不支持行锁</li>
+<li>不支持事务</li>
+<li>索- 引叶子节点只保存数据的地址而不是数据本身</li>
+</ul>
+<h3 id="七、explain"><a href="#七、explain" class="headerlink" title="七、explain"></a>七、explain</h3><p><a href="https://segmentfault.com/a/1190000021458117?utm_source=tag-newest" target="_blank" rel="noopener">摘自</a> </p>
+<h4 id="1、用途"><a href="#1、用途" class="headerlink" title="1、用途"></a>1、用途</h4><ul>
+<li>表的读取顺序如何</li>
+<li>数据读取操作有哪些操作类型</li>
+<li>哪些索引可以使用</li>
+<li>哪些索引被实际使用</li>
+<li>表之间是如何引用</li>
+<li>每张- 表有多少行被优化器查询<br>……<h4 id="2、explain包含的字段"><a href="#2、explain包含的字段" class="headerlink" title="2、explain包含的字段"></a>2、explain包含的字段</h4></li>
+<li>id //select查询的序列号，包含一组数字，表示查询中执行select子句或操作表的顺序</li>
+<li>select_type //查询类型</li>
+<li>table //正在访问哪个表</li>
+<li>partitions //匹配的分区</li>
+<li>type //访问的类型</li>
+<li>possible_keys //显示可能应用在这张表中的索引，一个或多个，但不一定实际使用到</li>
+<li>key //实际使用到的索引，如果为NULL，则没有使用索引</li>
+<li>key_len //表示索引中使用的字节数，可通过该列计算查询中使用的索引的长度</li>
+<li>ref //显示索引的哪一列被使用了，如果可能的话，是一个常数，哪些列或常量被用于查找索引列上的值</li>
+<li>rows //根据表统计信息及索引选用情况，大致估算出找到所需的记录所需读取的行数</li>
+<li>filtered //查询的表行占表的百分比</li>
+<li>Extra //包含不适合在其它列中显示但十分重要的额外信息<br><img src="https://tva1.sinaimg.cn/large/0081Kckwly1gk54fpvopzj30u01sjnpd.jpg" alt="explain图"></li>
+</ul>
+<h3 id="八、优化方向"><a href="#八、优化方向" class="headerlink" title="八、优化方向"></a>八、优化方向</h3><p>1、正确的字段类型和长度<br>2、选择何时的存储引擎<br>3、推荐使用utf8mb4字符集，可以存表情，可以表示4个字节宽位，排序规则上general_ci 更快，unicode_ci 更准确。ci不区分大小写，cs区分大小写<br>4、少用多表操作（子查询，联合查询），而是将SQL拆分多次执行。如果查询很很小，会增加查询缓存的利用率。<br>5、慢sql查询处理<br>定位执行较慢的查询语句<br>show variables like “slow_query%”;<br>show variables like “%long_query%”;<br>开启日志<br>set global slow_query_log=1;<br>set long_query_time=0.5;<br>6、尽量不要出现null值 给默认值 （null不会走索引）<br>7、索引建立<br>8、使用explain检查sql的执行情况<br>9、开启表缓存 query_cache_type=On|1 ，查看show variables like ‘%query_cache%’;<br>10、主从配置<br>11、分库，分表<br>12、查看数据库链接池</p>
+<h3 id="九、主从同步延时问题"><a href="#九、主从同步延时问题" class="headerlink" title="九、主从同步延时问题"></a>九、主从同步延时问题</h3><h4 id="MySQL数据库主从同步延迟是怎么产生的。"><a href="#MySQL数据库主从同步延迟是怎么产生的。" class="headerlink" title="MySQL数据库主从同步延迟是怎么产生的。"></a>MySQL数据库主从同步延迟是怎么产生的。</h4><p>主服务器何以并发, 但是从服务器的里面读取binlog 的线程仅有一个， 当某个SQL在从服务器上执行的时间稍长 或者由于某个SQL要进行锁表就会导致，主服务器的SQL大量积压，未被同步到从服务器里。这就导致了主从不一致， 也就是主从延迟。</p>
+<h4 id="如何查看是否存在延迟"><a href="#如何查看是否存在延迟" class="headerlink" title="如何查看是否存在延迟"></a>如何查看是否存在延迟</h4><p>1、可以通过监控show slave status\G命令输出的Seconds_Behind_Master参数的值来判断，是否有发生主从延时。：<br> NULL - 表示io_thread或是sql_thread有任何一个发生故障，也就是该线程的Running状态是No,而非Yes.<br> 0 - 该值为零，是我们极为渴望看到的情况，表示主从复制良好，可以认为lag不存在。<br> 正值 - 表示主从已经出现延时，数字越大表示从库落后主库越多。<br> 负值 - 几乎很少见，这是一个BUG值，该参数是不支持负值的，也就是不应该出现。</p>
+<h4 id="MySQL数据库主从同步延迟解决方案。"><a href="#MySQL数据库主从同步延迟解决方案。" class="headerlink" title="MySQL数据库主从同步延迟解决方案。"></a>MySQL数据库主从同步延迟解决方案。</h4><p>1、slave的sync_binlog设置为0或者关闭binlog：</p>
+<ul>
+<li>sync_binlog 表示每sync_binlog次事务提交，MySQL调用文件系统的刷新操作将缓存刷下去，1最安全<br>2、使用比主库更好的硬件设备作为slave。<br>3、slave的innodb_flush_log_at_trx_commit 设置0：</li>
+<li>默认值1的意思是每一次事务提交或事务外的指令都需要把日志写入（flush）硬盘</li>
+<li>设置2的意思是不写入硬盘而是写入系统缓存。日志仍然会每秒flush到硬盘，只会在整个操作系统 挂了时才可能丢数据，一般不会丢失超过1-2秒的更新</li>
+<li>设成0会更快一点，但安全方面比较差，即使MySQL挂了也可能会丢失事务的数据。<br>4、–logs-slave-updates 从服务器从主服务器接收到的更新不记入它的二进制日志</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="ckqapn0f7000tf4s68abudbu6" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-bitmap" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/09/27/bitmap/" class="article-date">
@@ -120,7 +265,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/09/27/bitmap/" data-id="ckk7qe8fu0001nps69olgc3tg" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/09/27/bitmap/" data-id="ckqapn0eq0005f4s6czr5e68l" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
@@ -168,10 +313,54 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" data-id="ckk7qe8fn0000nps6dl1p971r" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" data-id="ckqapn0ej0001f4s67fgy21yj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-HTTP状态码" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/php/">php</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/">HTTP状态码</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>HTTP状态码（HTTP Status Code）是用来表示网页服务器HTTP 响应状态的3位数字代码。它由RFC 2616规范定义的，并得到RFC 2518、RFC 2817、RFC 2295、RFC 2774、RFC 4918等规范扩展。所有状态码的第一个数字代表了响应的五种状态之一</p>
+<p>HTTP/1.1定义的状态码值和对应的原因短语（Reason-Phrase）的例子。<br>1XX表示:消息<br>这一类型的状态码，代表请求已被接受，需要继续处理。这类响应是临时响应，只包含状态行和某些可选的响应头信息，并以空行结束。由于HTTP/1.0 协议中没有定义任何1xx状态码，所以除非在某些试验条件下，服务器禁止向此类客户端发送1xx响应。 这些状态码代表的响应都是信息性的，标示客户应该采取的其他行动。<br>100 : Continue  客户端应当继续发送请求。这个临时响应是用来通知客户端它的部分请求已经被服务器接收，且仍未被拒绝。客户端应当继续发送请求的剩余部分.<br>101 : witching Protocols 服务器已经理解了客户端的请求，并将通过Upgrade消息头通知客户端采用不同的协议来完成这个请求。在发送完这个响应最后的空行后，服务器将会切换到 在Upgrade消息头中定义的那些协议。: 只有在切换新的协议更有好处的时候才应该采取类似措施.<br>102: Processing  由WebDAV（RFC 2518）扩展的状态码，代表处理将被继续执行。<br>2XX表示:成功<br>这一类型的状态码，代表请求已成功被服务器接收、理解、并接受。<br>200 : OK<br>201 : Created 已创建<br>202 : Accepted 接收<br>203 : Non-Authoritative Information 非认证信息<br>204 : No Content 无内容<br>205 : Reset Content 重置内容<br>206 : Partial Content 服务器已经成功处理了部分GET请求。类似于FlashGet或者迅雷这类的HTTP 下载工具都是使用此类响应实现断点续传或者将一个大文档分解为多个下载段同时下载。<br>207: Multi-Status 由WebDAV(RFC 2518)扩展的状态码，代表之后的消息体将是一个XML消息，并且可能依照之前子请求数量的不同，包含一系列独立的响应代码.<br>3XX表示: 重定向<br>这类状态码代表需要客户端采取进一步的操作才能完成请求。通常，这些状态码用来重定向，后续的请求地址（重定向目标）在本次响应的Location域中指明。<br>300 : Multiple Choices 多路选择<br>301 : Moved Permanently  永久转移<br>302 : Found 暂时转移<br>303 : See Other 参见其它<br>304 : Not Modified 未修改<br>305 : Use Proxy 使用代理<br>306: Switch Proxy  在最新版的规范中，306状态码已经不再被使用。<br>307 : Temporary Redirect 请求的资源现在临时从不同的URI响应请求。由于这样的重定向是临时的，客户端应当继续向原有地址发送以后的请求。只有在Cache-Control或 Expires中进行了指定的情况下，这个响应才是可缓存的。<br>4XX表示: 客户端错误<br>这类的状态码代表了客户端看起来可能发生了错误，妨碍了服务器的处理。<br>400 : Bad Request 错误请求<br>401 : Unauthorized 未认证<br>402 : Payment Required 需要付费<br>403 : Forbidden 禁止<br>404 : Not Found  请求失败，请求所希望得到的资源未被在服务器上发现<br>405 : Method Not Allowed 方法不允许<br>406 : Not Acceptable 不接受<br>407 : Proxy Authentication Required 需要代理认证<br>408 : Request Time-out 请求超时<br>409 : Conflict 冲突<br>410 : Gone 失败<br>411 : Length Required 需要长度<br>412 : Precondition Failed 条件失败<br>413 : Request Entity Too Large 请求实体太大<br>414 : Request-URI Too Large 请求URI太长<br>415 : Unsupported Media Type 不支持媒体类型<br>416 : Requested range not satisfiable 如果请求中包含了Range请求头，并且Range中指定的任何数据范围都与当前资源的可用范围不重合，同时请求中又没有定义If-Range请求头，那 么服务器就应当返回416状态码。<br>417 : Expectation Failed 在请求头Expect中指定的预期内容无法被服务器满足<br>421 :There are too many connections from your internet address 从当前客户端所在的IP地址到服务器的连接数超过了服务器许可的最大范围。通常，这里的IP地址指的是从服务器上看到的客户端地址.<br>422: Unprocessable Entity 请求格式正确，但是由于含有语义错误，无法响应。（RFC 4918 WebDAV）<br>423: Locked 当前资源被锁定。（RFC 4918 WebDAV）<br>424: Failed Dependency 由于之前的某个请求发生的错误，导致当前请求失败，例如PROPPATCH。（RFC 4918 WebDAV）<br>425: Unordered Collection 在WebDav Advanced Collections草案中定义，但是未出现在《WebDAV顺序集协议》（RFC 3658）中。<br>426:Upgrade Required 客户端应当切换到TLS/1.0。（RFC 2817）<br>449: Retry With 由微软扩展，代表请求应当在执行完适当的操作后进行重试。<br>5XX表示: 服务器错误<br>这类状态码代表了服务器在处理请求的过程中有错误或者异常状态发生<br>500 : Internal Server Error  服务器遇到了一个未曾预料的状况，导致了它无法完成对请求的处理。一般来说，这个问题都会在服务器的程序码出错时出现<br>501 : Not Implemented 未实现<br>502 : Bad Gateway  作为网关或者代理工作的服务器尝试执行请求时，从上游服务器接收到无效的响应<br>503 : Service Unavailable 由于临时的服务器维护或者过载，服务器当前无法处理请求。这个状况是临时的，并且将在一段时间以后恢复。<br>504 : Gateway Time-out 网关超时<br>505 : HTTP Version not supported  服务器不支持，或者拒绝支持在请求中使用的HTTP版本。这暗示着服务器不能或不愿使用与客户端相同的版本。响应中应当包含一个描述了为何版本不被支持以及服务器支持哪些协议的实体。<br>506 : Variant Also Negotiates 由《透明内容协商协议》（RFC 2295）扩展，代表服务器存在内部配置错误：被请求的协商变元资源被配置为在透明内容协商中使用自己，因此在一个协商处理中不是一个合适的重点。<br>507 : Insufficient Storage 服务器无法存储完成请求所必须的内容。这个状况被认为是临时的。WebDAV（RFC 4918）<br>509 : Bandwidth Limit Exceeded 服务器达到带宽限制。这不是一个官方的状态码，但是仍被广泛使用。<br>510 : Not Extended 获取资源所需要的策略并没有没满足。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://blog.tianfs.com/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" data-id="ckqapn0ec0000f4s63t6t61iq" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/" rel="tag">http</a></li></ul>
 
     </footer>
   </div>
@@ -244,7 +433,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="ckk7qe8fy0004nps64q5p2nfx" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="ckqapn0eo0004f4s657dqeags" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
@@ -256,14 +445,14 @@
 
 
   
-    <article id="post-HTTP状态码" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-css定位绝对居中办法" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" class="article-date">
+    <a href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" class="article-date">
   <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/php/">php</a>
+    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
   </div>
 
   </div>
@@ -274,7 +463,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/">HTTP状态码</a>
+      <a class="article-title" href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/">css定位绝对居中办法</a>
     </h1>
   
 
@@ -282,16 +471,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>HTTP状态码（HTTP Status Code）是用来表示网页服务器HTTP 响应状态的3位数字代码。它由RFC 2616规范定义的，并得到RFC 2518、RFC 2817、RFC 2295、RFC 2774、RFC 4918等规范扩展。所有状态码的第一个数字代表了响应的五种状态之一</p>
-<p>HTTP/1.1定义的状态码值和对应的原因短语（Reason-Phrase）的例子。<br>1XX表示:消息<br>这一类型的状态码，代表请求已被接受，需要继续处理。这类响应是临时响应，只包含状态行和某些可选的响应头信息，并以空行结束。由于HTTP/1.0 协议中没有定义任何1xx状态码，所以除非在某些试验条件下，服务器禁止向此类客户端发送1xx响应。 这些状态码代表的响应都是信息性的，标示客户应该采取的其他行动。<br>100 : Continue  客户端应当继续发送请求。这个临时响应是用来通知客户端它的部分请求已经被服务器接收，且仍未被拒绝。客户端应当继续发送请求的剩余部分.<br>101 : witching Protocols 服务器已经理解了客户端的请求，并将通过Upgrade消息头通知客户端采用不同的协议来完成这个请求。在发送完这个响应最后的空行后，服务器将会切换到 在Upgrade消息头中定义的那些协议。: 只有在切换新的协议更有好处的时候才应该采取类似措施.<br>102: Processing  由WebDAV（RFC 2518）扩展的状态码，代表处理将被继续执行。<br>2XX表示:成功<br>这一类型的状态码，代表请求已成功被服务器接收、理解、并接受。<br>200 : OK<br>201 : Created 已创建<br>202 : Accepted 接收<br>203 : Non-Authoritative Information 非认证信息<br>204 : No Content 无内容<br>205 : Reset Content 重置内容<br>206 : Partial Content 服务器已经成功处理了部分GET请求。类似于FlashGet或者迅雷这类的HTTP 下载工具都是使用此类响应实现断点续传或者将一个大文档分解为多个下载段同时下载。<br>207: Multi-Status 由WebDAV(RFC 2518)扩展的状态码，代表之后的消息体将是一个XML消息，并且可能依照之前子请求数量的不同，包含一系列独立的响应代码.<br>3XX表示: 重定向<br>这类状态码代表需要客户端采取进一步的操作才能完成请求。通常，这些状态码用来重定向，后续的请求地址（重定向目标）在本次响应的Location域中指明。<br>300 : Multiple Choices 多路选择<br>301 : Moved Permanently  永久转移<br>302 : Found 暂时转移<br>303 : See Other 参见其它<br>304 : Not Modified 未修改<br>305 : Use Proxy 使用代理<br>306: Switch Proxy  在最新版的规范中，306状态码已经不再被使用。<br>307 : Temporary Redirect 请求的资源现在临时从不同的URI响应请求。由于这样的重定向是临时的，客户端应当继续向原有地址发送以后的请求。只有在Cache-Control或 Expires中进行了指定的情况下，这个响应才是可缓存的。<br>4XX表示: 客户端错误<br>这类的状态码代表了客户端看起来可能发生了错误，妨碍了服务器的处理。<br>400 : Bad Request 错误请求<br>401 : Unauthorized 未认证<br>402 : Payment Required 需要付费<br>403 : Forbidden 禁止<br>404 : Not Found  请求失败，请求所希望得到的资源未被在服务器上发现<br>405 : Method Not Allowed 方法不允许<br>406 : Not Acceptable 不接受<br>407 : Proxy Authentication Required 需要代理认证<br>408 : Request Time-out 请求超时<br>409 : Conflict 冲突<br>410 : Gone 失败<br>411 : Length Required 需要长度<br>412 : Precondition Failed 条件失败<br>413 : Request Entity Too Large 请求实体太大<br>414 : Request-URI Too Large 请求URI太长<br>415 : Unsupported Media Type 不支持媒体类型<br>416 : Requested range not satisfiable 如果请求中包含了Range请求头，并且Range中指定的任何数据范围都与当前资源的可用范围不重合，同时请求中又没有定义If-Range请求头，那 么服务器就应当返回416状态码。<br>417 : Expectation Failed 在请求头Expect中指定的预期内容无法被服务器满足<br>421 :There are too many connections from your internet address 从当前客户端所在的IP地址到服务器的连接数超过了服务器许可的最大范围。通常，这里的IP地址指的是从服务器上看到的客户端地址.<br>422: Unprocessable Entity 请求格式正确，但是由于含有语义错误，无法响应。（RFC 4918 WebDAV）<br>423: Locked 当前资源被锁定。（RFC 4918 WebDAV）<br>424: Failed Dependency 由于之前的某个请求发生的错误，导致当前请求失败，例如PROPPATCH。（RFC 4918 WebDAV）<br>425: Unordered Collection 在WebDav Advanced Collections草案中定义，但是未出现在《WebDAV顺序集协议》（RFC 3658）中。<br>426:Upgrade Required 客户端应当切换到TLS/1.0。（RFC 2817）<br>449: Retry With 由微软扩展，代表请求应当在执行完适当的操作后进行重试。<br>5XX表示: 服务器错误<br>这类状态码代表了服务器在处理请求的过程中有错误或者异常状态发生<br>500 : Internal Server Error  服务器遇到了一个未曾预料的状况，导致了它无法完成对请求的处理。一般来说，这个问题都会在服务器的程序码出错时出现<br>501 : Not Implemented 未实现<br>502 : Bad Gateway  作为网关或者代理工作的服务器尝试执行请求时，从上游服务器接收到无效的响应<br>503 : Service Unavailable 由于临时的服务器维护或者过载，服务器当前无法处理请求。这个状况是临时的，并且将在一段时间以后恢复。<br>504 : Gateway Time-out 网关超时<br>505 : HTTP Version not supported  服务器不支持，或者拒绝支持在请求中使用的HTTP版本。这暗示着服务器不能或不愿使用与客户端相同的版本。响应中应当包含一个描述了为何版本不被支持以及服务器支持哪些协议的实体。<br>506 : Variant Also Negotiates 由《透明内容协商协议》（RFC 2295）扩展，代表服务器存在内部配置错误：被请求的协商变元资源被配置为在透明内容协商中使用自己，因此在一个协商处理中不是一个合适的重点。<br>507 : Insufficient Storage 服务器无法存储完成请求所必须的内容。这个状况被认为是临时的。WebDAV（RFC 4918）<br>509 : Bandwidth Limit Exceeded 服务器达到带宽限制。这不是一个官方的状态码，但是仍被广泛使用。<br>510 : Not Extended 获取资源所需要的策略并没有没满足。</p>
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">position: absolute;</span><br><span class="line">left: 50%;</span><br><span class="line">top: 50%;</span><br><span class="line">transform: translate(-50%, -50%);</span><br><span class="line">-webkit-transform:translate(-50%, -50%);</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" data-id="ckk7qe8fz0005nps656sx8z5w" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="ckqapn0er0006f4s61fl02rlk" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/" rel="tag">http</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
 
     </footer>
   </div>
@@ -335,51 +524,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="ckk7qe8g00006nps6dfty3iw1" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-css定位绝对居中办法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/">css定位绝对居中办法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">position: absolute;</span><br><span class="line">left: 50%;</span><br><span class="line">top: 50%;</span><br><span class="line">transform: translate(-50%, -50%);</span><br><span class="line">-webkit-transform:translate(-50%, -50%);</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="ckk7qe8g3000anps6gk935l1k" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="ckqapn0eu000af4s6e8zuhq19" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
@@ -425,7 +570,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" data-id="ckk7qe8ga000nnps63m161kg3" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/jquery%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E6%94%AF%E6%8C%81%E8%BF%9B%E5%BA%A6%E6%9D%A1%E9%9D%9Eflash/" data-id="ckqapn0f2000lf4s6ewvz51gy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
@@ -437,14 +582,14 @@
 
 
   
-    <article id="post-求两个数的比例" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-php垃圾回收机制" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" class="article-date">
+    <a href="/2020/06/09/php%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" class="article-date">
   <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+    <a class="article-category-link" href="/categories/php/">php</a>
   </div>
 
   </div>
@@ -455,7 +600,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/">求两个数的比例</a>
+      <a class="article-title" href="/2020/06/09/php%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/">php垃圾回收机制</a>
     </h1>
   
 
@@ -463,17 +608,60 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="比例计算"><a href="#比例计算" class="headerlink" title="比例计算"></a>比例计算</h2><p>1、计算长宽比例（长200 * 宽180）</p>
-<p>2、设A为长，B为宽，C为A和B的最大公约数 （20）</p>
-<p>3、得到 A/C : B/C   =&gt;（10 : 9）</p>
+        <h3 id="写时复制"><a href="#写时复制" class="headerlink" title="写时复制"></a>写时复制</h3><p>首先,php的变量复制用的是写时复制方式,举个例子. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span>=<span class="string">'蛋蛋'</span>.time();</span><br><span class="line"><span class="variable">$b</span>=<span class="variable">$a</span>;</span><br><span class="line"><span class="variable">$c</span>=<span class="variable">$a</span>;</span><br><span class="line">//这个时候内存占用相同,<span class="variable">$b</span>,<span class="variable">$c</span>都将指向<span class="variable">$a</span>的内存,无需额外占用</span><br><span class="line"> </span><br><span class="line"><span class="variable">$b</span>=<span class="string">'蛋蛋1号'</span>;</span><br><span class="line">//这个时候<span class="variable">$b</span>的数据已经改变了,无法再引用<span class="variable">$a</span>的内存,所以需要额外给<span class="variable">$b</span>开拓内存空间</span><br><span class="line"> </span><br><span class="line"><span class="variable">$a</span>=<span class="string">'蛋蛋2号'</span>;</span><br><span class="line">//<span class="variable">$a</span>的数据发生了变化,同样的,<span class="variable">$c</span>也无法引用<span class="variable">$a</span>了,需要给<span class="variable">$a</span>额外开拓内存空间</span><br></pre></td></tr></table></figure>
+<h3 id="引用计数"><a href="#引用计数" class="headerlink" title="引用计数"></a>引用计数</h3><p>既然变量会引用内存,那么删除变量的时候,就会出现一个问题了:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$a=<span class="string">'蛋蛋'</span>;</span><br><span class="line">$b=$a;</span><br><span class="line">$c=$a;</span><br><span class="line"><span class="comment">//这个时候内存占用相同,$b,$c都将指向$a的内存,无需额外占用</span></span><br><span class="line"> </span><br><span class="line">$b=<span class="string">'蛋蛋1号'</span>;</span><br><span class="line"><span class="comment">//这个时候$b的数据已经改变了,无法再引用$a的内存,所以需要额外给$b开拓内存空间</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">unset</span>($c);</span><br><span class="line"><span class="comment">//这个时候,删除$c,由于$c的数据是引用$a的数据,那么直接删除$a?</span></span><br></pre></td></tr></table></figure>
+<p>很明显,当$c引用$a的时候,删除$c,不能把$a的数据直接给删除,那么该怎么做呢?<br>这个时候,php底层就使用到了引用计数这个概念<br>引用计数,给变量引用的次数进行计算,当计数不等于0时,说明这个变量已经被引用,不能直接被回收,否则可以直接回收,例如:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span> = <span class="string">'蛋蛋'</span>.time();</span><br><span class="line"><span class="variable">$b</span> = <span class="variable">$a</span>;</span><br><span class="line"><span class="variable">$c</span> = <span class="variable">$a</span>;</span><br><span class="line"> </span><br><span class="line">xdebug_debug_zval(<span class="string">'a'</span>);</span><br><span class="line">xdebug_debug_zval(<span class="string">'b'</span>);</span><br><span class="line">xdebug_debug_zval(<span class="string">'c'</span>);</span><br><span class="line"> </span><br><span class="line"><span class="variable">$b</span>=<span class="string">'蛋蛋2号'</span>;</span><br><span class="line">xdebug_debug_zval(<span class="string">'a'</span>);</span><br><span class="line">xdebug_debug_zval(<span class="string">'b'</span>);</span><br><span class="line"> </span><br><span class="line"><span class="built_in">echo</span> <span class="string">"脚本结束\n"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">//输出</span><br><span class="line"></span><br><span class="line">a: (refcount=3, is_ref=0)=<span class="string">'蛋蛋1578154814'</span></span><br><span class="line">b: (refcount=3, is_ref=0)=<span class="string">'蛋蛋1578154814'</span></span><br><span class="line">c: (refcount=3, is_ref=0)=<span class="string">'蛋蛋1578154814'</span></span><br><span class="line">a: (refcount=2, is_ref=0)=<span class="string">'蛋蛋1578154814'</span></span><br><span class="line">b: (refcount=1, is_ref=0)=<span class="string">'蛋蛋2号'</span></span><br><span class="line">脚本结束</span><br></pre></td></tr></table></figure>
+<p>注意,xdebug_debug_zval函数是xdebug扩展的,使用前必须安装xdebug扩展</p>
+<h3 id="引用计数特殊情况"><a href="#引用计数特殊情况" class="headerlink" title="引用计数特殊情况"></a>引用计数特殊情况</h3><p>当变量值为整型,浮点型时,在赋值变量时,php7底层将会直接把值存储(php7的结构体将会直接存储简单数据类型),refcount将为0</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">$a = <span class="number">1111</span>;</span><br><span class="line">$b = $a;</span><br><span class="line">$c = <span class="number">22.222</span>;</span><br><span class="line">$d = $c;</span><br><span class="line"> </span><br><span class="line">xdebug_debug_zval(<span class="string">'a'</span>);</span><br><span class="line">xdebug_debug_zval(<span class="string">'b'</span>);</span><br><span class="line">xdebug_debug_zval(<span class="string">'c'</span>);</span><br><span class="line">xdebug_debug_zval(<span class="string">'d'</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"脚本结束\n"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//输出</span></span><br><span class="line"></span><br><span class="line">a: (refcount=<span class="number">0</span>, is_ref=<span class="number">0</span>)=<span class="number">1111</span></span><br><span class="line">b: (refcount=<span class="number">0</span>, is_ref=<span class="number">0</span>)=<span class="number">1111</span></span><br><span class="line">c: (refcount=<span class="number">0</span>, is_ref=<span class="number">0</span>)=<span class="number">22.222</span></span><br><span class="line">d: (refcount=<span class="number">0</span>, is_ref=<span class="number">0</span>)=<span class="number">22.222</span></span><br><span class="line">脚本结束</span><br></pre></td></tr></table></figure>
+<p>当变量值为interned string字符串型(变量名,函数名,静态字符串,类名等)时,变量值存储在静态区,内存回收被系统全局接管,引用计数将一直为1(php7.3)</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">$str = <span class="string">'蛋蛋'</span>;    <span class="comment">// 静态字符串</span></span><br><span class="line">$str = <span class="string">'蛋蛋'</span> . time();<span class="comment">//普通字符串</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$a = <span class="string">'aa'</span>;</span><br><span class="line">$b = $a;</span><br><span class="line">$c = $b;</span><br><span class="line"> </span><br><span class="line">$d = <span class="string">'aa'</span>.time();</span><br><span class="line">$e = $d;</span><br><span class="line">$f = $d;</span><br><span class="line"> </span><br><span class="line">xdebug_debug_zval(<span class="string">'a'</span>);</span><br><span class="line">xdebug_debug_zval(<span class="string">'d'</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"脚本结束\n"</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//输出</span></span><br><span class="line"></span><br><span class="line">a: (refcount=<span class="number">1</span>, is_ref=<span class="number">0</span>)=<span class="string">'aa'</span></span><br><span class="line">d: (refcount=<span class="number">3</span>, is_ref=<span class="number">0</span>)=<span class="string">'aa1578156506'</span></span><br><span class="line">脚本结束</span><br></pre></td></tr></table></figure>
+<p>当变量值为以上几种时,复制变量将会直接拷贝变量值,所以将不存在多次引用的情况</p>
+<p>###引用时引用计数变化</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$a</span> = <span class="string">'aa'</span>;</span><br><span class="line"><span class="variable">$b</span> = &amp;<span class="variable">$a</span>;</span><br><span class="line"><span class="variable">$c</span> = <span class="variable">$b</span>;</span><br><span class="line"> </span><br><span class="line">xdebug_debug_zval(<span class="string">'a'</span>);</span><br><span class="line">xdebug_debug_zval(<span class="string">'b'</span>);</span><br><span class="line">xdebug_debug_zval(<span class="string">'c'</span>);</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"脚本结束\n"</span>;</span><br><span class="line"></span><br><span class="line">//输出</span><br><span class="line"></span><br><span class="line">a: (refcount=2, is_ref=1)=<span class="string">'aa'</span></span><br><span class="line">b: (refcount=2, is_ref=1)=<span class="string">'aa'</span></span><br><span class="line">c: (refcount=1, is_ref=0)=<span class="string">'aa'</span></span><br><span class="line">脚本结束</span><br></pre></td></tr></table></figure>
+<p>当引用时,被引用变量的value以及类型将会更改为引用类型,并将引用值指向原来的值内存地址中.</p>
+<p>之后引用变量的类型也会更改为引用类型,并将值指向原来的值内存地址,这个时候,值内存地址被引用了2次,所以refcount=2.</p>
+<p>而$c并非是引用变量,所以将值复制给了$c,$c引用还是为1</p>
+<p>详细引用计数知识,底层原理可查看:<a href="https://www.cnblogs.com/sohuhome/p/9800977.html" target="_blank" rel="noopener">https://www.cnblogs.com/sohuhome/p/9800977.html</a></p>
+<h3 id="php生命周期"><a href="#php生命周期" class="headerlink" title="php生命周期"></a>php生命周期</h3><p>php将每个运行域作为一次生命周期,每次执行完一个域,将回收域内所有相关变量:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by PhpStorm.</span></span><br><span class="line"><span class="comment"> * User: Tioncico</span></span><br><span class="line"><span class="comment"> * Date: 2020/1/6 0006</span></span><br><span class="line"><span class="comment"> * Time: 14:22</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">echo</span> <span class="string">"php文件的全局开始\n"</span>;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $a;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($a)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;a = $a;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"类A&#123;$this-&gt;a&#125;生命周期开始\n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"类test方法域开始\n"</span>;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"类test方法域结束\n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//通过类析构函数的特性,当类初始化或回收时,会调用相应的方法</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"类A&#123;$this-&gt;a&#125;生命周期结束\n"</span>;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> Implement __destruct() method.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a1</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"a1函数域开始\n"</span>;</span><br><span class="line">    $a = <span class="keyword">new</span> A(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"a1函数域结束\n"</span>;</span><br><span class="line">    <span class="comment">//函数结束,将回收所有在函数a1的变量$a</span></span><br><span class="line">&#125;</span><br><span class="line">a1();</span><br><span class="line"> </span><br><span class="line">$a = <span class="keyword">new</span> A(<span class="number">2</span>);</span><br><span class="line"> </span><br><span class="line"><span class="keyword">echo</span> <span class="string">"php文件的全局结束\n"</span>;</span><br><span class="line"><span class="comment">//全局结束后,会回收全局的变量$a</span></span><br></pre></td></tr></table></figure>
+<p>可看出,每个方法/函数都作为一个作用域,当运行完该作用域时,将会回收这里面的所有变量.</p>
+<p>再看看这个例子:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">echo</span> <span class="string">"php文件的全局开始\n"</span>;</span><br><span class="line"> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $a;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($a)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;a = $a;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"类&#123;$this-&gt;a&#125;生命周期开始\n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"类test方法域开始\n"</span>;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"类test方法域结束\n"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">//通过类析构函数的特性,当类初始化或回收时,会调用相应的方法</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"类&#123;$this-&gt;a&#125;生命周期结束\n"</span>;</span><br><span class="line">        <span class="comment">// <span class="doctag">TODO:</span> Implement __destruct() method.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">$arr = [];</span><br><span class="line">$i = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    $arr[] = <span class="keyword">new</span> A(<span class="string">'arr_'</span> . $i);</span><br><span class="line">    $obj = <span class="keyword">new</span> A(<span class="string">'obj_'</span> . $i);</span><br><span class="line">    $i++;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"数组大小:"</span>. count($arr).<span class="string">'\n'</span>;</span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line"><span class="comment">//$arr 会随着循环,慢慢的变大,直到内存溢出</span></span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="keyword">echo</span> <span class="string">"php文件的全局结束\n"</span>;</span><br><span class="line"><span class="comment">//全局结束后,会回收全局的变量$a</span></span><br></pre></td></tr></table></figure>
+<p>全局变量只有在脚本结束后才会回收,而在这份代码中,脚本永远不会被结束,也就说明变量永远不会回收,$arr还在不断的增加变量,直到内存溢出.</p>
+<h3 id="内存泄漏"><a href="#内存泄漏" class="headerlink" title="内存泄漏"></a>内存泄漏</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $ref;</span><br><span class="line">        <span class="keyword">public</span> $name;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($name)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;name = $name;</span><br><span class="line">            <span class="keyword">echo</span>(<span class="keyword">$this</span>-&gt;name.<span class="string">'-&gt;__construct();'</span>.PHP_EOL);</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">echo</span>(<span class="keyword">$this</span>-&gt;name.<span class="string">'-&gt;__destruct();'</span>.PHP_EOL);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    $a1 = <span class="keyword">new</span> A(<span class="string">'$a1'</span>);</span><br><span class="line">    $a2 = <span class="keyword">new</span> A(<span class="string">'$a2'</span>);</span><br><span class="line">    $a3 = <span class="keyword">new</span> A(<span class="string">'$3'</span>);</span><br><span class="line"> </span><br><span class="line">    $a1-&gt;ref = $a2;</span><br><span class="line">    $a2-&gt;ref = $a1;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">unset</span>($a1);</span><br><span class="line">    <span class="keyword">unset</span>($a2);</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">echo</span>(<span class="string">'exit(1);'</span>.PHP_EOL);</span><br><span class="line">&#125;</span><br><span class="line">a();</span><br><span class="line"><span class="keyword">echo</span>(<span class="string">'exit(2);'</span>.PHP_EOL);</span><br></pre></td></tr></table></figure>
+<p>当$a1和$a2的属性互相引用时,unset($a1,$a2) 只能删除变量的引用,却没有真正的删除类的变量,这是为什么呢?</p>
+<p>首先,类的实例化变量分为2个步骤,1:开辟类存储空间,用于存储类数据,2:实例化一个变量,类型为class,值指向类存储空间.</p>
+<p>当给变量赋值成功后,类的引用计数为1,同时,a1-&gt;ref指向了a2,导致a2类引用计数增加1,同时a1类被a2-&gt;ref引用,a1引用计数增加1</p>
+<p>当unset时,只会删除类的变量引用,也就是-1,但是该类其实还存在了一次引用(类的互相引用),</p>
+<p>这将造成这2个类内存永远无法释放,直到被gc机制循环查找回收,或脚本终止回收(域结束无法回收).</p>
+<h3 id="手动回收机制"><a href="#手动回收机制" class="headerlink" title="手动回收机制"></a>手动回收机制</h3><p>在上面,我们知道了脚本回收,域结束回收2种php回收方式,那么可以手动回收吗?答案是可以的.</p>
+<p>手动回收有以下几种方式:</p>
+<p>unset,赋值为null,变量赋值覆盖,gc_collect_cycles函数回收</p>
+<h4 id="unset"><a href="#unset" class="headerlink" title="unset"></a>unset</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $ref;</span><br><span class="line">    <span class="keyword">public</span> $name;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($name)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;name = $name;</span><br><span class="line">        <span class="keyword">echo</span>(<span class="keyword">$this</span>-&gt;name . <span class="string">'-&gt;__construct();'</span> . PHP_EOL);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span>(<span class="keyword">$this</span>-&gt;name . <span class="string">'-&gt;__destruct();'</span> . PHP_EOL);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">$a = <span class="keyword">new</span> A(<span class="string">'$a'</span>);</span><br><span class="line">$b = <span class="keyword">new</span> A(<span class="string">'$b'</span>);</span><br><span class="line"><span class="keyword">unset</span>($a);</span><br><span class="line"><span class="comment">//a将会先回收</span></span><br><span class="line"><span class="keyword">echo</span>(<span class="string">'exit(1);'</span> . PHP_EOL);</span><br><span class="line"><span class="comment">//b需要脚本结束才会回收</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//输出</span></span><br><span class="line">$a-&gt;__construct();</span><br><span class="line">$b-&gt;__construct();</span><br><span class="line">$a-&gt;__destruct();</span><br><span class="line"><span class="keyword">exit</span>(<span class="number">1</span>);</span><br><span class="line">$b-&gt;__destruct();</span><br></pre></td></tr></table></figure>
+<p>unset的回收原理其实就是引用计数-1,当引用计数-1之后为0时,将会直接回收该变量,否则不做操作(这就是上面内存泄漏的原因,引用计数-1并没有等于0)</p>
+<h4 id="null回收"><a href="#null回收" class="headerlink" title="=null回收"></a>=null回收</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $ref;</span><br><span class="line">    <span class="keyword">public</span> $name;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">($name)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;name = $name;</span><br><span class="line">        <span class="keyword">echo</span>(<span class="keyword">$this</span>-&gt;name . <span class="string">'-&gt;__construct();'</span> . PHP_EOL);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">echo</span>(<span class="keyword">$this</span>-&gt;name . <span class="string">'-&gt;__destruct();'</span> . PHP_EOL);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">$a = <span class="keyword">new</span> A(<span class="string">'$a'</span>);</span><br><span class="line">$b = <span class="keyword">new</span> A(<span class="string">'$b'</span>);</span><br><span class="line">$c = <span class="keyword">new</span> A(<span class="string">'$c'</span>);</span><br><span class="line"><span class="keyword">unset</span>($a);</span><br><span class="line">$c=<span class="keyword">null</span>;</span><br><span class="line">xdebug_debug_zval(<span class="string">'a'</span>);</span><br><span class="line">xdebug_debug_zval(<span class="string">'b'</span>);</span><br><span class="line">xdebug_debug_zval(<span class="string">'c'</span>);</span><br><span class="line"> </span><br><span class="line"><span class="keyword">echo</span>(<span class="string">'exit(1);'</span> . PHP_EOL);</span><br></pre></td></tr></table></figure>
+<p>=null和unset($a),作用其实都为一致,null将变量值赋值为null,原先的变量值引用计数-1,而unset是将变量名从php底层变量表中清理,并将变量值引用计数-1,唯一的区别在于,=null,变量名还存在,而unset之后,该变量就没了:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$a-&gt;__construct();</span><br><span class="line">$b-&gt;__construct();</span><br><span class="line">$c-&gt;__construct();</span><br><span class="line">$a-&gt;__destruct();</span><br><span class="line">$c-&gt;__destruct();</span><br><span class="line">a: no such symbol &#x2F;&#x2F;$a已经不在符号表</span><br><span class="line">b: (refcount&#x3D;1, is_ref&#x3D;0)&#x3D;class A &#123; public $ref &#x3D; (refcount&#x3D;0, is_ref&#x3D;0)&#x3D;NULL; public $name &#x3D; (refcount&#x3D;1, is_ref&#x3D;0)&#x3D;&#39;$b&#39; &#125;</span><br><span class="line">c: (refcount&#x3D;0, is_ref&#x3D;0)&#x3D;NULL  &#x2F;&#x2F;c还存在,只是值为null</span><br><span class="line">exit(1);</span><br><span class="line">$b-&gt;__destruct();</span><br></pre></td></tr></table></figure>
+<h4 id="变量覆盖回收"><a href="#变量覆盖回收" class="headerlink" title="变量覆盖回收"></a>变量覆盖回收</h4><p>通过给变量赋值其他值(例如null)进行回收:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">class A</span><br><span class="line">&#123;</span><br><span class="line">    public $ref;</span><br><span class="line">    public $name;</span><br><span class="line"> </span><br><span class="line">    public function __construct($name)</span><br><span class="line">    &#123;</span><br><span class="line">        $this-&gt;name &#x3D; $name;</span><br><span class="line">        echo($this-&gt;name . &#39;-&gt;__construct();&#39; . PHP_EOL);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    public function __destruct()</span><br><span class="line">    &#123;</span><br><span class="line">        echo($this-&gt;name . &#39;-&gt;__destruct();&#39; . PHP_EOL);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">$a &#x3D; new A(&#39;$a&#39;);</span><br><span class="line">$b &#x3D; new A(&#39;$b&#39;);</span><br><span class="line">$c &#x3D; new A(&#39;$c&#39;);</span><br><span class="line">$a&#x3D;null;</span><br><span class="line">$c&#x3D; &#39;练习时长两年半的个人练习生&#39;;</span><br><span class="line">xdebug_debug_zval(&#39;a&#39;);</span><br><span class="line">xdebug_debug_zval(&#39;b&#39;);</span><br><span class="line">xdebug_debug_zval(&#39;c&#39;);</span><br><span class="line"> </span><br><span class="line">echo(&#39;exit(1);&#39; . PHP_EOL);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;输出</span><br><span class="line"></span><br><span class="line">$a-&gt;__construct();</span><br><span class="line">$b-&gt;__construct();</span><br><span class="line">$c-&gt;__construct();</span><br><span class="line">$a-&gt;__destruct();</span><br><span class="line">$c-&gt;__destruct();</span><br><span class="line">a: (refcount&#x3D;0, is_ref&#x3D;0)&#x3D;NULL</span><br><span class="line">b: (refcount&#x3D;1, is_ref&#x3D;0)&#x3D;class A &#123; public $ref &#x3D; (refcount&#x3D;0, is_ref&#x3D;0)&#x3D;NULL; public $name &#x3D; (refcount&#x3D;1, is_ref&#x3D;0)&#x3D;&#39;$b&#39; &#125;</span><br><span class="line">c: (refcount&#x3D;1, is_ref&#x3D;0)&#x3D;&#39;练习时长两年半的个人练习生&#39;</span><br><span class="line">exit(1);</span><br><span class="line">$b-&gt;__destruct();</span><br></pre></td></tr></table></figure>
+<p>可以看出,c由于覆盖赋值,将原先A类实例的引用计数-1,导致了$c的回收,但是从程序的内存占用来说,覆盖变量并不是意义上的内存回收,只是将变量的内存修改为了其他值.内存不会直接清空.</p>
+<h4 id="gc-collect-cycles"><a href="#gc-collect-cycles" class="headerlink" title="gc_collect_cycles"></a>gc_collect_cycles</h4><p>回到之前的内存泄漏章节,当写程序不小心造成了内存泄漏,内存越来越大,可是php默认只能脚本结束后回收,那该怎么办呢?我们可以使用gc_collect_cycles 函数,进行手动回收</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">function a()&#123;</span><br><span class="line">    class A &#123;</span><br><span class="line">        public $ref;</span><br><span class="line">        public $name;</span><br><span class="line"> </span><br><span class="line">        public function __construct($name) &#123;</span><br><span class="line">            $this-&gt;name &#x3D; $name;</span><br><span class="line">            echo($this-&gt;name.&#39;-&gt;__construct();&#39;.PHP_EOL);</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        public function __destruct() &#123;</span><br><span class="line">            echo($this-&gt;name.&#39;-&gt;__destruct();&#39;.PHP_EOL);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    $a1 &#x3D; new A(&#39;$a1&#39;);</span><br><span class="line">    $a2 &#x3D; new A(&#39;$a2&#39;);</span><br><span class="line"> </span><br><span class="line">    $a1-&gt;ref &#x3D; $a2;</span><br><span class="line">    $a2-&gt;ref &#x3D; $a1;</span><br><span class="line"> </span><br><span class="line">    $b &#x3D; new A(&#39;$b&#39;);</span><br><span class="line">    $b-&gt;ref &#x3D; $a1;</span><br><span class="line"> </span><br><span class="line">    echo(&#39;$a1 &#x3D; $a2 &#x3D; $b &#x3D; NULL;&#39;.PHP_EOL);</span><br><span class="line">    $a1 &#x3D; $a2 &#x3D; $b &#x3D; NULL;</span><br><span class="line">    echo(&#39;gc_collect_cycles();&#39;.PHP_EOL);</span><br><span class="line">    echo(&#39;&#x2F;&#x2F; removed cycles: &#39;.gc_collect_cycles().PHP_EOL);</span><br><span class="line">    &#x2F;&#x2F;这个时候,a1,a2已经被gc_collect_cycles手动回收了</span><br><span class="line">    echo(&#39;exit(1);&#39;.PHP_EOL);</span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line">a();</span><br><span class="line">echo(&#39;exit(2);&#39;.PHP_EOL);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;输出</span><br><span class="line"></span><br><span class="line">$a1-&gt;__construct();</span><br><span class="line">$a2-&gt;__construct();</span><br><span class="line">$b-&gt;__construct();</span><br><span class="line">$a1 &#x3D; $a2 &#x3D; $b &#x3D; NULL;</span><br><span class="line">$b-&gt;__destruct();</span><br><span class="line">gc_collect_cycles();</span><br><span class="line">$a1-&gt;__destruct();</span><br><span class="line">$a2-&gt;__destruct();</span><br><span class="line">&#x2F;&#x2F; removed cycles: 4</span><br><span class="line">exit(1);</span><br><span class="line">exit(2);</span><br></pre></td></tr></table></figure>
+
+<p>注意,gc_colect_cycles 函数会从php的符号表,遍历所有变量,去实现引用计数的计算并清理内存,将消耗大量的cpu资源,不建议频繁使用</p>
+<p>另外,除去这些方法,php内存到达一定临界值时,会自动调用内存清理(我猜的),每次调用都会消耗大量的资源,可通过gc_disable 函数,去关闭php的自动gc</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E6%B1%82%E4%B8%A4%E4%B8%AA%E6%95%B0%E7%9A%84%E6%AF%94%E4%BE%8B/" data-id="ckk7qe8gf000ynps66ozde2nv" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/php%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" data-id="ckqapn0fa000yf4s66p1s6d28" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/php/" rel="tag">php</a></li></ul>
 
     </footer>
   </div>
@@ -519,63 +707,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" data-id="ckk7qe8gg0011nps66ls6e1qm" class="article-share-link">Share</a>
+      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" data-id="ckqapn0fi001bf4s65kan9qp1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-用一个数值保存多选的值" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/">用一个数值保存多选的值</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在开发过程中，对于网页中的多选，我们有很多种存储方式，常见的如逗号分隔。下文介绍一种通用设计方式：用一个整数来存储复选框的值。</p>
-<h3 id="准备知识-——-位与运算"><a href="#准备知识-——-位与运算" class="headerlink" title="准备知识 —— 位与运算"></a>准备知识 —— 位与运算</h3><p>位与运算：二进制运算，相同位的两个数字都为1，则为1；若有一个不为1，则为0，如：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> 下方是运算</span><br><span class="line">  00101 </span><br><span class="line">&amp; 11100 </span><br><span class="line">------------ </span><br><span class="line">  00100</span><br></pre></td></tr></table></figure>
-
-<h3 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h3><p>将多项的选项值分别设置为 2 的 n 次方，n 从 0 开始，每多一项，n + 1。即 1，2，4，8…<br>多选的存储值为各项值之和，如选中了第 1、3 项，则值为：1 + 4 = 5</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<h3 id="回显"><a href="#回显" class="headerlink" title="回显"></a>回显</h3><p>假设存储的值为 5 ，要使相应的项被勾选，则是循环多项的值，每项与存储值 5 进行 位与运算，如果值与选项本身的值相等，则选中该项；相反地，如果运算值为 0 ，则设置为不选中：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">下方回显</span><br><span class="line"> 1 &amp; 5 = 1</span><br><span class="line"> 2 &amp; 5 = 0</span><br><span class="line"> 4 &amp; 5 = 4</span><br><span class="line"> 8 &amp; 5 = 0</span><br></pre></td></tr></table></figure>
-
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt; </span><br><span class="line">&lt;html lang=<span class="string">"en"</span>&gt; </span><br><span class="line">&lt;head&gt; </span><br><span class="line">  &lt;meta charset=<span class="string">"UTF-8"</span>&gt; </span><br><span class="line">  &lt;title&gt;Checkbox Test&lt;/title&gt; </span><br><span class="line">&lt;/head&gt; </span><br><span class="line">&lt;body&gt; </span><br><span class="line">&lt;form&gt; </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"1"</span>&gt; 1 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"2"</span>&gt; 2 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"4"</span>&gt; 4 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"8"</span>&gt; 8 </span><br><span class="line">&lt;/form&gt; </span><br><span class="line">&lt;input <span class="built_in">type</span>=<span class="string">"text"</span> id=<span class="string">"result"</span> placeholder=<span class="string">"设置要回显的值"</span>&gt; </span><br><span class="line">&lt;button id=<span class="string">"show"</span>&gt;回显&lt;/button&gt; </span><br><span class="line">&lt;script src=<span class="string">"http://libs.baidu.com/jquery/1.11.1/jquery.min.js"</span>&gt;&lt;/script&gt; </span><br><span class="line">&lt;script&gt; </span><br><span class="line">$(<span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">  $(<span class="string">"[name='test']"</span>).on(<span class="string">"change"</span>, <span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">    var result = 0; </span><br><span class="line">    $(<span class="string">"[name='test']:checkbox:checked"</span>).each(<span class="function"><span class="title">function</span></span>()&#123; </span><br><span class="line">      result += parseInt($(this).val()); </span><br><span class="line">    &#125;); </span><br><span class="line">    $(<span class="string">"#result"</span>).val(result); &#125;); </span><br><span class="line">    $(<span class="string">"#show"</span>).on(<span class="string">"click"</span>, <span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">      var result = parseInt($(<span class="string">"#result"</span>).val()); </span><br><span class="line">      $(<span class="string">"[name='test']:checkbox"</span>).each(<span class="function"><span class="title">function</span></span>()&#123; </span><br><span class="line">        var value = parseInt($(this).val()); </span><br><span class="line">        <span class="keyword">if</span> ((result &amp; value) == value) &#123; </span><br><span class="line">        $(this).prop(<span class="string">"checked"</span>, <span class="literal">true</span>); </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">        $(this).prop(<span class="string">"checked"</span>, <span class="literal">false</span>); </span><br><span class="line">        &#125; </span><br><span class="line">      &#125;); </span><br><span class="line">   &#125;); </span><br><span class="line">&#125;); </span><br><span class="line">&lt;/script&gt; </span><br><span class="line">&lt;/body&gt; </span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://blog.tianfs.com/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" data-id="ckk7qe8gi0014nps6ab400fzx" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
 
     </footer>
   </div>
@@ -609,7 +744,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/channel/" rel="tag">channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kibana/" rel="tag">kibana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/" rel="tag">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/waitGroup/" rel="tag">waitGroup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/channel/" rel="tag">channel</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/context/" rel="tag">context</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kibana/" rel="tag">kibana</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php/" rel="tag">php</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/php%E7%8E%AF%E5%A2%83/" rel="tag">php环境</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/" rel="tag">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/" rel="tag">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/" rel="tag">vim</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/waitGroup/" rel="tag">waitGroup</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
     </div>
   </div>
 
@@ -619,7 +754,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/b%E6%A0%91/" style="font-size: 10px;">b树</a> <a href="/tags/channel/" style="font-size: 10px;">channel</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/css/" style="font-size: 16.67px;">css</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/golang/" style="font-size: 13.33px;">golang</a> <a href="/tags/html/" style="font-size: 16.67px;">html</a> <a href="/tags/http/" style="font-size: 13.33px;">http</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/kibana/" style="font-size: 10px;">kibana</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/php/" style="font-size: 13.33px;">php</a> <a href="/tags/php%E7%8E%AF%E5%A2%83/" style="font-size: 10px;">php环境</a> <a href="/tags/redis/" style="font-size: 13.33px;">redis</a> <a href="/tags/tcc/" style="font-size: 10px;">tcc</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/waitGroup/" style="font-size: 10px;">waitGroup</a> <a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 16.67px;">web前端</a> <a href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" style="font-size: 10px;">xa两段提交</a> <a href="/tags/%E5%87%BB%E7%A9%BF/" style="font-size: 10px;">击穿</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">分布式事务</a> <a href="/tags/%E7%A9%BF%E9%80%8F/" style="font-size: 10px;">穿透</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 20px;">算法</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 10px;">索引</a> <a href="/tags/%E9%94%81/" style="font-size: 10px;">锁</a> <a href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" style="font-size: 10px;">雪崩，队列</a>
+      <a href="/tags/b%E6%A0%91/" style="font-size: 10px;">b树</a> <a href="/tags/channel/" style="font-size: 10px;">channel</a> <a href="/tags/context/" style="font-size: 10px;">context</a> <a href="/tags/css/" style="font-size: 16.67px;">css</a> <a href="/tags/docker/" style="font-size: 13.33px;">docker</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/golang/" style="font-size: 13.33px;">golang</a> <a href="/tags/html/" style="font-size: 16.67px;">html</a> <a href="/tags/http/" style="font-size: 13.33px;">http</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/kibana/" style="font-size: 10px;">kibana</a> <a href="/tags/mysql/" style="font-size: 16.67px;">mysql</a> <a href="/tags/php/" style="font-size: 13.33px;">php</a> <a href="/tags/php%E7%8E%AF%E5%A2%83/" style="font-size: 10px;">php环境</a> <a href="/tags/redis/" style="font-size: 13.33px;">redis</a> <a href="/tags/tcc/" style="font-size: 10px;">tcc</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/vim/" style="font-size: 10px;">vim</a> <a href="/tags/waitGroup/" style="font-size: 10px;">waitGroup</a> <a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 16.67px;">web前端</a> <a href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" style="font-size: 10px;">xa两段提交</a> <a href="/tags/%E5%87%BB%E7%A9%BF/" style="font-size: 10px;">击穿</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" style="font-size: 10px;">分布式</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" style="font-size: 10px;">分布式事务</a> <a href="/tags/%E7%A9%BF%E9%80%8F/" style="font-size: 10px;">穿透</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 20px;">算法</a> <a href="/tags/%E7%B4%A2%E5%BC%95/" style="font-size: 10px;">索引</a> <a href="/tags/%E9%94%81/" style="font-size: 10px;">锁</a> <a href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" style="font-size: 10px;">雪崩，队列</a>
     </div>
   </div>
 
@@ -628,7 +763,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/06/">June 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">January 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/11/">November 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
     </div>
   </div>
 
@@ -639,6 +774,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2021/06/19/%E5%BC%BA%E5%93%A5%E7%9A%84vimrc%E5%A4%A7%E5%AE%9D%E5%89%91/">强哥的vimrc大宝剑</a>
+          </li>
         
           <li>
             <a href="/2021/01/09/redis%E7%A7%92%E6%9D%80/">redis秒杀</a>
@@ -654,10 +793,6 @@
         
           <li>
             <a href="/2020/11/01/http%E5%92%8Ctcp%E5%92%8Cudp/">http、tcp、udp</a>
-          </li>
-        
-          <li>
-            <a href="/2020/10/22/docker%E5%AE%89%E8%A3%85php%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">docker安装php开发环境</a>
           </li>
         
       </ul>
