@@ -5,13 +5,13 @@
   
 
   
-  <title>田丰硕-个人博客</title>
+  <title>田丰硕个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="田丰硕个人博客-750755553@qq.com">
 <meta property="og:type" content="website">
-<meta property="og:title" content="田丰硕-个人博客">
+<meta property="og:title" content="田丰硕个人博客">
 <meta property="og:url" content="https://tianfs.com/page/2/index.html">
-<meta property="og:site_name" content="田丰硕-个人博客">
+<meta property="og:site_name" content="田丰硕个人博客">
 <meta property="og:description" content="田丰硕个人博客-750755553@qq.com">
 <meta property="og:locale" content="en_US">
 <meta property="article:author" content="tianfs">
@@ -33,7 +33,7 @@
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary">
   
-    <link rel="alternate" href="/atom.xml" title="田丰硕-个人博客" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="田丰硕个人博客" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -54,7 +54,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">田丰硕-个人博客</a>
+        <a href="/" id="logo">田丰硕个人博客</a>
       </h1>
       
         <h2 id="subtitle-wrap">
@@ -138,10 +138,88 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://tianfs.com/2020/10/20/elasticsearch%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="cmo0xgtk8000filfe1n6vbwib" class="article-share-link">Share</a>
+      <a data-url="https://tianfs.com/2020/10/20/elasticsearch%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="cmo0xil1f000fh0fe973fg6uh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/" rel="tag">elasticsearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/kibana/" rel="tag">kibana</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-分布式知识整理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="article-date">
+  <time datetime="2020-10-19T04:46:47.000Z" itemprop="datePublished">2020-10-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一、分布式事务"><a href="#一、分布式事务" class="headerlink" title="一、分布式事务"></a>一、分布式事务</h3><h4 id="1、tcc（最终一致性）"><a href="#1、tcc（最终一致性）" class="headerlink" title="1、tcc（最终一致性）"></a>1、tcc（最终一致性）</h4><ul>
+<li>一般使用tcc分布式事务框架</li>
+<li>实现的功能需要修改的代码比较多，需要个个系统配合完成try、commit和cancel方法</li>
+<li>有try、commit和cancel三个阶段</li>
+<li>TCC是业务层面的分布式事务，最终一致性，不会一直持有资源的锁。</li>
+<li>try阶段保证各自服务本地资源一致</li>
+<li>commit 和cancel只会有一个被执行 </li>
+<li>try阶段有服务失败将触发cancel 如果cancel失败，那么走补偿机制，保证最终一致性</li>
+<li>不会阻塞资源</li>
+<li>执行流程<br>1) 成功流程：事务框架-&gt;try（请求所有服务预留业务资源,不阻塞）-&gt;成功-&gt;commit(所有服务正式提交修改)<br>2) 失败流程：事务框架-&gt;try（请求所有服务预留业务资源,不阻塞）-&gt;失败-&gt;cancel(告知所有服务取消预约)<br>3) commit/cancel 如果失败了，那么走补偿机制，保证最终一致性<h4 id="3、xa两段提交（强一致性）（阻塞）"><a href="#3、xa两段提交（强一致性）（阻塞）" class="headerlink" title="3、xa两段提交（强一致性）（阻塞）"></a>3、xa两段提交（强一致性）（阻塞）</h4></li>
+<li>分为协调者(xa协调工具)、参与者(各服务)</li>
+<li>XA是资源层面的分布式事务，强一致性，在两阶段提交的整个过程中，一直会持有资源的锁。</li>
+<li>只有try 和commit 两个阶段</li>
+<li>MySQL中只有InnoDB引擎支持XA协议</li>
+<li>MySQL中只有当隔离级别为Serializable（最高界别，串行）时候才能使用分布式事务</li>
+<li>执行流程<br>1) 成功流程：协调者-&gt;try（询问所有服务是否可以执行,持有资源的锁）-&gt;成功-&gt;协调者通知commit(所有服务正式提交修改),解除资源锁定<br>2) 失败流程：协调者-&gt;try（询问所有服务是否可以执行,持有资源的锁）-&gt;失败-&gt;协调者通知rollback,解除资源锁定</li>
+</ul>
+<h4 id="2、mq事务消息（最终一致性）"><a href="#2、mq事务消息（最终一致性）" class="headerlink" title="2、mq事务消息（最终一致性）"></a>2、mq事务消息（最终一致性）</h4><ul>
+<li>实现的功能需要修改的代码相对较少，消费端几乎不需要任何修改</li>
+<li>只能保证（生产端的业务和消息投递到mq同时成功）</li>
+<li>消费端消费失败走补偿机制，保证最终一致性</li>
+<li>执行流程<br>1) 服务a向mq发送prepare消息（本地事务，消费端不会收到）-&gt;mq得到返回给服务a执行结果-&gt;只能服务a本地业务<br>2) 服务a本地业务执行成功-&gt;向mq发送事务消息的提交commitlog-&gt;消息出现在真实的mq消息中-&gt;消费端接收处理<br>3) 服务a本地业务执行失败-&gt;向mq发送事务消息的撤销commitlog-&gt;移除事务消息<br>4) 如果mq未收到事务的commit/rollback则会回查事务状态，然后继续执行<h4 id="4、最大努力通知"><a href="#4、最大努力通知" class="headerlink" title="4、最大努力通知"></a>4、最大努力通知</h4></li>
+<li>不可靠消息：业务活动主动方，在完成业务处理之后，向业务活动的被动方发送消息，直到通知N次后不再通知，允许消息丢失(不可靠消息)。</li>
+<li>定期校对：业务活动的被动方，根据定时策略，向业务活动主动方查询(主动方提供查询接口)，恢复丢失的业务消息。<h4 id="5、可靠消息最终一致性"><a href="#5、可靠消息最终一致性" class="headerlink" title="5、可靠消息最终一致性"></a>5、可靠消息最终一致性</h4></li>
+<li>是指产生消息的业务动作与消息发送的一致</li>
+<li>如果业务操作成功，那么由这个业务操作所产生的消息一定要成功投递出去</li>
+<li>异步确保性</li>
+<li>一般可以使用mq事务消息实现<h3 id="二、分布式锁"><a href="#二、分布式锁" class="headerlink" title="二、分布式锁"></a>二、分布式锁</h3><h4 id="1、基于缓存（Redis等）实现分布式锁"><a href="#1、基于缓存（Redis等）实现分布式锁" class="headerlink" title="1、基于缓存（Redis等）实现分布式锁"></a>1、基于缓存（Redis等）实现分布式锁</h4></li>
+<li>主要使用命令：<br>1）SETNX key val：当且仅当key不存在时，set一个key为val的字符串，返回1；若key存在，则什么都不做，返回0。<br>2）expire key timeout：为key设置一个超时时间，单位为second，超过这个时间锁会自动释放，避免死锁。<br>2）delete key ：删除key。</li>
+<li>实现思想：<br>1）获取锁的时候，使用setnx加锁，并使用expire命令为锁添加一个超时时间，超过该时间则自动释放锁，锁的value值为一个随机生成的UUID，通过此在释放锁的时候进行判断。<br>2）获取锁的时候还设置一个获取的超时时间，若超过这个时间则放弃获取锁。<br>3）释放锁的时候，通过UUID判断是不是该锁，若是该锁，则执行delete进行锁释放。</li>
+</ul>
+<h4 id="2、基于Zookeeper实现分布式锁"><a href="#2、基于Zookeeper实现分布式锁" class="headerlink" title="2、基于Zookeeper实现分布式锁"></a>2、基于Zookeeper实现分布式锁</h4><p>因为需要频繁的创建和删除节点，性能上不如Redis方式。</p>
+<ul>
+<li>实现思想：<br>1）创建一个目录mylock；<br>2）线程A想获取锁就在mylock目录下创建临时顺序节点；<br>3）获取mylock目录下所有的子节点，然后获取比自己小的兄弟节点，如果不存在，则说明当前线程顺序号最小，获得锁；<br>4）线程B获取所有节点，判断自己不是最小节点，设置监听比自己次小的节点；<br>5）线程A处理完，删除自己的节点，线程B监听到变更事件，判断自己是不是最小的节点，如果是则获得锁。</li>
+</ul>
+<h4 id="3、基于数据库实现分布式锁；"><a href="#3、基于数据库实现分布式锁；" class="headerlink" title="3、基于数据库实现分布式锁；"></a>3、基于数据库实现分布式锁；</h4><p>性能差，不推荐，不需要了解</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://tianfs.com/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="cmo0xil1y001fh0fe9n55bdgl" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li></ul>
 
     </footer>
   </div>
@@ -264,88 +342,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://tianfs.com/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="cmo0xgtkm001iilfe1ev22yaq" class="article-share-link">Share</a>
+      <a data-url="https://tianfs.com/2020/10/19/redis%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="cmo0xil22001lh0fe5fqagjq5" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/" rel="tag">redis</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BB%E7%A9%BF/" rel="tag">击穿</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A9%BF%E9%80%8F/" rel="tag">穿透</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9B%AA%E5%B4%A9%EF%BC%8C%E9%98%9F%E5%88%97/" rel="tag">雪崩，队列</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-分布式知识整理" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="article-date">
-  <time datetime="2020-10-19T04:46:47.000Z" itemprop="datePublished">2020-10-19</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%9C%8D%E5%8A%A1%E7%AB%AF/">服务端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/">分布式知识整理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一、分布式事务"><a href="#一、分布式事务" class="headerlink" title="一、分布式事务"></a>一、分布式事务</h3><h4 id="1、tcc（最终一致性）"><a href="#1、tcc（最终一致性）" class="headerlink" title="1、tcc（最终一致性）"></a>1、tcc（最终一致性）</h4><ul>
-<li>一般使用tcc分布式事务框架</li>
-<li>实现的功能需要修改的代码比较多，需要个个系统配合完成try、commit和cancel方法</li>
-<li>有try、commit和cancel三个阶段</li>
-<li>TCC是业务层面的分布式事务，最终一致性，不会一直持有资源的锁。</li>
-<li>try阶段保证各自服务本地资源一致</li>
-<li>commit 和cancel只会有一个被执行 </li>
-<li>try阶段有服务失败将触发cancel 如果cancel失败，那么走补偿机制，保证最终一致性</li>
-<li>不会阻塞资源</li>
-<li>执行流程<br>1) 成功流程：事务框架-&gt;try（请求所有服务预留业务资源,不阻塞）-&gt;成功-&gt;commit(所有服务正式提交修改)<br>2) 失败流程：事务框架-&gt;try（请求所有服务预留业务资源,不阻塞）-&gt;失败-&gt;cancel(告知所有服务取消预约)<br>3) commit/cancel 如果失败了，那么走补偿机制，保证最终一致性<h4 id="3、xa两段提交（强一致性）（阻塞）"><a href="#3、xa两段提交（强一致性）（阻塞）" class="headerlink" title="3、xa两段提交（强一致性）（阻塞）"></a>3、xa两段提交（强一致性）（阻塞）</h4></li>
-<li>分为协调者(xa协调工具)、参与者(各服务)</li>
-<li>XA是资源层面的分布式事务，强一致性，在两阶段提交的整个过程中，一直会持有资源的锁。</li>
-<li>只有try 和commit 两个阶段</li>
-<li>MySQL中只有InnoDB引擎支持XA协议</li>
-<li>MySQL中只有当隔离级别为Serializable（最高界别，串行）时候才能使用分布式事务</li>
-<li>执行流程<br>1) 成功流程：协调者-&gt;try（询问所有服务是否可以执行,持有资源的锁）-&gt;成功-&gt;协调者通知commit(所有服务正式提交修改),解除资源锁定<br>2) 失败流程：协调者-&gt;try（询问所有服务是否可以执行,持有资源的锁）-&gt;失败-&gt;协调者通知rollback,解除资源锁定</li>
-</ul>
-<h4 id="2、mq事务消息（最终一致性）"><a href="#2、mq事务消息（最终一致性）" class="headerlink" title="2、mq事务消息（最终一致性）"></a>2、mq事务消息（最终一致性）</h4><ul>
-<li>实现的功能需要修改的代码相对较少，消费端几乎不需要任何修改</li>
-<li>只能保证（生产端的业务和消息投递到mq同时成功）</li>
-<li>消费端消费失败走补偿机制，保证最终一致性</li>
-<li>执行流程<br>1) 服务a向mq发送prepare消息（本地事务，消费端不会收到）-&gt;mq得到返回给服务a执行结果-&gt;只能服务a本地业务<br>2) 服务a本地业务执行成功-&gt;向mq发送事务消息的提交commitlog-&gt;消息出现在真实的mq消息中-&gt;消费端接收处理<br>3) 服务a本地业务执行失败-&gt;向mq发送事务消息的撤销commitlog-&gt;移除事务消息<br>4) 如果mq未收到事务的commit/rollback则会回查事务状态，然后继续执行<h4 id="4、最大努力通知"><a href="#4、最大努力通知" class="headerlink" title="4、最大努力通知"></a>4、最大努力通知</h4></li>
-<li>不可靠消息：业务活动主动方，在完成业务处理之后，向业务活动的被动方发送消息，直到通知N次后不再通知，允许消息丢失(不可靠消息)。</li>
-<li>定期校对：业务活动的被动方，根据定时策略，向业务活动主动方查询(主动方提供查询接口)，恢复丢失的业务消息。<h4 id="5、可靠消息最终一致性"><a href="#5、可靠消息最终一致性" class="headerlink" title="5、可靠消息最终一致性"></a>5、可靠消息最终一致性</h4></li>
-<li>是指产生消息的业务动作与消息发送的一致</li>
-<li>如果业务操作成功，那么由这个业务操作所产生的消息一定要成功投递出去</li>
-<li>异步确保性</li>
-<li>一般可以使用mq事务消息实现<h3 id="二、分布式锁"><a href="#二、分布式锁" class="headerlink" title="二、分布式锁"></a>二、分布式锁</h3><h4 id="1、基于缓存（Redis等）实现分布式锁"><a href="#1、基于缓存（Redis等）实现分布式锁" class="headerlink" title="1、基于缓存（Redis等）实现分布式锁"></a>1、基于缓存（Redis等）实现分布式锁</h4></li>
-<li>主要使用命令：<br>1）SETNX key val：当且仅当key不存在时，set一个key为val的字符串，返回1；若key存在，则什么都不做，返回0。<br>2）expire key timeout：为key设置一个超时时间，单位为second，超过这个时间锁会自动释放，避免死锁。<br>2）delete key ：删除key。</li>
-<li>实现思想：<br>1）获取锁的时候，使用setnx加锁，并使用expire命令为锁添加一个超时时间，超过该时间则自动释放锁，锁的value值为一个随机生成的UUID，通过此在释放锁的时候进行判断。<br>2）获取锁的时候还设置一个获取的超时时间，若超过这个时间则放弃获取锁。<br>3）释放锁的时候，通过UUID判断是不是该锁，若是该锁，则执行delete进行锁释放。</li>
-</ul>
-<h4 id="2、基于Zookeeper实现分布式锁"><a href="#2、基于Zookeeper实现分布式锁" class="headerlink" title="2、基于Zookeeper实现分布式锁"></a>2、基于Zookeeper实现分布式锁</h4><p>因为需要频繁的创建和删除节点，性能上不如Redis方式。</p>
-<ul>
-<li>实现思想：<br>1）创建一个目录mylock；<br>2）线程A想获取锁就在mylock目录下创建临时顺序节点；<br>3）获取mylock目录下所有的子节点，然后获取比自己小的兄弟节点，如果不存在，则说明当前线程顺序号最小，获得锁；<br>4）线程B获取所有节点，判断自己不是最小节点，设置监听比自己次小的节点；<br>5）线程A处理完，删除自己的节点，线程B监听到变更事件，判断自己是不是最小的节点，如果是则获得锁。</li>
-</ul>
-<h4 id="3、基于数据库实现分布式锁；"><a href="#3、基于数据库实现分布式锁；" class="headerlink" title="3、基于数据库实现分布式锁；"></a>3、基于数据库实现分布式锁；</h4><p>性能差，不推荐，不需要了解</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://tianfs.com/2020/10/19/%E5%88%86%E5%B8%83%E5%BC%8F%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-id="cmo0xgtkn001milfead3b5y5i" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcc/" rel="tag">tcc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xa%E4%B8%A4%E6%AE%B5%E6%8F%90%E4%BA%A4/" rel="tag">xa两段提交</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag">分布式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/" rel="tag">分布式事务</a></li></ul>
 
     </footer>
   </div>
@@ -487,7 +487,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://tianfs.com/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="cmo0xgtkh0014ilfe9ehxg2ms" class="article-share-link">Share</a>
+      <a data-url="https://tianfs.com/2020/10/19/mysql%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/" data-id="cmo0xil1r0010h0fehdg21bm6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/b%E6%A0%91/" rel="tag">b树</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag">索引</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%94%81/" rel="tag">锁</a></li></ul>
@@ -533,7 +533,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://tianfs.com/2020/09/27/bitmap/" data-id="cmo0xgtk7000bilfe25lha1uq" class="article-share-link">Share</a>
+      <a data-url="https://tianfs.com/2020/09/27/bitmap/" data-id="cmo0xil160005h0feb06r7haf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
@@ -581,7 +581,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://tianfs.com/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" data-id="cmo0xgtk30005ilfe3713e7bc" class="article-share-link">Share</a>
+      <a data-url="https://tianfs.com/2020/09/09/2%E8%BF%9B%E5%88%B610%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/" data-id="cmo0xil140004h0fe3bhr3wwz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
@@ -625,10 +625,101 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://tianfs.com/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" data-id="cmo0xgtjx0001ilfe495adt6w" class="article-share-link">Share</a>
+      <a data-url="https://tianfs.com/2020/06/09/HTTP%E7%8A%B6%E6%80%81%E7%A0%81/" data-id="cmo0xil0x0001h0fe2amy54j0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/" rel="tag">http</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-css去除webkit内核的默认样式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/">css去除webkit内核的默认样式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##前言<br>做移动端的朋友应该知道，iphone的默认按钮是个很恶心的圆角，select下拉框也有默认样式无法修改。</p>
+<p>###解决办法<br>这时候可以用到的<br>在按钮和select样式里加入下面css<br>–webkit–appearance:none //去除默认样</p>
+<p>###示例代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">input&#123;</span><br><span class="line"> background:<span class="comment">#FF9933;</span></span><br><span class="line"> border–radius:5px;</span><br><span class="line"> color:<span class="comment">#fff;</span></span><br><span class="line"> padding:3px 20px;</span><br><span class="line">–webkit–appearance:none;</span><br><span class="line">&#125;</span><br><span class="line">select&#123;</span><br><span class="line"> background:url(images/img1.jpg) no–repeat;</span><br><span class="line"> background–size:20px;</span><br><span class="line"> background–position:95% center;</span><br><span class="line"> padding:3px 10px;</span><br><span class="line"> width:30%;</span><br><span class="line">–webkit–appearance:none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="cmo0xil1a000ah0feet8s4j8a" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-css定位绝对居中办法" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" class="article-date">
+  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/">css定位绝对居中办法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">position: absolute;</span><br><span class="line">left: 50%;</span><br><span class="line">top: 50%;</span><br><span class="line">transform: translate(-50%, -50%);</span><br><span class="line">-webkit-transform:translate(-50%, -50%);</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="cmo0xil1b000bh0fe5syghoc3" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
 
     </footer>
   </div>
@@ -701,101 +792,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="cmo0xgtk10004ilfe1bw67uhf" class="article-share-link">Share</a>
+      <a data-url="https://tianfs.com/2020/06/09/MySQL%E4%BF%AE%E6%94%B9root%E5%AF%86%E7%A0%81%E7%9A%84%E5%87%A0%E7%A7%8D%E6%96%B9%E6%B3%95/" data-id="cmo0xil1g000hh0feckzveycc" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mysql/" rel="tag">mysql</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-css定位绝对居中办法" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/">css定位绝对居中办法</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">position: absolute;</span><br><span class="line">left: 50%;</span><br><span class="line">top: 50%;</span><br><span class="line">transform: translate(-50%, -50%);</span><br><span class="line">-webkit-transform:translate(-50%, -50%);</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://tianfs.com/2020/06/09/css%E5%AE%9A%E4%BD%8D%E7%BB%9D%E5%AF%B9%E5%B1%85%E4%B8%AD%E5%8A%9E%E6%B3%95/" data-id="cmo0xgtk40006ilfecwj4bpo6" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-css去除webkit内核的默认样式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/web%E5%89%8D%E7%AB%AF/">web前端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/">css去除webkit内核的默认样式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>##前言<br>做移动端的朋友应该知道，iphone的默认按钮是个很恶心的圆角，select下拉框也有默认样式无法修改。</p>
-<p>###解决办法<br>这时候可以用到的<br>在按钮和select样式里加入下面css<br>–webkit–appearance:none //去除默认样</p>
-<p>###示例代码</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">input&#123;</span><br><span class="line"> background:<span class="comment">#FF9933;</span></span><br><span class="line"> border–radius:5px;</span><br><span class="line"> color:<span class="comment">#fff;</span></span><br><span class="line"> padding:3px 20px;</span><br><span class="line">–webkit–appearance:none;</span><br><span class="line">&#125;</span><br><span class="line">select&#123;</span><br><span class="line"> background:url(images/img1.jpg) no–repeat;</span><br><span class="line"> background–size:20px;</span><br><span class="line"> background–position:95% center;</span><br><span class="line"> padding:3px 10px;</span><br><span class="line"> width:30%;</span><br><span class="line">–webkit–appearance:none;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://tianfs.com/2020/06/09/css%E5%8E%BB%E9%99%A4webkit%E5%86%85%E6%A0%B8%E7%9A%84%E9%BB%98%E8%AE%A4%E6%A0%B7%E5%BC%8F/" data-id="cmo0xgtkb000milfe2qukff0t" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/" rel="tag">css</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/" rel="tag">html</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/web%E5%89%8D%E7%AB%AF/" rel="tag">web前端</a></li></ul>
 
     </footer>
   </div>
