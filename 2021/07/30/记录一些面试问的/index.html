@@ -5,19 +5,19 @@
   
 
   
-  <title>用一个数值保存多选的值 | 田丰硕个人博客</title>
+  <title>记录一些面试问的 | 田丰硕个人博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前言在开发过程中，对于网页中的多选，我们有很多种存储方式，常见的如逗号分隔。下文介绍一种通用设计方式：用一个整数来存储复选框的值。 准备知识 —— 位与运算位与运算：二进制运算，相同位的两个数字都为1，则为1；若有一个不为1，则为0，如： 12345 下方是运算  00101 &amp; 11100 ------------   00100  设计将多项的选项值分别设置为 2 的 n 次方，n 从">
+  <meta name="description" content="Mysql 的redolog和bingo1、redolog：redolog是物理日志，记录在某个数据页上做了什么修改， 有了 redo log，InnoDB 就可以保证即使数据库发生异常重启，因为redo log 的写入机制是事务中有更新操作时就会将更新操作记录在 redo log buffer 中，在事务提交时，根据相关参数的设定，按照不同逻辑持久化到磁盘文件2、bingo：是逻辑日志,属于my">
 <meta property="og:type" content="article">
-<meta property="og:title" content="用一个数值保存多选的值">
-<meta property="og:url" content="http://tianfs.com/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/index.html">
+<meta property="og:title" content="记录一些面试问的">
+<meta property="og:url" content="http://tianfs.com/2021/07/30/%E8%AE%B0%E5%BD%95%E4%B8%80%E4%BA%9B%E9%9D%A2%E8%AF%95%E9%97%AE%E7%9A%84/index.html">
 <meta property="og:site_name" content="田丰硕个人博客">
-<meta property="og:description" content="前言在开发过程中，对于网页中的多选，我们有很多种存储方式，常见的如逗号分隔。下文介绍一种通用设计方式：用一个整数来存储复选框的值。 准备知识 —— 位与运算位与运算：二进制运算，相同位的两个数字都为1，则为1；若有一个不为1，则为0，如： 12345 下方是运算  00101 &amp; 11100 ------------   00100  设计将多项的选项值分别设置为 2 的 n 次方，n 从">
+<meta property="og:description" content="Mysql 的redolog和bingo1、redolog：redolog是物理日志，记录在某个数据页上做了什么修改， 有了 redo log，InnoDB 就可以保证即使数据库发生异常重启，因为redo log 的写入机制是事务中有更新操作时就会将更新操作记录在 redo log buffer 中，在事务提交时，根据相关参数的设定，按照不同逻辑持久化到磁盘文件2、bingo：是逻辑日志,属于my">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-06-09T03:46:47.000Z">
-<meta property="article:modified_time" content="2020-06-09T07:28:59.125Z">
+<meta property="article:published_time" content="2021-07-30T03:46:47.000Z">
+<meta property="article:modified_time" content="2022-04-20T17:28:17.557Z">
 <meta property="article:author" content="tianfs">
-<meta property="article:tag" content="算法">
+<meta property="article:tag" content="面试">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="田丰硕个人博客" type="application/atom+xml">
@@ -71,14 +71,14 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-用一个数值保存多选的值" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-记录一些面试问的" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" class="article-date">
-  <time datetime="2020-06-09T03:46:47.000Z" itemprop="datePublished">2020-06-09</time>
+    <a href="/2021/07/30/%E8%AE%B0%E5%BD%95%E4%B8%80%E4%BA%9B%E9%9D%A2%E8%AF%95%E9%97%AE%E7%9A%84/" class="article-date">
+  <time datetime="2021-07-30T03:46:47.000Z" itemprop="datePublished">2021-07-30</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+    <a class="article-category-link" href="/categories/%E9%9D%A2%E8%AF%95/">面试</a>
   </div>
 
   </div>
@@ -89,7 +89,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      用一个数值保存多选的值
+      记录一些面试问的
     </h1>
   
 
@@ -97,25 +97,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在开发过程中，对于网页中的多选，我们有很多种存储方式，常见的如逗号分隔。下文介绍一种通用设计方式：用一个整数来存储复选框的值。</p>
-<h3 id="准备知识-——-位与运算"><a href="#准备知识-——-位与运算" class="headerlink" title="准备知识 —— 位与运算"></a>准备知识 —— 位与运算</h3><p>位与运算：二进制运算，相同位的两个数字都为1，则为1；若有一个不为1，则为0，如：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> 下方是运算</span><br><span class="line">  00101 </span><br><span class="line">&amp; 11100 </span><br><span class="line">------------ </span><br><span class="line">  00100</span><br></pre></td></tr></table></figure>
-
-<h3 id="设计"><a href="#设计" class="headerlink" title="设计"></a>设计</h3><p>将多项的选项值分别设置为 2 的 n 次方，n 从 0 开始，每多一项，n + 1。即 1，2，4，8…<br>多选的存储值为各项值之和，如选中了第 1、3 项，则值为：1 + 4 = 5</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<h3 id="回显"><a href="#回显" class="headerlink" title="回显"></a>回显</h3><p>假设存储的值为 5 ，要使相应的项被勾选，则是循环多项的值，每项与存储值 5 进行 位与运算，如果值与选项本身的值相等，则选中该项；相反地，如果运算值为 0 ，则设置为不选中：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">下方回显</span><br><span class="line"> 1 &amp; 5 = 1</span><br><span class="line"> 2 &amp; 5 = 0</span><br><span class="line"> 4 &amp; 5 = 4</span><br><span class="line"> 8 &amp; 5 = 0</span><br></pre></td></tr></table></figure>
-
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt; </span><br><span class="line">&lt;html lang=<span class="string">"en"</span>&gt; </span><br><span class="line">&lt;head&gt; </span><br><span class="line">  &lt;meta charset=<span class="string">"UTF-8"</span>&gt; </span><br><span class="line">  &lt;title&gt;Checkbox Test&lt;/title&gt; </span><br><span class="line">&lt;/head&gt; </span><br><span class="line">&lt;body&gt; </span><br><span class="line">&lt;form&gt; </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"1"</span>&gt; 1 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"2"</span>&gt; 2 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"4"</span>&gt; 4 </span><br><span class="line">  &lt;input <span class="built_in">type</span>=<span class="string">"checkbox"</span> name=<span class="string">"test"</span> value=<span class="string">"8"</span>&gt; 8 </span><br><span class="line">&lt;/form&gt; </span><br><span class="line">&lt;input <span class="built_in">type</span>=<span class="string">"text"</span> id=<span class="string">"result"</span> placeholder=<span class="string">"设置要回显的值"</span>&gt; </span><br><span class="line">&lt;button id=<span class="string">"show"</span>&gt;回显&lt;/button&gt; </span><br><span class="line">&lt;script src=<span class="string">"http://libs.baidu.com/jquery/1.11.1/jquery.min.js"</span>&gt;&lt;/script&gt; </span><br><span class="line">&lt;script&gt; </span><br><span class="line">$(<span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">  $(<span class="string">"[name='test']"</span>).on(<span class="string">"change"</span>, <span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">    var result = 0; </span><br><span class="line">    $(<span class="string">"[name='test']:checkbox:checked"</span>).each(<span class="function"><span class="title">function</span></span>()&#123; </span><br><span class="line">      result += parseInt($(this).val()); </span><br><span class="line">    &#125;); </span><br><span class="line">    $(<span class="string">"#result"</span>).val(result); &#125;); </span><br><span class="line">    $(<span class="string">"#show"</span>).on(<span class="string">"click"</span>, <span class="function"><span class="title">function</span></span> () &#123; </span><br><span class="line">      var result = parseInt($(<span class="string">"#result"</span>).val()); </span><br><span class="line">      $(<span class="string">"[name='test']:checkbox"</span>).each(<span class="function"><span class="title">function</span></span>()&#123; </span><br><span class="line">        var value = parseInt($(this).val()); </span><br><span class="line">        <span class="keyword">if</span> ((result &amp; value) == value) &#123; </span><br><span class="line">        $(this).prop(<span class="string">"checked"</span>, <span class="literal">true</span>); </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">        $(this).prop(<span class="string">"checked"</span>, <span class="literal">false</span>); </span><br><span class="line">        &#125; </span><br><span class="line">      &#125;); </span><br><span class="line">   &#125;); </span><br><span class="line">&#125;); </span><br><span class="line">&lt;/script&gt; </span><br><span class="line">&lt;/body&gt; </span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+        <h3 id="Mysql-的redolog和bingo"><a href="#Mysql-的redolog和bingo" class="headerlink" title="Mysql 的redolog和bingo"></a>Mysql 的redolog和bingo</h3><p>1、redolog：redolog是物理日志，记录在某个数据页上做了什么修改， 有了 redo log，InnoDB 就可以保证即使数据库发生异常重启，因为redo log 的写入机制是事务中有更新操作时就会将更新操作记录在 redo log buffer 中，在事务提交时，根据相关参数的设定，按照不同逻辑持久化到磁盘文件<br>2、bingo：是逻辑日志,属于mysql server层,用于灾难后的数据恢复和mysql的主从复制<br>3、区别：<br>①redolog具有crash-safe的能力,而binlog没有。<br>②redolog是记录在数据页上做了什么修改,而binlog记录的是语句的原始逻辑<br>③redolog是循环写(前面的图片已经说的很清楚了),所以binlog存在数据覆盖的问题,binlog<br>是追加写,一个binlog文件写满了就会再创建一个binlog文件写,所以binlog是归档日志<br>④binlog是事务提交的时候才从binlog cache写到binlog，而redolog有后台每1秒自动刷<br>盘的功能,在这点上保证了事务即使未提交时发生崩溃也能完好的恢复事务中的数据<br>⑤binlog属于server层,redolog属于innodb引擎特有的</p>
+<h3 id="websocket链接中中断怎么办，如何保证消息正确发送"><a href="#websocket链接中中断怎么办，如何保证消息正确发送" class="headerlink" title="websocket链接中中断怎么办，如何保证消息正确发送"></a>websocket链接中中断怎么办，如何保证消息正确发送</h3><p>加入心跳检测 ，触发重连，自己实现增加ack确认机制<br>###mysql深度分页优化<br>1、增加索引<br>2、限制获取的字段 先查主键再根据主键查询数据，核心在于 Innodb 的聚簇索引<br>3、count时大问题，采用滚动分页，通过主键id+条件 来查 使用limit 单不使用offset<br>###一条sql的执行过程<br>客户端-》检查缓存-》sql解析-》查询优化-》执行查询-》存储引擎查询数据</p>
+<h3 id="mysql-mvcc"><a href="#mysql-mvcc" class="headerlink" title="mysql mvcc"></a>mysql mvcc</h3><p>MVCC：控制并发<br>###mysql undolog<br>逻辑日志，可以理解为delete一条记录的时候，undo log会记录一条对应的insert记录，update一条记录的时候，undo log会记录一条相反的update记录，当事务失败需要回滚操作时，就可以通过读取undo log中相应的内容进行回滚，MVCC就利用到了undo log。</p>
+<h3 id="redis持久化方式"><a href="#redis持久化方式" class="headerlink" title="redis持久化方式"></a>redis持久化方式</h3><p>–RDB（默认）：根据指定的规则“定时”将内存中的数据存储在硬盘上，生成的快照<br>一、优势<br>1.RDB是一个非常紧凑(compact)的文件，它保存了redis 在某个时间点上的数据集，这种文件非常适合用于进行备份和灾难恢复。<br>2.生成RDB文件的时候，redis主进程会fork()一个子进程来处理所有保存工作，主进程不需要进行任何磁盘IO操作。<br>3.RDB 在恢复大数据集时的速度比AOF的恢复速度要快。<br>二、劣势<br>•1、RDB方式数据没办法做到实时持久化/秒级持久化。因为bgsave每次运行都要执行fork操作创建子进程，频繁执行成本过高<br>•2、在一定间隔时间做一次备份，所以如果redis意外down掉的话，最后一次快照之后的修改数据会被丢失（数据有丢失）。<br>如果数据相对来说比较重要，希望将损失降到最小，则可以使用AOF方式进行持久化。</p>
+<p>–AOF：每次执行命令后将命令本身记录下来，每次执行命令都会将命令写入到aof文件中优点：<br>优点：<br>1、AOF 持久化的方法使用默认的每秒同步一次，Redis 最多也就丢失 1 秒的数据而已。<br>缺点：<br>1、对于具有相同数据的的Redis，AOF 文件通常会比 RDB 文件体积更大（RDB存的是数据快照）。<br>2、虽默认情况下，每秒同步一次的频率也具有较高的性能。在高并发的情况下，RDB 比 AOF 具有更好的性能保证。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://tianfs.com/2020/06/09/%E7%94%A8%E4%B8%80%E4%B8%AA%E6%95%B0%E5%80%BC%E4%BF%9D%E5%AD%98%E5%A4%9A%E9%80%89%E7%9A%84%E5%80%BC/" data-id="cmo0x1rwd001sbnfehvmqg2pd" class="article-share-link">Share</a>
+      <a data-url="http://tianfs.com/2021/07/30/%E8%AE%B0%E5%BD%95%E4%B8%80%E4%BA%9B%E9%9D%A2%E8%AF%95%E9%97%AE%E7%9A%84/" data-id="cmo0x1rx2004kbnfe926p657f" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li></ul>
 
     </footer>
   </div>
@@ -123,19 +117,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2020/06/09/php%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2021/07/30/1+2+4+8=15%E7%9A%84%E4%BD%8D%E8%BF%90%E7%AE%97%E5%85%B3%E7%B3%BB/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          php垃圾回收机制
+          1+2+4+8=15的位运算关系
         
       </div>
     </a>
   
   
-    <a href="/2020/06/09/%E7%94%A8css3%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%B8%83%E5%B1%80/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2021/06/19/%E5%BC%BA%E5%93%A5%E7%9A%84vimrc%E5%A4%A7%E5%AE%9D%E5%89%91/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">用css3 media实现响应式布局</div>
+      <div class="article-nav-title">强哥的vimrc大宝剑</div>
     </a>
   
 </nav>
